@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dice Roguelike — v9.6 SVG</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{display:flex;justify-content:center;padding:8px;background:#1a1a2e;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.phone{background:#fff;width:390px;min-height:820px;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #ccc;position:relative}
+button{font-family:inherit;cursor:pointer}
+.ez{padding:12px 14px 6px;border-bottom:1px solid #eee;flex-shrink:0}
+.er{display:flex;gap:10px;align-items:flex-start}
+.av{width:52px;height:52px;border-radius:14px;background:#f5eeff;border:2px solid #9b59b6;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.av svg{width:34px;height:34px}
+.ei{flex:1}.en{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.hrow{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.hbar{flex:1;background:#f0f0f0;border-radius:3px;height:7px;overflow:hidden}
+.hfil{height:100%;border-radius:3px;background:#e74c3c;transition:width .4s}
+.htxt{font-size:10px;color:#999;min-width:52px;text-align:right}
+.ebot{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.ibadge{display:inline-flex;align-items:center;gap:4px;background:#fff0f0;border:1px solid #fcc;border-radius:6px;padding:2px 8px;font-size:11px;color:#c0392b}
+.idot{width:6px;height:6px;border-radius:50%;background:#e74c3c;flex-shrink:0}
+.rbtn{background:#f0f0f0;border:1px solid #ddd;color:#888;border-radius:6px;padding:2px 7px;font-size:9px}
+@keyframes spin{0%{transform:rotate(-30deg) scale(.7)}20%{transform:rotate(25deg) scale(1.15)}40%{transform:rotate(-18deg) scale(.9)}60%{transform:rotate(14deg) scale(1.05)}80%{transform:rotate(-6deg) scale(.98)}100%{transform:rotate(0deg) scale(1)}}
+@keyframes hotpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes flash{0%,100%{background:#f5eeff}25%{background:#ffe8e8}75%{background:#f5eeff}}
+@keyframes bigshake{0%,100%{transform:translateX(0) scale(1)}10%{transform:translateX(-10px) scale(1.12) rotate(-4deg)}25%{transform:translateX(9px) scale(1.1) rotate(3deg)}40%{transform:translateX(-7px)}55%{transform:translateX(7px)}70%{transform:translateX(-4px)}85%{transform:translateX(3px)}}
+@keyframes hpshake{0%,100%{transform:translateX(0)}15%{transform:translateX(-5px)}30%{transform:translateX(5px)}45%{transform:translateX(-4px)}60%{transform:translateX(4px)}75%{transform:translateX(-2px)}90%{transform:translateX(2px)}}
+@keyframes boxin{0%{transform:scale(.88);opacity:0}70%{transform:scale(1.03)}100%{transform:scale(1);opacity:1}}
+.av.flash{animation:flash .4s ease}
+.av.bigshake{animation:bigshake .65s ease}
+.hrow.shake{animation:hpshake .45s ease}
+.ban{display:none;text-align:center;padding:5px 12px;font-size:13px;font-weight:500;flex-shrink:0}
+.ban.bust{background:#ffeaea;color:#c0392b;border-bottom:2px solid #e74c3c}
+.ban.steak{background:#fff3e0;color:#d35400;border-bottom:2px solid #f39c12;font-size:14px}
+.ban.on{display:block}
+.arena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px 16px;min-height:300px}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:286px;min-height:164px;align-content:center}
+.dw{display:flex;flex-direction:column;align-items:center;gap:3px}
+.die{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #e0e0e0;background:#f7f7f7;transition:border-color .15s,background .15s;user-select:none}
+.die:active{transform:scale(.88)}
+.die.free{border-color:#ddd;background:#f7f7f7}
+.die.sel{border-color:#f39c12;background:#fffbf0}
+.die.slot{border:2px dashed #ebebeb;background:#fafafa;cursor:default}
+.die.rolling{animation:spin 2.5s ease forwards}
+.die.hotdie{border-color:#f39c12;background:#fff5ee;animation:hotpulse .5s ease 4}
+.die svg{width:38px;height:38px;pointer-events:none}
+.die.slot svg{width:20px;height:20px;opacity:.2}
+.die.rolling svg{width:32px;height:32px}
+.dlbl{font-size:9px;color:#ccc;user-select:none}
+.dlbl.s{color:#f39c12}.dlbl.inv{color:#e74c3c}
+.groups-area{display:flex;flex-direction:column;gap:4px;width:100%}
+.gbox{border-radius:10px;padding:5px 9px;display:flex;align-items:flex-start;gap:7px;animation:boxin .22s ease}
+.gbox.steak{background:#fff3e0;border:1.5px solid #f39c12}
+.gbox.pushrow{background:#f5f5f5;border:1px solid #ebebeb}
+.gbox.selbox{background:#fff;border:1.5px solid #2980b9}
+.gbox-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0;padding-top:3px;min-width:52px}
+.gbox.steak .gbox-lbl{color:#e67e22}
+.gbox.pushrow .gbox-lbl{color:#bbb}
+.gbox.selbox .gbox-lbl{color:#2980b9}
+.gbox-content{display:flex;align-items:center;flex-wrap:wrap;gap:3px;flex:1}
+.gchip{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gchip svg{width:14px;height:14px}
+.gbox.steak .gchip{background:#fff;border:1px solid #f5cba7}
+.gbox.pushrow .gchip{background:#fff;border:1px solid #ddd}
+.gbox.selbox .gchip{background:#eef6ff;border:1px solid #aed6f1}
+.gcomma{font-size:10px;color:#ccc;align-self:center;margin:0 1px}
+.gbox-score{font-size:10px;font-weight:600;flex-shrink:0;padding-top:3px;text-align:right;line-height:1.5;min-width:44px}
+.gbox.steak .gbox-score{color:#e67e22}
+.gbox.pushrow .gbox-score{color:#aaa}
+.gbox.selbox .gbox-score{color:#2980b9}
+.bottom{padding:6px 14px 14px;border-top:1px solid #eee;flex-shrink:0}
+.fr{display:flex;gap:8px;align-items:stretch;margin-bottom:6px}
+.fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:12px;padding:9px 14px;display:flex;align-items:center;justify-content:space-around}
+.fdc{display:flex;flex-direction:column;align-items:center;gap:2px}
+.fdc-val{font-size:22px;font-weight:600;line-height:1}
+.fdc-lbl{font-size:10px;color:#888}
+.fdc-dmg .fdc-val{color:#e8a020}.fdc-bonus .fdc-val{color:#e05530}
+.fdiv{width:1px;height:34px;background:#e0e8f5}
+.fop-mid{display:flex;align-items:center;font-size:18px;color:#bbb;flex-shrink:0}
+.fbox-flux{flex:1;background:#fff;border:1.5px solid #c71585;border-radius:12px;padding:9px 4px;text-align:center}
+.fval-flux{font-size:20px;font-weight:600;color:#9b59b6;line-height:1}
+.fl{font-size:9px;color:#bbb;margin-top:2px}
+.bb{display:flex;gap:8px;align-items:flex-start}
+.bc{display:flex;flex-direction:column;gap:3px;width:50px;flex-shrink:0;padding-top:2px}
+.brow{display:flex;align-items:center;gap:4px}
+.bi{font-size:12px;width:16px;text-align:center;line-height:1;flex-shrink:0}
+.bi svg{width:13px;height:13px;vertical-align:middle}
+.bg{flex:1;background:#f0f0f0;border-radius:3px;height:7px;overflow:hidden}
+.bf{height:100%;border-radius:3px;transition:width .4s}
+.bhp{background:#e74c3c}.bmp{background:#2980b9}
+.bv{font-size:8px;color:#bbb;text-align:right}
+.hbtn{width:22px;height:22px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:2px}
+.btc{flex:1;display:flex;flex-direction:column;gap:5px}
+.skrow{display:flex;gap:5px}
+.sk{flex:1;border-radius:10px;padding:6px 3px;text-align:center;border:1.5px solid #bbb;background:#f9f9f9;position:relative}
+.sk .sn{font-size:10px;font-weight:500;color:#555}.sk .sc{font-size:8px;color:#bbb;margin-top:1px}
+.sk.fire{border-color:#e67e22;background:#fff8f0}.sk.fire .sn{color:#d35400}
+.sk.sh{border-color:#2980b9;background:#f0f7ff}.sk.sh .sn{color:#1a5276}
+.sk.rr{border-color:#8e44ad;background:#f9f0ff}.sk.rr .sn{color:#6c3483}
+.sk:disabled{opacity:.3;cursor:not-allowed;border-color:#ddd!important;background:#f8f8f8!important}
+.sk:disabled .sn{color:#ccc!important}
+.sbadge{position:absolute;top:-6px;right:-6px;background:#27ae60;color:#fff;border-radius:9px;font-size:9px;font-weight:700;padding:2px 5px;display:none;z-index:10;border:1.5px solid #fff}
+.sbadge.on{display:block}
+.sk.sh.has-shield{opacity:1!important;border-color:#27ae60!important;background:#f0fff4!important}
+.sk.sh.has-shield .sn{color:#1a5276!important}
+.sk.sh.has-shield:disabled{cursor:not-allowed}
+.mr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mb{border:none;border-radius:12px;padding:11px 8px;font-size:14px;font-weight:500;line-height:1.3}
+.mb:active:not(:disabled){transform:scale(.95)}
+.mb:disabled{opacity:.3;cursor:not-allowed}
+.mb .ms{font-size:9px;display:block;margin-top:2px;opacity:.75;font-weight:400}
+.b-roll{background:#2c3e50;color:#ecf0f1}.b-push{background:#6e2f1a;color:#f0c3a1}.b-strike{background:#1e8449;color:#a9dfbf}
+.ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;border-radius:20px;z-index:50}
+.ov.on{display:flex}
+.oc{background:#fff;border-radius:16px;padding:22px 20px;text-align:center;width:260px;border:1px solid #ddd}
+.ot{font-size:17px;font-weight:500;color:#111;margin-bottom:6px}
+.os{font-size:12px;color:#888;margin-bottom:18px;line-height:1.6}
+.ob{width:100%;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:500;cursor:pointer}
+.ob.ok{background:#27ae60;color:#fff}.ob.danger{background:#e74c3c;color:#fff}
+.tov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.5);align-items:flex-end;border-radius:20px;z-index:60}
+.tov.on{display:flex}
+.tc{background:#fff;border-radius:16px 16px 20px 20px;width:100%;max-height:88%;overflow-y:auto;padding:14px 14px 20px}
+.th{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tt{font-size:14px;font-weight:500;color:#111}
+.tbk{background:#f0f0f0;border:none;border-radius:8px;padding:5px 12px;font-size:12px;color:#555;cursor:pointer}
+.cg2{display:flex;flex-direction:column;gap:4px}
+.cc2{background:#f8f8f8;border-radius:9px;padding:6px 9px;display:flex;align-items:center;gap:8px}
+.ci2{flex:1}.cn2{font-size:11px;font-weight:500;color:#111}.cr2{font-size:9px;color:#aaa;margin-top:1px}
+.cval2{font-size:11px;font-weight:500;text-align:right;flex-shrink:0;min-width:56px}
+.cval2.dmg{color:#e74c3c}.cval2.bn{color:#e67e22}.cval2.fx{color:#9b59b6}.cval2.mn{color:#2980b9}.cval2.bk{color:#27ae60}
+.gsec{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px 2px}
+.toast{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,20,.85);color:#fff;border-radius:10px;padding:8px 16px;font-size:12px;text-align:center;pointer-events:none;opacity:0;transition:opacity .18s;z-index:99;white-space:nowrap}
+.toast.on{opacity:1}
+/* Legend row in guide */
+.lg-row{display:flex;align-items:center;gap:8px;padding:5px 8px;background:#f8f8f8;border-radius:8px}
+.lg-die{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lg-die svg{width:20px;height:20px}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="ez">
+    <div class="er">
+      <div class="av" id="eavatar"></div>
+      <div class="ei">
+        <div class="en" id="ename">Goblin Raider · Lv 1</div>
+        <div class="hrow"><div class="hbar"><div class="hfil" id="ehpbar" style="width:100%"></div></div><div class="htxt" id="ehptxt">80 / 80</div></div>
+        <div class="ebot">
+          <div class="ibadge"><div class="idot"></div><span id="itxt">Next: attack 8 dmg</span></div>
+          <button class="rbtn" id="btnRestart">↺ restart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ban bust" id="bustBanner">💀 Break! All effects lost</div>
+  <div class="ban steak" id="steakBanner">🔥 Steak! Flux ×2 — Rolling fresh 6...</div>
+  <div class="arena">
+    <div class="dg" id="diceGrid"></div>
+    <div class="groups-area" id="groupsArea"></div>
+  </div>
+  <div class="bottom">
+    <div class="fr">
+      <div class="fbox-db">
+        <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
+        <div class="fdiv"></div>
+        <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
+      </div>
+      <div class="fop-mid">×</div>
+      <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1.0</div><div class="fl" id="fFluxLbl">Flux</div></div>
+    </div>
+    <div class="bb">
+      <div class="bc">
+        <div class="brow" id="hpRow">
+          <div class="bi"><svg viewBox="0 0 16 16" fill="none"><path d="M8 14s-6-3.5-6-7.5A4 4 0 018 3a4 4 0 016 3.5C14 10.5 8 14 8 14z" fill="#e74c3c"/></svg></div>
+          <div class="bg"><div class="bf bhp" id="barHp" style="width:100%"></div></div>
+        </div>
+        <div class="bv" id="valHp" style="color:#e74c3c">50/50</div>
+        <div style="height:3px"></div>
+        <div class="brow">
+          <div class="bi"><svg viewBox="0 0 16 16" fill="none"><ellipse cx="8" cy="10" rx="4" ry="2.5" fill="#aed6f1"/><path d="M4 10C4 6 6 3 8 2c2 1 4 4 4 8" stroke="#2980b9" stroke-width="1.2" fill="#d6eaf8"/></svg></div>
+          <div class="bg"><div class="bf bmp" id="barMana" style="width:0%"></div></div>
+        </div>
+        <div class="bv" id="valMana" style="color:#2980b9">0/10</div>
+        <div style="display:flex;justify-content:center;margin-top:2px"><button class="hbtn" id="btnHelp">?</button></div>
+      </div>
+      <div class="btc">
+        <div class="skrow">
+          <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">5 dmg · 2 MP</div></button>
+          <button class="sk sh" id="btnShield" disabled>
+            <div class="sn">Shield</div>
+            <div class="sc">+10 blk · 2 MP</div>
+            <div class="sbadge" id="shieldBadge">0</div>
+          </button>
+          <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc" id="rrSub">selected · 2 MP</div></button>
+        </div>
+        <div class="mr">
+          <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
+          <button class="mb b-strike" id="btnStrike" disabled>Strike<span class="ms" id="sts">select combo</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="ov" id="overlay"><div class="oc" id="ocard"></div></div>
+  <div class="tov" id="tutOv">
+    <div class="tc">
+      <div class="th"><div class="tt">Combo Guide — Balance v3.1</div><button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Back</button></div>
+      <div class="gsec">Attack — single die counts</div>
+      <div class="cg2" id="guideContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SVG ICONS ─────────────────────────────────────────────────
+// Mỗi icon là SVG standalone, render pixel-perfect trên mọi platform
+const SVG = {
+  // 0 🗡️ Normal Attack — dagger
+  0: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="8" y1="24" x2="24" y2="8" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M22 8l2-2 2 2-2 2z" fill="#c0392b"/>
+    <line x1="9" y1="23" x2="6" y2="26" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="12" y1="20" x2="10" y2="22" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // 1 ⚔️ Strong Attack — crossed swords
+  1: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="6" y1="26" x2="26" y2="6" stroke="#922b21" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="26" y1="26" x2="6" y2="6" stroke="#922b21" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M24 6l2-2 2 2-2 2z" fill="#c0392b"/>
+    <path d="M6 24l-2 2-2-2 2-2z" fill="#c0392b"/>
+    <path d="M8 6l-2-2 2-2 2 2z" fill="#c0392b"/>
+    <path d="M24 24l2 2-2 2-2-2z" fill="#c0392b"/>
+    <circle cx="16" cy="16" r="2.5" fill="#f39c12"/>
+  </svg>`,
+  // 2 💧 Mana — water drop
+  2: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 6c0 0-8 8-8 14a8 8 0 0016 0C24 14 16 6 16 6z" fill="#2980b9"/>
+    <path d="M16 9c0 0-5 5.5-5 11a5 5 0 004 4.9" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  </svg>`,
+  // 3 🛡️ Shield — kite shield
+  3: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 4L6 8v10c0 5 4 9 10 10 6-1 10-5 10-10V8L16 4z" fill="#27ae60"/>
+    <path d="M16 4L6 8v10c0 5 4 9 10 10 6-1 10-5 10-10V8L16 4z" stroke="#1e8449" stroke-width="1.5" fill="none"/>
+    <line x1="16" y1="9" x2="16" y2="24" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="10" y1="15" x2="22" y2="15" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // 4 ⭐ Flux — 5-point star
+  4: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="16,4 19.5,12.5 28,13 22,19 24,27.5 16,23 8,27.5 10,19 4,13 12.5,12.5" fill="#f39c12" stroke="#e67e22" stroke-width="1"/>
+    <polygon points="16,8 18.5,14 24.5,14.5 20,18.5 21.5,24.5 16,21.5 10.5,24.5 12,18.5 7.5,14.5 13.5,14" fill="#f9ca74"/>
+  </svg>`,
+  // 5 💥 Bonus Damage — explosion burst
+  5: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 4l2 6 5-4-2 6 6 1-5 4 3 6-6-2-1 6-4-5-4 5-1-6-6 2 3-6-5-4 6-1-2-6 5 4z" fill="#e67e22" stroke="#d35400" stroke-width="1"/>
+    <circle cx="16" cy="16" r="4" fill="#f9ca74"/>
+    <circle cx="16" cy="16" r="2" fill="#fff"/>
+  </svg>`,
+  // Rolling placeholder
+  roll: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="4" width="24" height="24" rx="5" fill="#ddd" stroke="#ccc" stroke-width="1.5"/>
+    <circle cx="10" cy="10" r="2" fill="#bbb"/><circle cx="22" cy="10" r="2" fill="#bbb"/>
+    <circle cx="10" cy="22" r="2" fill="#bbb"/><circle cx="22" cy="22" r="2" fill="#bbb"/>
+    <circle cx="16" cy="16" r="2" fill="#bbb"/>
+  </svg>`,
+  // Steak fire
+  fire: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 28c-5.5 0-10-4-10-9 0-4 3-7 5-9-1 3 1 5 1 5 1-4 4-8 6-11 0 4 4 6 4 9 1-1 1-3 1-3 2 2 3 5 3 8 0 5.5-4.5 10-10 10z" fill="#e67e22"/>
+    <path d="M16 26c-3 0-6-2.5-6-5.5 0-2 1-3.5 2-4.5 0 1.5 1 2.5 1 2.5 1-2 2.5-4 3-5 0 2 2 3 2 4.5 0-0.5 0-1.5 0-1.5 1 1 2 2.5 2 4 0 3-1.5 5.5-4 5.5z" fill="#f39c12"/>
+  </svg>`,
+  // Slot empty
+  dot: `<svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="3" fill="#ddd"/></svg>`,
+  // Enemy icons
+  skull: `<svg viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="14" rx="9" ry="8" fill="#9b59b6"/><rect x="9" y="19" width="14" height="6" rx="2" fill="#9b59b6"/><circle cx="12" cy="14" r="3" fill="#fff"/><circle cx="20" cy="14" r="3" fill="#fff"/><circle cx="12" cy="14" r="1.5" fill="#111"/><circle cx="20" cy="14" r="1.5" fill="#111"/><rect x="11" y="22" width="3" height="4" rx="1" fill="#6c3483"/><rect x="15" y="22" width="3" height="4" rx="1" fill="#6c3483"/></svg>`,
+  goblin: `<svg viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="15" rx="8" ry="7" fill="#27ae60"/><ellipse cx="11" cy="11" rx="2" ry="3" fill="#27ae60"/><ellipse cx="21" cy="11" rx="2" ry="3" fill="#27ae60"/><circle cx="13" cy="15" r="2" fill="#fff"/><circle cx="19" cy="15" r="2" fill="#fff"/><circle cx="13" cy="15.5" r="1" fill="#111"/><circle cx="19" cy="15.5" r="1" fill="#111"/><path d="M13 20q3 2 6 0" stroke="#111" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>`,
+  orc: `<svg viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="15" rx="9" ry="8" fill="#e74c3c"/><circle cx="13" cy="14" r="2.5" fill="#fff"/><circle cx="19" cy="14" r="2.5" fill="#fff"/><circle cx="13" cy="14" r="1.2" fill="#111"/><circle cx="19" cy="14" r="1.2" fill="#111"/><path d="M13 20q3 3 6 0" stroke="#111" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M12 22l-1 2M20 22l1 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  troll: `<svg viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="16" rx="10" ry="9" fill="#795548"/><circle cx="12" cy="15" r="3" fill="#fff"/><circle cx="20" cy="15" r="3" fill="#fff"/><circle cx="12" cy="15" r="1.5" fill="#111"/><circle cx="20" cy="15" r="1.5" fill="#111"/><ellipse cx="16" cy="21" rx="4" ry="2" fill="#6d4c41"/><path d="M10 8c0-3 2-4 6-4s6 1 6 4" stroke="#5d4037" stroke-width="2" fill="none"/></svg>`,
+  knight: `<svg viewBox="0 0 32 32" fill="none"><rect x="7" y="8" width="18" height="16" rx="3" fill="#2c3e50"/><rect x="7" y="8" width="18" height="8" rx="3" fill="#34495e"/><rect x="10" y="12" width="12" height="4" rx="1" fill="#1a1a2e"/><circle cx="13" cy="14" r="1.5" fill="#e74c3c"/><circle cx="19" cy="14" r="1.5" fill="#e74c3c"/><rect x="14" y="5" width="4" height="5" rx="1" fill="#34495e"/></svg>`,
+  dragon: `<svg viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="16" rx="9" ry="8" fill="#c0392b"/><path d="M7 12L3 8M25 12l4-4" stroke="#c0392b" stroke-width="2"/><path d="M3 8l3 1M29 8l-3 1" stroke="#e74c3c" stroke-width="1.5"/><circle cx="12" cy="14" r="2.5" fill="#f39c12"/><circle cx="20" cy="14" r="2.5" fill="#f39c12"/><circle cx="12" cy="14" r="1.2" fill="#111"/><circle cx="20" cy="14" r="1.2" fill="#111"/><path d="M12 21q4 3 8 0" stroke="#922b21" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M8 10l2-4 2 4" fill="#c0392b"/><path d="M20 10l2-4 2 4" fill="#c0392b"/></svg>`
+};
+
+// Icon colors per dice face (for die background tint)
+const COLORS = ['#fff5f5','#ffeaea','#ebf5fb','#eafaf1','#fefde7','#fff5e0'];
+const BORDER  = ['#e74c3c','#c0392b','#2980b9','#27ae60','#f39c12','#e67e22'];
+
+const DS={F:'free',S:'sel',ST:'stacked'};
+const ANIM=2500;
+const G={
+  pHp:50,pMaxHp:50,mana:0,maxMana:10,
+  eHp:80,eMaxHp:80,eDmg:8,enemyIdx:0,
+  flux:1.0,bonusDmg:0,shield:0,
+  busy:false,phase:'idle',steakActive:false,
+  dice:[],ds:[],steakBoxes:[],currentGroups:[]
+};
+const $=id=>document.getElementById(id);
+const rnd=()=>Math.floor(Math.random()*6);
+
+function makeSvgEl(idx){
+  const d=document.createElement('div');
+  d.innerHTML=SVG[idx]||SVG.dot;
+  return d.firstElementChild;
+}
+
+function scoreGroup(arr){
+  if(!arr.length) return{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
+  const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
+  let ad=0,fluxG=0,manaG=0,shieldG=0,bdmgG=0;
+  if(c[0]){const n=c[0];ad+=n===1?2:n===2?5:n===3?16:n===4?35:n===5?75:140;}
+  if(c[1]){const n=c[1];ad+=n===1?6:n===2?15:n===3?42:n===4?105:n===5?225:420;}
+  [2,3,4,5].forEach(ic=>{
+    const n=c[ic]||0;if(n<2)return;
+    if(ic===2){ad+=n===2?8:n===3?12:n===4?50:n===5?105:195;manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
+    else if(ic===3){shieldG+=n===2?4:n===3?12:n===4?28:n===5?60:120;}
+    else if(ic===4){ad+=n===2?8:n===3?22:n===4?50:n===5?105:195;if(n>=3)fluxG+=n===3?1:n===4?2.5:n===5?5:6;}
+    else if(ic===5){ad+=n===2?0:n===3?10:n===4?22:n===5?45:85;bdmgG+=n===2?4:n===3?20:n===4?50:n===5?100:200;}
+  });
+  const allDiff=!Object.values(c).some(v=>v>1);
+  if(allDiff){if(arr.length===4)ad+=30;else if(arr.length===5)ad+=60;else if(arr.length===6)ad+=110;}
+  return{ad,fluxG,manaG,shieldG,bdmgG};
+}
+function scoreLabel(groups){
+  let ad=0;const extras=[];
+  for(const g of groups){const s=scoreGroup(g.dice);ad+=s.ad;if(s.fluxG>0)extras.push('+'+s.fluxG.toFixed(1)+'fx');if(s.manaG>0)extras.push('+'+s.manaG+'MP');if(s.shieldG>0)extras.push('+'+s.shieldG+'blk');if(s.bdmgG>0)extras.push('+'+s.bdmgG+'BD↑');}
+  let lbl=ad>0?ad+' AD':'';if(extras.length)lbl+=(lbl?' ':'')+extras.join(' ');return lbl||'—';
+}
+function analyze(){
+  const si=G.ds.map((s,i)=>s===DS.S?i:-1).filter(i=>i>=0);
+  if(!si.length) return{vi:[],ii:[],hasCombo:false,hasInvalid:false};
+  const icons=si.map(i=>G.dice[i]);
+  const c={};icons.forEach(d=>c[d]=(c[d]||0)+1);
+  const allDiff=!Object.values(c).some(v=>v>1);
+  if(allDiff&&si.length>=4) return{vi:si,ii:[],hasCombo:true,hasInvalid:false};
+  const vs=new Set();
+  if(c[0])vs.add(0);if(c[1])vs.add(1);
+  [2,3,4,5].forEach(ic=>{if((c[ic]||0)>=2)vs.add(ic);});
+  const vi=si.filter(i=>vs.has(G.dice[i])),ii=si.filter(i=>!vs.has(G.dice[i]));
+  return{vi,ii,hasCombo:vi.length>0,hasInvalid:ii.length>0};
+}
+const canPush=()=>{const{hasCombo,hasInvalid}=analyze();return hasCombo&&!hasInvalid;};
+function hasCombo(arr){
+  if(!arr.length) return false;
+  if(arr.some(d=>d===0||d===1)) return true;
+  const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
+  if([2,3,4,5].some(ic=>(c[ic]||0)>=2)) return true;
+  return !Object.values(c).some(v=>v>1)&&arr.length>=4;
+}
+function calcCombo(){
+  const{vi,hasInvalid}=analyze();if(hasInvalid) return null;
+  const board=vi.map(i=>G.dice[i]);
+  let tAD=0,tFx=0,tMana=0,tShield=0,tBD=0;
+  for(const sb of G.steakBoxes)for(const g of sb.groups){const s=scoreGroup(g.dice);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
+  for(const g of G.currentGroups){const s=scoreGroup(g.dice);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
+  if(board.length){const s=scoreGroup(board);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
+  if(!tAD&&!tShield&&!tBD&&!tMana&&!tFx) return null;
+  const effectiveFlux=G.flux+tFx;
+  const totalDmg=Math.round((tAD+G.bonusDmg+tBD)*effectiveFlux);
+  return{ad:tAD,fluxG:tFx,manaG:tMana,shieldG:tShield,bdmgG:tBD,effectiveFlux,totalDmg,board};
+}
+
+function makeDieCell(svgIdx, cls, label, clickFn, invalid=false){
+  const w=document.createElement('div');w.className='dw';
+  const die=document.createElement('div');
+  die.className='die '+cls;
+  if(cls.includes('free')||cls.includes('sel')){
+    die.style.background=cls.includes('sel')?'#fffbf0':COLORS[svgIdx]||'#f7f7f7';
+    die.style.borderColor=invalid?'#e74c3c':cls.includes('sel')?BORDER[svgIdx]||'#f39c12':'#ddd';
+  }
+  die.innerHTML=SVG[svgIdx]||SVG.dot;
+  if(clickFn) die.onclick=clickFn;
+  const lbl=document.createElement('div');
+  lbl.className='dlbl'+(label==='keep?'?' s':label==='no pair'?' inv':'');
+  lbl.textContent=label;
+  w.appendChild(die);w.appendChild(lbl);return w;
+}
+function makeSlotCell(){
+  const w=document.createElement('div');w.className='dw';
+  const d=document.createElement('div');d.className='die slot';d.innerHTML=SVG.dot;
+  const l=document.createElement('div');l.className='dlbl';l.textContent='—';
+  w.appendChild(d);w.appendChild(l);return w;
+}
+function makeAnimCell(steak=false){
+  const w=document.createElement('div');w.className='dw';
+  const d=document.createElement('div');d.className='die '+(steak?'hotdie':'free')+' rolling';
+  d.innerHTML=steak?SVG.fire:SVG.roll;
+  const l=document.createElement('div');l.className='dlbl';l.style.color=steak?'#e67e22':'';l.textContent=steak?'steak!':'rolling';
+  w.appendChild(d);w.appendChild(l);return w;
+}
+
+function renderDice(){
+  const grid=$('diceGrid');grid.innerHTML='';
+  const{ii}=analyze();const inv=new Set(ii);
+  let vis=0;
+  G.dice.forEach((d,i)=>{
+    if(G.ds[i]===DS.ST)return;vis++;
+    const isInv=G.ds[i]===DS.S&&inv.has(i);
+    const lbl=G.ds[i]===DS.S?(isInv?'no pair':'keep?'):'free';
+    const cls=G.ds[i]===DS.S?'sel':'free';
+    grid.appendChild(makeDieCell(d,cls,lbl,()=>tapDie(i),isInv));
+  });
+  for(let i=vis;i<6;i++) grid.appendChild(makeSlotCell());
+  renderGroups();updateFormula();renderBtns();
+}
+function showAnimGrid(count,steak=false){
+  const grid=$('diceGrid');grid.innerHTML='';
+  for(let i=0;i<count;i++) grid.appendChild(makeAnimCell(steak));
+  for(let i=count;i<6;i++) grid.appendChild(makeSlotCell());
+}
+function showRerollingSelected(selIdxs){
+  const grid=$('diceGrid');grid.innerHTML='';
+  const selSet=new Set(selIdxs);let vis=0;
+  G.dice.forEach((d,i)=>{
+    if(G.ds[i]===DS.ST)return;vis++;
+    if(selSet.has(i)) grid.appendChild(makeAnimCell(false));
+    else{const lbl=G.ds[i]===DS.S?'keep?':'free';grid.appendChild(makeDieCell(d,G.ds[i]===DS.S?'sel':'free',lbl,null));}
+  });
+  for(let i=vis;i<6;i++) grid.appendChild(makeSlotCell());
+}
+
+function makeChip(iconIdx,boxCls){
+  const ch=document.createElement('div');ch.className='gchip';
+  ch.innerHTML=SVG[iconIdx];
+  return ch;
+}
+function renderGroups(newSteakIdx=-1){
+  const area=$('groupsArea');area.innerHTML='';
+  function makeBox(cls,label,groups,animate=false){
+    const box=document.createElement('div');box.className='gbox '+cls+(animate?' new':'');
+    const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent=label;
+    const content=document.createElement('div');content.className='gbox-content';
+    groups.forEach((g,gi)=>{
+      if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+      g.dice.forEach(ic=>content.appendChild(makeChip(ic,cls)));
+    });
+    const sc=document.createElement('div');sc.className='gbox-score';sc.textContent=scoreLabel(groups);
+    box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);return box;
+  }
+  G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak','🔥 Steak!',sb.groups,i===newSteakIdx)));
+  if(G.currentGroups.length>0) area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups));
+  if(G.phase==='rolled'&&G.dice.length>0){
+    const{vi,hasInvalid}=analyze();
+    if(vi.length>0&&!hasInvalid){
+      const selDice=vi.map(i=>G.dice[i]);
+      const box=document.createElement('div');box.className='gbox selbox';
+      const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
+      const content=document.createElement('div');content.className='gbox-content';
+      selDice.forEach(ic=>content.appendChild(makeChip(ic,'selbox')));
+      const sc=document.createElement('div');sc.className='gbox-score';sc.textContent=scoreLabel([{dice:selDice}]);
+      box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
+    }
+  }
+}
+
+function updateFormula(){
+  const combo=calcCombo();
+  if(combo){
+    $('fDmg').textContent=combo.ad;
+    $('fBonus').textContent='+'+(G.bonusDmg+combo.bdmgG);
+    $('fBonusLbl').textContent=combo.bdmgG>0?'Bonus (+'+combo.bdmgG+'BD)':'Bonus';
+    $('fFlux').textContent='×'+combo.effectiveFlux.toFixed(1);
+    $('fFluxLbl').textContent=combo.fluxG>0?'Flux (+'+combo.fluxG.toFixed(1)+'fx)':'Flux';
+    $('sts').textContent='deal '+combo.totalDmg;
+  } else {
+    $('fDmg').textContent='0';$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';
+    $('fFlux').textContent='×'+G.flux.toFixed(1);$('fFluxLbl').textContent='Flux';$('sts').textContent='select combo';
+  }
+}
+function renderBtns(){
+  const ph=G.phase,anim=G.busy;
+  const combo=calcCombo(),_can=!anim&&ph==='rolled'&&canPush();
+  const mp=G.mana>=2;const{hasInvalid,hasCombo:hc}=analyze();
+  const hasSel=G.ds.some(s=>s===DS.S);
+  const bl=$('btnLeft'),bll=$('bll'),bls=$('bls');
+  if(anim){bl.className='mb b-roll';bl.disabled=true;bll.textContent='Roll';bls.textContent='rolling...';}
+  else if(ph==='idle'){bl.className='mb b-roll';bl.disabled=false;bll.textContent='Roll';bls.textContent='start turn';}
+  else{bl.className='mb b-push';bl.disabled=!_can;bll.textContent='Push Luck';bls.textContent=hasInvalid?'remove invalid':!hc?'select combo':'lock & roll rest';}
+  $('btnStrike').disabled=!combo||anim||ph!=='rolled';
+  $('btnFireball').disabled=!mp||anim;
+  const shBtn=$('btnShield'),badge=$('shieldBadge');
+  if(G.shield>0){shBtn.classList.add('has-shield');badge.textContent=G.shield;badge.classList.add('on');}
+  else{shBtn.classList.remove('has-shield');badge.classList.remove('on');}
+  shBtn.disabled=!mp||anim;
+  $('btnReroll').disabled=!mp||anim||ph!=='rolled'||!hasSel;
+  $('rrSub').textContent=mp?(hasSel?'selected · 2 MP':'select dice first'):'need MP';
+}
+function updateUI(){
+  $('barHp').style.width=Math.round(G.pHp/G.pMaxHp*100)+'%';$('valHp').textContent=G.pHp+'/'+G.pMaxHp;
+  $('barMana').style.width=Math.round(G.mana/G.maxMana*100)+'%';$('valMana').textContent=G.mana+'/'+G.maxMana;
+  $('ehpbar').style.width=Math.round(Math.max(0,G.eHp)/G.eMaxHp*100)+'%';$('ehptxt').textContent=Math.max(0,G.eHp)+' / '+G.eMaxHp;
+}
+function toast(msg,ms=1400){const t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),ms);}
+function hideBanners(){$('bustBanner').classList.remove('on');$('steakBanner').classList.remove('on');}
+function showOverlay(html){$('ocard').innerHTML=html;$('overlay').classList.add('on')}
+window.hideOverlay=()=>$('overlay').classList.remove('on');
+
+function flashEnemy(dmg){
+  const av=$('eavatar');av.classList.remove('flash','bigshake');void av.offsetWidth;
+  if(dmg>50){av.classList.add('bigshake');setTimeout(()=>av.classList.remove('bigshake'),700);}
+  else{av.classList.add('flash');setTimeout(()=>av.classList.remove('flash'),400);}
+}
+function shakeHp(){const r=$('hpRow');r.classList.remove('shake');void r.offsetWidth;r.classList.add('shake');setTimeout(()=>r.classList.remove('shake'),450);}
+function applyEnemyHit(){
+  const blocked=Math.min(G.shield,G.eDmg),dmgToHp=G.eDmg-blocked;
+  G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);
+  shakeHp();
+  if(blocked>0&&dmgToHp===0) toast('Shield blocked! '+G.shield+' left',1900);
+  else if(blocked>0) toast('Blocked '+blocked+' → took '+dmgToHp+' HP',1900);
+  else toast('Enemy hits! −'+dmgToHp+' HP',1900);
+  updateUI();renderBtns();
+}
+function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
+
+function doBreak(){
+  if(G.steakActive){G.flux=1.0;G.bonusDmg=0;G.steakActive=false;}
+  G.steakBoxes=[];G.currentGroups=[];
+  renderGroups();$('bustBanner').classList.add('on');renderBtns();renderDice();updateUI();
+  setTimeout(()=>{
+    $('bustBanner').classList.remove('on');applyEnemyHit();
+    if(G.pHp<=0){G.busy=false;G.phase='idle';setTimeout(()=>showOverlay('<div class="ot">Run over 💀</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),400);return;}
+    setTimeout(()=>{G.flux=1.0;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakBoxes=[];G.currentGroups=[];hideBanners();renderGroups();renderDice();updateFormula();updateUI();},900);
+  },1800);
+}
+function doRoll(){
+  G.busy=true;G.phase='rolling';G.steakActive=false;showAnimGrid(6);renderBtns();
+  G.steakBoxes=[];G.currentGroups=[];
+  G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
+  setTimeout(()=>{G.phase='rolled';G.busy=false;hideBanners();if(!hasCombo(G.dice))doBreak();else{renderDice();updateUI();}},ANIM);
+}
+function doPushLuck(){
+  if(G.busy||G.phase!=='rolled')return;
+  if(!canPush()){toast('Fix invalid dice first');return;}
+  const{vi}=analyze();
+  G.currentGroups.push({dice:vi.map(i=>G.dice[i])});
+  vi.forEach(i=>G.ds[i]=DS.ST);
+  G.ds.forEach((s,i)=>{if(s===DS.S)G.ds[i]=DS.F;});
+  const pushed=G.ds.filter(s=>s===DS.ST).length;
+  if(pushed===6){
+    const newSteakIdx=G.steakBoxes.length;
+    G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
+    const oldFlux=G.flux;G.flux*=2;
+    G.steakActive=true;G.busy=true;G.phase='pushing';
+    $('steakBanner').classList.add('on');showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
+    setTimeout(()=>{
+      G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
+      G.phase='rolled';G.busy=false;$('steakBanner').classList.remove('on');
+      if(!hasCombo(G.dice))doBreak();
+      else{renderDice();updateUI();toast('Steak! Flux ×'+oldFlux.toFixed(1)+' → ×'+G.flux.toFixed(1)+'!',2400);}
+    },ANIM);return;
+  }
+  const fi=G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
+  if(!fi.length){hideBanners();renderDice();updateUI();return;}
+  G.busy=true;G.phase='pushing';
+  const grid=$('diceGrid');grid.innerHTML='';
+  G.ds.forEach(s=>{if(s===DS.ST)return;grid.appendChild(makeAnimCell(false));});
+  renderGroups();renderBtns();
+  setTimeout(()=>{fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});G.phase='rolled';G.busy=false;hideBanners();if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();else{renderDice();updateUI();}},ANIM);
+}
+function doStrike(){
+  if(G.busy||G.phase!=='rolled')return;
+  const combo=calcCombo();if(!combo)return;
+  G.busy=true;G.phase='striking';hideBanners();renderBtns();
+  G.mana=Math.min(G.maxMana,G.mana+combo.manaG);G.bonusDmg+=combo.bdmgG;G.shield+=combo.shieldG;
+  const td=combo.totalDmg;G.eHp=Math.max(0,G.eHp-td);G.steakActive=false;
+  flashEnemy(td);
+  const extras=[];if(combo.bdmgG>0)extras.push('+'+combo.bdmgG+'BD');if(combo.shieldG>0)extras.push('Shield+'+combo.shieldG);
+  toast(td+' dmg!'+(extras.length?' ('+extras.join(' ')+'!)':''));updateUI();
+  setTimeout(()=>{
+    if(G.eHp<=0){G.busy=false;G.phase='idle';showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');return;}
+    setTimeout(()=>{
+      applyEnemyHit();
+      if(G.pHp<=0){G.busy=false;G.phase='idle';setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),400);return;}
+      setTimeout(()=>{G.steakBoxes=[];G.currentGroups=[];G.flux=1.0;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakActive=false;hideBanners();renderGroups();renderDice();updateFormula();updateUI();},700);
+    },500);
+  },500);
+}
+
+$('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();else if(G.phase==='rolled')doPushLuck();};
+$('btnStrike').onclick=doStrike;
+$('btnFireball').onclick=()=>{if(G.mana<2)return;G.mana-=2;G.eHp=Math.max(0,G.eHp-5);flashEnemy(5);toast('Fireball! −5 HP');updateUI();renderBtns();};
+$('btnShield').onclick=()=>{if(G.mana<2)return;G.mana-=2;G.shield+=10;toast('Shield +10! Total: '+G.shield);updateUI();renderBtns();};
+$('btnReroll').onclick=()=>{
+  if(G.mana<2||G.phase!=='rolled'||G.busy)return;
+  const selIdxs=G.ds.map((s,i)=>s===DS.S?i:-1).filter(i=>i>=0);
+  if(!selIdxs.length){toast('Select dice to reroll first');return;}
+  G.mana-=2;G.busy=true;G.phase='pushing';showRerollingSelected(selIdxs);renderBtns();
+  setTimeout(()=>{selIdxs.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});G.busy=false;G.phase='rolled';hideBanners();renderDice();updateUI();toast('Rerolled '+selIdxs.length+' dice!');},ANIM);
+};
+$('btnHelp').onclick=()=>{buildGuide();$('tutOv').classList.add('on');};
+
+// Build guide with SVG icons
+function buildGuide(){
+  const gc=$('guideContent');if(gc.children.length>0)return;
+  const rows=[
+    {idx:0,name:'Normal Attack',desc:'×1=2 · ×2=5 · ×3=16 · ×4=35 · ×5=75 · ×6=140',col:'#fff5f5',border:'#e74c3c'},
+    {idx:1,name:'Strong Attack',desc:'×1=6 · ×2=15 · ×3=42 · ×4=105 · ×5=225 · ×6=420',col:'#ffeaea',border:'#c0392b'},
+    {idx:2,name:'Mana',desc:'pair=8 · triple=12 · quad=50 · quint=105 · sext=195 + MP',col:'#ebf5fb',border:'#2980b9'},
+    {idx:3,name:'Shield',desc:'pair=4 · triple=12 · quad=28 · quint=60 · sext=120 blk',col:'#eafaf1',border:'#27ae60'},
+    {idx:4,name:'Flux',desc:'pair=8(no fx) · triple=22(+1.0fx) · quad=50(+2.5fx) · quint=105(+5.0fx)',col:'#fefde7',border:'#f39c12'},
+    {idx:5,name:'Bonus Dmg',desc:'pair=+4BD · triple=10AD+20BD · quad=22AD+50BD · quint=45AD+100BD',col:'#fff5e0',border:'#e67e22'},
+  ];
+  rows.forEach(r=>{
+    const row=document.createElement('div');row.className='lg-row';row.style.marginBottom='4px';
+    const die=document.createElement('div');die.className='lg-die';die.style.background=r.col;die.style.border='1.5px solid '+r.border;
+    die.innerHTML=SVG[r.idx];row.appendChild(die);
+    const info=document.createElement('div');info.style.flex='1';
+    info.innerHTML=`<div class="cn2">${r.name}</div><div class="cr2">${r.desc}</div>`;
+    row.appendChild(info);gc.appendChild(row);
+  });
+}
+
+const ENEMIES=[
+  {name:'Goblin Raider · Lv 1',svgKey:'goblin',hp:80,dmg:8},
+  {name:'Orc Warrior · Lv 2',svgKey:'orc',hp:120,dmg:9},
+  {name:'Troll Brute · Lv 3',svgKey:'troll',hp:160,dmg:10},
+  {name:'Dark Knight · Lv 4',svgKey:'knight',hp:200,dmg:11},
+  {name:'Dragon · Lv 5 (BOSS)',svgKey:'dragon',hp:240,dmg:12},
+];
+function setEnemy(idx){
+  const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];
+  G.enemyIdx=idx;G.eHp=e.hp;G.eMaxHp=e.hp;G.eDmg=e.dmg;
+  $('eavatar').innerHTML=SVG[e.svgKey]||SVG.skull;
+  $('ename').textContent=e.name;
+  $('itxt').textContent='Next: attack '+e.dmg+' dmg';updateUI();
+}
+function doRestart(){
+  window.hideOverlay();
+  Object.assign(G,{pHp:50,mana:0,flux:1.0,bonusDmg:0,shield:0,busy:false,steakActive:false,phase:'idle',dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0});
+  setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
+}
+$('btnRestart').onclick=doRestart;
+window.restart=doRestart;
+window.nextEnemy=()=>{
+  hideOverlay();
+  Object.assign(G,{bonusDmg:0,shield:0,flux:1.0,busy:false,steakActive:false,phase:'idle',dice:[],ds:[],steakBoxes:[],currentGroups:[]});
+  setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
+};
+doRestart();
+</script>
+</body>
+</html>
