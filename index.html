@@ -35,42 +35,18 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .ban.feedback.warn{background:#fff9e6;color:#7d6608;border-bottom:1px solid #f39c12}
 .ban.on{display:block}
 
-/* ── STEAK POPUP OVERLAY ── */
-.steak-pop{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  display:flex;align-items:center;justify-content:center;
-  pointer-events:none;z-index:80;
-}
-.steak-card{
-  background:#fff3e0;border:2.5px solid #f39c12;
-  border-radius:18px;padding:14px 28px;text-align:center;
-  box-shadow:0 4px 24px rgba(243,156,18,.25);
-  transform:scale(0);opacity:0;
-  transition:transform .22s cubic-bezier(.34,1.56,.64,1), opacity .18s ease;
-  pointer-events:none;
-}
-.steak-card.on{transform:scale(1);opacity:1}
-.steak-title{font-size:22px;font-weight:700;color:#d35400;line-height:1.1}
-.steak-sub{font-size:12px;color:#e67e22;margin-top:3px}
 
-/* ── FORMULA BAR — floats between arena and bottom, separated from both ── */
-.formula-bar{
-  background:#fff;
-  border-top:1.5px solid #eee;
-  border-bottom:1.5px solid #eee;
-  padding:7px 14px;
-  flex-shrink:0;
-  display:flex;gap:6px;align-items:stretch;
-  margin-bottom:0;
-}
-.fbox-db{flex:2;background:#f0f7ff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 10px;display:flex;align-items:center;justify-content:space-around}
+
+/* ── FORMULA BAR — inside arena, same width/alignment as Steak/Selection boxes ── */
+.formula-bar{width:100%;display:flex;gap:6px;align-items:stretch;margin-top:2px;flex-shrink:0}
+.fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 10px;display:flex;align-items:center;justify-content:space-around}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
 .fdc-val{font-size:16px;font-weight:700;line-height:1}
 .fdc-lbl{font-size:8px;color:#888}
 .fdc-dmg .fdc-val{color:#e8a020}.fdc-bonus .fdc-val{color:#e05530}
 .fdiv{width:1px;height:20px;background:#aed6f1}
 .fop-mid{display:flex;align-items:center;font-size:14px;color:#bbb;flex-shrink:0}
-.fbox-flux{flex:1;background:#fdf0f8;border:1.5px solid #c71585;border-radius:9px;padding:4px 3px;text-align:center}
+.fbox-flux{flex:1;background:#fff;border:1.5px solid #c71585;border-radius:9px;padding:4px 3px;text-align:center}
 .fval-flux{font-size:15px;font-weight:700;color:#9b59b6;line-height:1}
 .fl{font-size:7px;color:#bbb;margin-top:1px}
 
@@ -83,58 +59,122 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .die img{width:72%;height:72%;object-fit:contain;pointer-events:none;display:block}
 .die.sel{border-color:#f39c12;background:#fff}
 .die.slot{border:2px dashed #e8e8e8;background:#fafafa;cursor:default}
+/* Enemy attack popup */
+@keyframes atk-in{0%{transform:translateY(-16px) scale(.85);opacity:0}50%{transform:translateY(4px) scale(1.04);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+@keyframes atk-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.9) translateY(6px)}}
+.enemy-atk-pop{
+  position:absolute;left:50%;transform:translateX(-50%);
+  background:#c0392b;color:#fff;
+  border-radius:10px;padding:7px 18px;
+  font-size:13px;font-weight:700;text-align:center;
+  white-space:nowrap;pointer-events:none;
+  box-shadow:0 3px 14px rgba(192,57,43,.35);
+  z-index:70;
+  animation:atk-in .3s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.enemy-atk-pop.out{animation:atk-out .25s ease forwards}
+.enemy-atk-pop .atk-sub{font-size:10px;font-weight:400;opacity:.85;display:block;margin-top:2px}
+.die.locked{border:2px solid #c8e6c9;background:#f1f8f1;cursor:default;opacity:.5}
+.die.locked img{filter:grayscale(.4)}
 .die.slot img{opacity:.1}
 @keyframes spin{0%{transform:rotate(-25deg) scale(.72)}20%{transform:rotate(22deg) scale(1.14)}45%{transform:rotate(-14deg) scale(.92)}65%{transform:rotate(10deg) scale(1.04)}82%{transform:rotate(-5deg) scale(.98)}100%{transform:rotate(0) scale(1)}}
 @keyframes hotpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 @keyframes flash{0%,100%{background:#f5eeff}30%{background:#ffe8e8}70%{background:#f5eeff}}
 @keyframes bigshake{0%,100%{transform:translateX(0) scale(1)}12%{transform:translateX(-9px) scale(1.1) rotate(-3deg)}28%{transform:translateX(8px) scale(1.08) rotate(2deg)}44%{transform:translateX(-6px)}58%{transform:translateX(5px)}72%{transform:translateX(-3px)}86%{transform:translateX(2px)}}
-@keyframes hpshake{0%,100%{transform:translateX(0)}15%{transform:translateX(-4px)}30%{transform:translateX(4px)}45%{transform:translateX(-3px)}60%{transform:translateX(3px)}75%{transform:translateX(-1px)}}
+@keyframes hpshake{0%{transform:translateX(0)}10%{transform:translateX(-10px) scale(1.04)}20%{transform:translateX(9px)}30%{transform:translateX(-8px)}40%{transform:translateX(7px)}50%{transform:translateX(-5px)}65%{transform:translateX(4px)}80%{transform:translateX(-2px)}100%{transform:translateX(0)}}
 @keyframes boxin{0%{transform:scale(.88);opacity:0}70%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
 .die.rolling{animation:spin 2.4s ease forwards}
+/* Strike scoring animations */
+@keyframes die-score{0%{transform:scale(1)}35%{transform:scale(1.22);border-color:#f39c12;box-shadow:0 0 14px rgba(243,156,18,.7)}70%{transform:scale(.96)}100%{transform:scale(1)}}
+@keyframes gbox-flash{0%{transform:scale(1)}30%{transform:scale(1.04);filter:brightness(1.08)}70%{transform:scale(.99)}100%{transform:scale(1);filter:none}}
+@keyframes val-pop{0%{transform:scale(1)}40%{transform:scale(1.35);color:#f39c12}100%{transform:scale(1)}}
+@keyframes stat-gain{0%{transform:scale(1)}40%{transform:scale(1.25);color:#27ae60}100%{transform:scale(1)}}
+@keyframes stat-lose{0%{transform:scale(1)}40%{transform:scale(1.2);color:#e74c3c}100%{transform:scale(1)}}
+.die.scoring{animation:die-score .45s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes firein{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes steak-txt-in{0%{transform:scale(.4) translateY(10px);opacity:0}60%{transform:scale(1.12) translateY(-4px)}100%{transform:scale(1) translateY(0);opacity:1}}
+@keyframes steak-txt-glow{0%,100%{opacity:1}50%{opacity:.7}}
+.die.steak-fire{border-color:#f39c12!important;background:#fff8ee!important;animation:hotpulse .4s ease infinite alternate}
+.die.steak-fire img{animation:firein .3s ease forwards}
+/* Steak big text banner — in arena, above dice */
+.steak-banner{
+  width:100%;max-width:320px;
+  text-align:center;padding:4px 0 2px;
+  pointer-events:none;
+}
+.steak-banner-txt{
+  font-size:28px;font-weight:800;
+  color:#d35400;letter-spacing:.5px;line-height:1;
+  animation:steak-txt-in .3s cubic-bezier(.34,1.56,.64,1) forwards, steak-txt-glow .8s ease .3s infinite;
+  display:inline-block;
+}
+.steak-banner-flux{
+  font-size:13px;font-weight:600;color:#e67e22;
+  margin-top:2px;display:block;
+  animation:steak-txt-in .35s cubic-bezier(.34,1.56,.64,1) .05s both;
+}
 .die.hotdie{border-color:#f39c12;background:#fff;animation:hotpulse .5s ease 4}
 .av.flash{animation:flash .4s ease}
 .av.bigshake{animation:bigshake .6s ease}
-.hrow.shake{animation:hpshake .4s ease}
+.hrow.shake{animation:hpshake .7s ease}
 .dlbl{font-size:7px;color:#ccc;user-select:none;line-height:1}
 .dlbl.s{color:#f39c12}.dlbl.inv{color:#e74c3c}
 
 /* Groups */
-.groups-area{display:flex;flex-direction:column;gap:3px;width:100%;max-width:320px}
-.gbox{border-radius:7px;padding:3px 7px;display:flex;align-items:flex-start;gap:4px;animation:boxin .2s ease}
+.groups-area{display:flex;flex-direction:column;gap:3px;width:100%}
+.gbox{border-radius:9px;padding:6px 10px;display:flex;align-items:flex-start;gap:8px;animation:boxin .2s ease}
 .gbox.steak-box{background:#fff3e0;border:1.5px solid #f39c12}
 .gbox.pushrow{background:#f5f5f5;border:1px solid #e8e8e8}
-.gbox.selbox{background:#fff;border:1.5px solid #2980b9}
-.gbox-lbl{font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0;padding-top:2px;min-width:40px;line-height:1.3}
+.gbox.selbox{background:#fff;border:1.5px solid #2980b9;padding:5px 8px;gap:6px}
+.gbox-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0;padding-top:2px;min-width:52px;line-height:1.3}
 .gbox.steak-box .gbox-lbl{color:#e67e22}
 .gbox.pushrow .gbox-lbl{color:#bbb}
-.gbox.selbox .gbox-lbl{color:#2980b9}
-.gbox-content{display:flex;align-items:center;flex-wrap:wrap;gap:2px;flex:1}
-.gchip{width:16px;height:16px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.gchip img{width:10px;height:10px;object-fit:contain}
+.gbox.selbox .gbox-lbl{color:#2980b9;min-width:36px;font-size:9px}
+.gbox-content{display:flex;align-items:center;flex-wrap:wrap;gap:4px;flex:1}
+.gchip{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gchip img{width:18px;height:18px;object-fit:contain}
 .gbox.steak-box .gchip{background:#fff;border:1px solid #f5cba7}
 .gbox.pushrow .gchip{background:#fff;border:1px solid #ddd}
-.gbox.selbox .gchip{background:#eef6ff;border:1px solid #aed6f1}
+.gbox.selbox .gchip{background:#eef6ff;border:1px solid #aed6f1;width:22px;height:22px}
+.gbox.selbox .gchip img{width:14px;height:14px}
+.gbox.selbox .gchip.dim{opacity:.25;filter:grayscale(.5)}
+.gbox.selbox .gchip.valid{opacity:1}
+.sel-empty{width:22px;height:22px;border-radius:4px;border:2px dashed #aed6f1;background:transparent;flex-shrink:0}
 .gcomma{font-size:8px;color:#ccc;align-self:center;margin:0 1px}
-.gbox-score{font-size:8px;font-weight:600;flex-shrink:0;padding-top:2px;text-align:right;line-height:1.4;min-width:38px}
+.gbox-score{font-size:12px;font-weight:700;flex-shrink:0;padding-top:2px;text-align:right;line-height:1.4;min-width:52px}
 .gbox.steak-box .gbox-score{color:#e67e22}
 .gbox.pushrow .gbox-score{color:#aaa}
-.gbox.selbox .gbox-score{color:#2980b9}
+.gbox.selbox .gbox-score{color:#2980b9;min-width:44px;font-size:11px}
 
 /* ── BOTTOM — action area only ── */
-.bottom{background:#fff;padding:5px 12px 8px;border-top:1px solid #eee;flex-shrink:0}
-.bb{display:flex;gap:6px;align-items:flex-start}
-.bc{display:flex;flex-direction:column;gap:2px;width:42px;flex-shrink:0;padding-top:1px}
+.bottom{background:#fff;padding:5px 12px 20px;border-top:1px solid #eee;flex-shrink:0}
+.bb{display:flex;flex-direction:column;gap:0}
+.hbtn{width:20px;height:20px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+/* ── PLAYER STAT ROW — bottom, HP left / MP right ── */
+.stat-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}
+.stat-side{display:flex;align-items:center;gap:5px;flex:1}
+.stat-side.right{justify-content:flex-end}
+.stat-icon{font-size:13px;flex-shrink:0}
+.stat-col{display:flex;flex-direction:column;gap:2px}
+.stat-col.right{align-items:flex-end}
+.stat-val{font-size:12px;font-weight:700;line-height:1}
+.stat-val.hp{color:#e74c3c}
+.stat-val.mp{color:#2980b9}
+.stat-bar{height:5px;border-radius:3px;background:#f0f0f0;overflow:hidden;width:72px}
+.stat-fill{height:100%;border-radius:3px;transition:width .4s}
+.stat-fill-hp{background:#e74c3c}
+.stat-fill-mp{background:#2980b9}
+.bc{display:none}
 .brow{display:flex;align-items:center;gap:3px}
 .bi{width:12px;text-align:center;flex-shrink:0;font-size:9px}
 .bg{flex:1;background:#f0f0f0;border-radius:3px;height:4px;overflow:hidden}
 .bf{height:100%;border-radius:3px;transition:width .4s}
 .bhp{background:#e74c3c}.bmp{background:#2980b9}
 .bv{font-size:7px;color:#bbb;text-align:right}
-.hbtn{width:16px;height:16px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:2px}
-.btc{flex:1;display:flex;flex-direction:column;gap:4px}
+.btc{flex:1;width:100%;display:flex;flex-direction:column;gap:4px}
 .skrow{display:flex;gap:4px}
 .sk{flex:1;border-radius:8px;padding:4px 2px;text-align:center;border:1.5px solid #bbb;background:#f9f9f9;position:relative}
-.sk .sn{font-size:8px;font-weight:600;color:#555}.sk .sc{font-size:7px;color:#bbb;margin-top:1px}
+.sk .sn{font-size:8px;font-weight:600;color:#555}.sk .sc{font-size:7px;color:#bbb;margin-top:1px}.mcost{font-size:8px;opacity:.7}
 .sk.fire{border-color:#e67e22;background:#fff8f0}.sk.fire .sn{color:#d35400}
 .sk.sh{border-color:#2980b9;background:#f0f7ff}.sk.sh .sn{color:#1a5276}
 .sk.rr{border-color:#8e44ad;background:#f9f0ff}.sk.rr .sn{color:#6c3483}
@@ -201,38 +241,47 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <div class="arena">
     <div class="dg" id="diceGrid"></div>
     <div class="groups-area" id="groupsArea"></div>
+    <!-- Formula bar — same alignment as Steak/Selection boxes -->
+    <div class="formula-bar">
+      <div class="fbox-db">
+        <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
+        <div class="fdiv"></div>
+        <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
+      </div>
+      <div class="fop-mid">×</div>
+      <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
+    </div>
   </div>
 
   <!-- Formula bar — between arena and bottom -->
-  <div class="formula-bar">
-    <div class="fbox-db">
-      <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
-      <div class="fdiv"></div>
-      <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
-    </div>
-    <div class="fop-mid">×</div>
-    <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
-  </div>
-
-  <!-- Spacer — visual gap between formula and action area -->
-  <div style="height:10px;background:#f0f0f0;flex-shrink:0;border-top:1px solid #e8e8e8;border-bottom:1px solid #e8e8e8;"></div>
+    <!-- Spacer — visual gap between formula and action area -->
 
   <!-- Bottom action area -->
   <div class="bottom">
     <div class="bb">
-      <div class="bc">
-        <div class="brow" id="hpRow"><div class="bi">❤️</div><div class="bg"><div class="bf bhp" id="barHp" style="width:100%"></div></div></div>
-        <div class="bv" id="valHp" style="color:#e74c3c">100/100</div>
-        <div style="height:2px"></div>
-        <div class="brow"><div class="bi">💧</div><div class="bg"><div class="bf bmp" id="barMana" style="width:0%"></div></div></div>
-        <div class="bv" id="valMana" style="color:#2980b9">0/10</div>
-        <div style="display:flex;justify-content:center;margin-top:2px"><button class="hbtn" id="btnHelp">?</button></div>
+      <!-- Player HP / MP — bottom, HP left · ? centre · MP right -->
+      <div class="stat-row">
+        <div class="stat-side" id="hpRow">
+          <div class="stat-icon">❤️</div>
+          <div class="stat-col">
+            <div class="stat-val hp" id="valHp">100/100</div>
+            <div class="stat-bar"><div class="stat-fill stat-fill-hp" id="barHp" style="width:100%"></div></div>
+          </div>
+        </div>
+        <button class="hbtn" id="btnHelp">?</button>
+        <div class="stat-side right">
+          <div class="stat-col right">
+            <div class="stat-val mp" id="valMana">0/10</div>
+            <div class="stat-bar"><div class="stat-fill stat-fill-mp" id="barMana" style="width:0%"></div></div>
+          </div>
+          <div class="stat-icon">💧</div>
+        </div>
       </div>
       <div class="btc">
         <div class="skrow">
-          <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">10dmg+5BD·2MP</div></button>
-          <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk·2MP</div><div class="sbadge" id="shieldBadge">0</div></button>
-          <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc" id="rrSub">sel·2MP</div></button>
+          <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">10+5BD <span class="mcost">💧💧</span></div></button>
+          <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div><div class="sbadge" id="shieldBadge">0</div></button>
+          <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc"><span id="rrSub">sel</span> <span class="mcost">💧💧</span></div></button>
         </div>
         <div class="mr">
           <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
@@ -242,13 +291,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     </div>
   </div>
 
-  <!-- Steak popup -->
-  <div class="steak-pop" id="steakPop">
-    <div class="steak-card" id="steakCard">
-      <div class="steak-title">🔥 Steak!</div>
-      <div class="steak-sub" id="steakSub">Flux ×2 — Rolling fresh 6...</div>
-    </div>
-  </div>
+
 
   <div class="ov" id="overlay"><div class="oc" id="ocard"></div></div>
 
@@ -292,8 +335,10 @@ function mkImg(url,size='72%'){const img=document.createElement('img');img.src=u
 function mkIconImg(idx,size='72%'){return mkImg(ICON_URLS[idx],size);}
 
 // ── FIBONACCI FLUX ─────────────────────────────────────────────
-const FIB=[1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,10946,17711];
-function fibFlux(steakCount){return FIB[Math.min(steakCount+2,FIB.length-1)];}
+
+// STEAK_FLUX lookup — cap Steak 15 = ×777
+const STEAK_FLUX=[0,2,3,5,8,13,20,30,50,70,100,150,200,300,450,777];
+function getFlux(n){if(n>=15)return 777;return STEAK_FLUX[Math.max(1,n)]||1;}
 
 // ── HIDDEN LOGIC ───────────────────────────────────────────────
 // Rule 01: No heavy cluster (4+) on first roll
@@ -383,7 +428,7 @@ function calcCombo(){
   for(const g of G.currentGroups){const s=scoreGroup(g.dice);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
   if(board.length){const s=scoreGroup(board);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
   if(!tAD&&!tShield&&!tBD&&!tMana&&!tFx)return null;
-  const effectiveFlux=G.flux+tFx;
+  const effectiveFlux=G.flux+tFx; // steak flux + star combo flux, tracked separately
   const totalDmg=Math.round((tAD+G.bonusDmg+tBD)*effectiveFlux);
   return{ad:tAD,fluxG:tFx,manaG:tMana,shieldG:tShield,bdmgG:tBD,effectiveFlux,totalDmg,board};
 }
@@ -404,25 +449,48 @@ function makeSlot(){
   const l=document.createElement('div');l.className='dlbl';l.textContent='—';
   w.appendChild(d);w.appendChild(l);return w;
 }
-function makeAnim(steak=false){
+function makeLockedDie(iconIdx){
   const w=document.createElement('div');w.className='dw';
-  const d=document.createElement('div');d.className='die '+(steak?'hotdie':'free')+' rolling';
-  d.style.background='#fff';d.appendChild(mkImg(ICON_ROLLING,'72%'));
-  const l=document.createElement('div');l.className='dlbl';l.style.color=steak?'#e67e22':'';l.textContent=steak?'steak!':'rolling';
+  const d=document.createElement('div');d.className='die locked';
+  d.appendChild(mkIconImg(iconIdx,'72%'));
+  const l=document.createElement('div');l.className='dlbl';l.style.color='#27ae60';l.textContent='✓';
   w.appendChild(d);w.appendChild(l);return w;
 }
-function makeChip(idx){const ch=document.createElement('div');ch.className='gchip';ch.appendChild(mkIconImg(idx,'10px'));return ch;}
+function makeAnim(steak=false){
+  const w=document.createElement('div');w.className='dw';
+  if(steak){
+    // Steak: fire emoji icon, hot pulse border
+    const d=document.createElement('div');d.className='die steak-fire';
+    d.style.cssText='width:100%;aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:36px;';
+    d.textContent='🔥';
+    const l=document.createElement('div');l.className='dlbl s';l.textContent='steak!';
+    w.appendChild(d);w.appendChild(l);
+  } else {
+    const d=document.createElement('div');d.className='die free rolling';
+    d.style.background='#fff';d.appendChild(mkImg(ICON_ROLLING,'72%'));
+    const l=document.createElement('div');l.className='dlbl';l.textContent='rolling';
+    w.appendChild(d);w.appendChild(l);
+  }
+  return w;
+}
+function makeChip(idx){const ch=document.createElement('div');ch.className='gchip';ch.appendChild(mkIconImg(idx,'18px'));return ch;}
 
-function renderDice(){
+function renderDice(skipFormula=false){
   const grid=$('diceGrid');grid.innerHTML='';
-  const{ii}=analyze();const inv=new Set(ii);let vis=0;
-  G.dice.forEach((d,i)=>{
-    if(G.ds[i]===DS.ST)return;vis++;
-    const isInv=G.ds[i]===DS.S&&inv.has(i);
-    grid.appendChild(makeDie(d,G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?(isInv?'no pair':'keep?'):'free',()=>tapDie(i),isInv));
-  });
-  for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
-  renderGroups();updateFormula();renderBtns();
+  const{ii}=analyze();const inv=new Set(ii);
+  for(let i=0;i<6;i++){
+    if(G.ds[i]===DS.ST){
+      grid.appendChild(G.dice[i]!==undefined?makeLockedDie(G.dice[i]):makeSlot());
+    } else if(!G.dice.length||G.phase==='idle'){
+      grid.appendChild(makeSlot());
+    } else {
+      const isInv=G.ds[i]===DS.S&&inv.has(i);
+      grid.appendChild(makeDie(G.dice[i],G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?(isInv?'no pair':'keep?'):'free',()=>tapDie(i),isInv));
+    }
+  }
+  renderGroups();
+  if(!skipFormula) updateFormula();
+  renderBtns();
 }
 function showAnimGrid(count,steak=false){
   const grid=$('diceGrid');grid.innerHTML='';
@@ -430,9 +498,12 @@ function showAnimGrid(count,steak=false){
   for(let i=count;i<6;i++)grid.appendChild(makeSlot());
 }
 function showRerolling(selIdxs){
-  const grid=$('diceGrid');grid.innerHTML='';const sel=new Set(selIdxs);let vis=0;
-  G.dice.forEach((d,i)=>{if(G.ds[i]===DS.ST)return;vis++;grid.appendChild(sel.has(i)?makeAnim(false):makeDie(d,G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?'keep?':'free',null));});
-  for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
+  const grid=$('diceGrid');grid.innerHTML='';const sel=new Set(selIdxs);
+  for(let i=0;i<6;i++){
+    if(G.ds[i]===DS.ST) grid.appendChild(makeLockedDie(G.dice[i]));
+    else if(sel.has(i)) grid.appendChild(makeAnim(false));
+    else grid.appendChild(makeDie(G.dice[i],G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?'keep?':'free',null));
+  }
 }
 
 function renderGroups(newSteakIdx=-1){
@@ -448,31 +519,62 @@ function renderGroups(newSteakIdx=-1){
   G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak-box','🔥 Steak!',sb.groups,i===newSteakIdx)));
   if(G.currentGroups.length>0)area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups));
   if(G.phase==='rolled'&&G.dice.length>0){
-    const{vi,hasInvalid}=analyze();
-    if(vi.length>0&&!hasInvalid){
-      const selDice=vi.map(i=>G.dice[i]);
-      const box=document.createElement('div');box.className='gbox selbox';
-      const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
-      const content=document.createElement('div');content.className='gbox-content';
-      selDice.forEach(ic=>content.appendChild(makeChip(ic)));
-      const sc=document.createElement('div');sc.className='gbox-score';sc.textContent=scoreLabel([{dice:selDice}]);
-      box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
+    const{vi,ii,hasInvalid}=analyze();
+    const hasSel=G.ds.some(s=>s===DS.S);
+    const invSet=new Set(ii);
+    const allSelIdxs=G.ds.map((s,i)=>s===DS.S?i:-1).filter(i=>i>=0);
+
+    // Always show selection box when rolled
+    const box=document.createElement('div');box.className='gbox selbox';
+    const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
+    const content=document.createElement('div');content.className='gbox-content';
+    const sc=document.createElement('div');sc.className='gbox-score';
+
+    if(!hasSel){
+      // No dice selected — 1 empty placeholder square
+      const empty=document.createElement('div');empty.className='sel-empty';
+      content.appendChild(empty);
+      sc.textContent='—';
+    } else if(hasInvalid){
+      // Invalid combo — show all selected dice dimmed
+      allSelIdxs.forEach(i=>{
+        const chip=makeChip(G.dice[i]);
+        chip.classList.add(invSet.has(i)?'dim':'dim'); // all dim if any invalid
+        content.appendChild(chip);
+      });
+      sc.textContent='invalid';sc.style.color='#e74c3c';
+    } else {
+      // Valid combo — show vi dice clearly
+      vi.forEach(i=>{
+        const chip=makeChip(G.dice[i]);
+        chip.classList.add('valid');
+        content.appendChild(chip);
+      });
+      sc.textContent=scoreLabel([{dice:vi.map(i=>G.dice[i])}]);
     }
+
+    box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
   }
 }
 
 function updateFormula(){
   const combo=calcCombo();
+  const{hasInvalid}=analyze();
+  const hasSel=G.ds.some(s=>s===DS.S);
   if(combo){
     $('fDmg').textContent=combo.ad;
     $('fBonus').textContent='+'+(G.bonusDmg+combo.bdmgG);
     $('fBonusLbl').textContent=combo.bdmgG>0?'Bonus(+'+combo.bdmgG+')':'Bonus';
-    $('fFlux').textContent='×'+combo.effectiveFlux;
-    $('fFluxLbl').textContent=combo.fluxG>0?'Flux(+'+combo.fluxG.toFixed(1)+')':'Flux';
-    $('sts').textContent='deal '+combo.totalDmg;
-  }else{
-    $('fDmg').textContent='0';$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';
-    $('fFlux').textContent='×'+G.flux;$('fFluxLbl').textContent='Flux';$('sts').textContent='select combo';
+    $('fFlux').textContent='×'+(Number.isInteger(combo.effectiveFlux)?combo.effectiveFlux:combo.effectiveFlux.toFixed(1));
+    $('fFluxLbl').textContent='Flux';
+  } else if(hasInvalid){
+    // Invalid selection — keep current displayed values, don't reset
+    $('fBonusLbl').textContent='Bonus';$('fFluxLbl').textContent='Flux';
+  } else {
+    // No selection or idle — show base state
+    $('fDmg').textContent='0';
+    $('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';
+    $('fFlux').textContent='×'+G.flux;$('fFluxLbl').textContent='Flux';
   }
 }
 
@@ -488,7 +590,10 @@ function renderBtns(){
   if(G.shield>0){shBtn.classList.add('has-shield');badge.textContent=G.shield;badge.classList.add('on');}
   else{shBtn.classList.remove('has-shield');badge.classList.remove('on');}
   shBtn.disabled=!mp||anim;$('btnReroll').disabled=!mp||anim||ph!=='rolled'||!hasSel;
-  $('rrSub').textContent=mp?(hasSel?'sel·2MP':'select'):'no MP';
+  const rrBtn=document.getElementById('btnReroll');
+  const rrMcost=rrBtn?rrBtn.querySelector('.mcost'):null;
+  $('rrSub').textContent=mp?(hasSel?'sel':'select'):'no';
+  if(rrMcost)rrMcost.style.display=mp?'':'none';
 }
 
 function updateUI(){
@@ -506,28 +611,75 @@ function feedback(msg,type='info',ms=1800){
 }
 function hideFeedback(){const b=$('feedbackBanner');clearTimeout(feedTimer);b.classList.remove('on');}
 
-// ── STEAK POPUP ────────────────────────────────────────────────
-let steakPopTimer=null;
-function showSteakPop(msg){
-  const card=$('steakCard');$('steakSub').textContent=msg;
-  card.classList.add('on');clearTimeout(steakPopTimer);
-  steakPopTimer=setTimeout(()=>card.classList.remove('on'),2200);
-}
 
-function hideBanners(){$('bustBanner').classList.remove('on');hideFeedback();}
+
+function hideBanners(){$('bustBanner').classList.remove('on');hideFeedback();hideSteakBanner();}
+function showSteakBanner(fluxVal){
+  let el=document.getElementById('steakBannerEl');
+  if(!el){
+    el=document.createElement('div');el.id='steakBannerEl';el.className='steak-banner';
+    el.innerHTML='<span class="steak-banner-txt">🔥 Steak!</span><span class="steak-banner-flux" id="steakFluxTxt"></span>';
+    // Insert before diceGrid inside arena
+    const arena=document.getElementById('diceGrid').parentNode;
+    arena.insertBefore(el,document.getElementById('diceGrid'));
+  }
+  document.getElementById('steakFluxTxt').textContent='Flux +'+fluxVal;
+  el.style.display='block';
+  // Re-trigger animation
+  const t=el.querySelector('.steak-banner-txt');
+  t.style.animation='none';void t.offsetWidth;
+  t.style.animation='steak-txt-in .3s cubic-bezier(.34,1.56,.64,1) forwards, steak-txt-glow .8s ease .3s infinite';
+}
+function hideSteakBanner(){const el=document.getElementById('steakBannerEl');if(el)el.style.display='none';}
 function showOverlay(html){$('ocard').innerHTML=html;$('overlay').classList.add('on')}
 window.hideOverlay=()=>$('overlay').classList.remove('on');
 
 function flashEnemy(dmg){const av=$('eavatar');av.classList.remove('flash','bigshake');void av.offsetWidth;if(dmg>50){av.classList.add('bigshake');setTimeout(()=>av.classList.remove('bigshake'),650);}else{av.classList.add('flash');setTimeout(()=>av.classList.remove('flash'),400);}}
-function shakeHp(){const r=$('hpRow');r.classList.remove('shake');void r.offsetWidth;r.classList.add('shake');setTimeout(()=>r.classList.remove('shake'),400);}
+function shakeHp(){
+  const r=$('hpRow');if(!r)return;
+  r.classList.remove('shake');void r.offsetWidth;
+  r.classList.add('shake');
+  setTimeout(()=>r.classList.remove('shake'),700);
+}
+
+function showEnemyAtkPop(dmg,blocked){
+  // Remove any existing popup
+  const old=document.getElementById('atkPop');if(old)old.remove();
+  const pop=document.createElement('div');
+  pop.id='atkPop';pop.className='enemy-atk-pop';
+  // Position just above dice area
+  const arena=document.querySelector('.arena');
+  const arenaRect=arena?arena.getBoundingClientRect():null;
+  const phone=document.querySelector('.phone');
+  const phoneRect=phone?phone.getBoundingClientRect():null;
+  if(arenaRect&&phoneRect){
+    pop.style.top=(arenaRect.top-phoneRect.top+6)+'px';
+  } else {
+    pop.style.top='140px';
+  }
+  const label=blocked>0&&dmg===0?'Shield blocked!':blocked>0?'Enemy Attack':'Enemy Attack';
+  const sub=blocked>0&&dmg===0?'Fully blocked — '+G.shield+' shield left':blocked>0?'−'+dmg+' HP (blocked '+blocked+')':'−'+dmg+' HP';
+  pop.innerHTML=label+'<span class="atk-sub">'+sub+'</span>';
+  phone.appendChild(pop);
+  // Auto dismiss after 1.6s
+  setTimeout(()=>{if(pop.parentNode){pop.classList.add('out');setTimeout(()=>pop.remove(),250);}},1600);
+}
 
 function applyEnemyHit(){
   const blocked=Math.min(G.shield,G.eDmg),dmgToHp=G.eDmg-blocked;
-  G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);shakeHp();
-  if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
-  else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
-  else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
-  updateUI();renderBtns();
+  G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);
+
+  // Step 1: show popup immediately
+  showEnemyAtkPop(dmgToHp,blocked);
+
+  // Step 2: 500ms gap, then shake HP bar + update UI
+  setTimeout(()=>{
+    shakeHp();
+    updateUI();renderBtns();
+    if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
+    else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
+    else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
+  },500);
 }
 
 function triggerVictory(){
@@ -535,7 +687,7 @@ function triggerVictory(){
   showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');
 }
 
-function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
+function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice(true);}
 
 function doBreak(){
   G.steakCount=0;G.flux=1;G.bonusDmg=0;G.breakStreak++;
@@ -573,50 +725,242 @@ function doRoll(){
 
 function doPushLuck(){
   if(G.busy||G.phase!=='rolled')return;if(!canPush()){feedback('⚠️ Fix invalid dice first','warn');return;}
-  const{vi}=analyze();G.currentGroups.push({dice:vi.map(i=>G.dice[i])});
+  const{vi}=analyze();
+  const groupDice=vi.map(i=>G.dice[i]);
+  const grpScore=scoreGroup(groupDice);
+
+  G.currentGroups.push({dice:groupDice});
   vi.forEach(i=>G.ds[i]=DS.ST);G.ds.forEach((s,i)=>{if(s===DS.S)G.ds[i]=DS.F;});
   const pushed=G.ds.filter(s=>s===DS.ST).length;
-  if(pushed===6){
-    // STEAK — increment steakCount, apply Fibonacci flux
-    G.steakCount++;
-    const newFlux=fibFlux(G.steakCount);
-    const newSteakIdx=G.steakBoxes.length;
-    G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
-    G.flux=newFlux;G.busy=true;G.phase='pushing';
-    // Show popup
-    showSteakPop('Flux ×'+newFlux+' — Rolling fresh 6...');
-    showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
-    setTimeout(()=>{
-      G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
-      G.phase='rolled';G.busy=false;
-      if(!hasCombo(G.dice))doBreak();
-      else{renderDice();updateUI();feedback('🔥 Steak ×'+G.steakCount+'! Flux = ×'+newFlux,'info',2400);}
-    },ANIM);return;
-  }
-  const fi=G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
-  if(!fi.length){hideBanners();renderDice();updateUI();return;}
   G.busy=true;G.phase='pushing';
-  const grid=$('diceGrid');grid.innerHTML='';G.ds.forEach(s=>{if(s===DS.ST)return;grid.appendChild(makeAnim(false));});
-  renderGroups();renderBtns();
-  setTimeout(()=>{fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});G.phase='rolled';G.busy=false;$('bustBanner').classList.remove('on');if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();else{renderDice();updateUI();}},ANIM);
+
+  // Phase 1: Show locked dice + flash them
+  renderDice(true); renderGroups(); renderBtns();
+  const lockedEls=[...document.querySelectorAll('#diceGrid .die.locked')];
+  lockedEls.forEach((d,idx)=>{
+    setTimeout(()=>{
+      d.style.animation='none';void d.offsetWidth;
+      d.classList.add('scoring');
+      setTimeout(()=>d.classList.remove('scoring'),500);
+    },idx*55);
+  });
+
+  // Phase 2 (300ms): Flash formula values with this group's contribution
+  setTimeout(()=>{
+    // Compute running totals across all committed groups
+    let rDmg=0,rFlux=G.flux,rBonus=G.bonusDmg;
+    for(const sb of G.steakBoxes)for(const g of sb.groups){const s=scoreGroup(g.dice);rDmg+=s.ad;rFlux+=s.fluxG;rBonus+=s.bdmgG;}
+    for(const g of G.currentGroups){const s=scoreGroup(g.dice);rDmg+=s.ad;rFlux+=s.fluxG;rBonus+=s.bdmgG;}
+    let fDelay=0;
+    if(grpScore.ad>0){setTimeout(()=>flashPop('fDmg',rDmg),fDelay);fDelay+=120;}
+    if(grpScore.fluxG>0){const fx=rFlux;setTimeout(()=>flashPop('fFlux','×'+(Number.isInteger(fx)?fx:fx.toFixed(1))),fDelay);fDelay+=120;}
+    if(grpScore.bdmgG>0){setTimeout(()=>flashPop('fBonus','+'+rBonus),fDelay);fDelay+=120;}
+    if(grpScore.manaG>0){const m=Math.min(G.maxMana,G.mana+grpScore.manaG);setTimeout(()=>flashPop('valMana',m+'/'+G.maxMana),fDelay);fDelay+=120;}
+    if(grpScore.shieldG>0){setTimeout(()=>popStat('shieldBadge','gain'),fDelay);}
+
+    // Phase 3 (300ms after formula): Rolling animation
+    setTimeout(()=>{
+      if(pushed===6){
+        // STEAK
+        G.steakCount++;
+        const newFlux=getFlux(G.steakCount);
+        const prevFlux=G.steakCount>1?getFlux(G.steakCount-1):1;
+        const fluxGain=newFlux-prevFlux;
+        const newSteakIdx=G.steakBoxes.length;
+        G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
+        G.flux=newFlux;
+        showSteakBanner(fluxGain);showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
+        setTimeout(()=>{
+          G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
+          G.phase='rolled';G.busy=false;hideSteakBanner();
+          if(!hasCombo(G.dice))doBreak();
+          else{renderDice();updateUI();feedback('🔥 Steak! Flux +'+fluxGain,'info',2400);}
+        },ANIM);
+        return;
+      }
+      const fi=G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
+      if(!fi.length){hideBanners();renderDice();updateUI();return;}
+      const grid=$('diceGrid');grid.innerHTML='';
+      for(let i=0;i<6;i++){
+        if(G.ds[i]===DS.ST) grid.appendChild(makeLockedDie(G.dice[i]));
+        else grid.appendChild(makeAnim(false));
+      }
+      renderGroups();renderBtns();
+      setTimeout(()=>{
+        fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});
+        G.phase='rolled';G.busy=false;
+        $('bustBanner').classList.remove('on');
+        if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();
+        else{renderDice();updateUI();}
+      },ANIM);
+    },300);
+  },300);
+}
+
+// ── STRIKE ANIMATION HELPERS ──────────────────────────────────
+
+// Flash a value element with pop animation, optionally update text
+function flashPop(elId, newText){
+  const el=$(elId);if(!el)return;
+  if(newText!==undefined)el.textContent=newText;
+  el.style.animation='none';void el.offsetWidth;
+  el.style.animation='val-pop .9s ease';
+  setTimeout(()=>el.style.animation='',900);
+}
+function popStat(elId,type='gain'){
+  const el=$(elId);if(!el)return;
+  el.style.animation='none';void el.offsetWidth;
+  el.style.animation=(type==='gain'?'stat-gain':'stat-lose')+' .45s ease';
+  setTimeout(()=>el.style.animation='',450);
+}
+
+// Animate HP counting down over dur ms
+function animHpDown(from, to, dur){
+  const el=$('valHp');if(!el)return;
+  const bar=$('barHp');
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min(1,(now-start)/dur);
+    const ease=1-Math.pow(1-t,3); // ease-out cubic
+    const val=Math.round(from+(to-from)*ease);
+    el.textContent=val+'/'+G.pMaxHp;
+    if(bar)bar.style.width=Math.round(val/G.pMaxHp*100)+'%';
+    if(t<1)requestAnimationFrame(tick);
+    else{popStat('valHp','lose');}
+  }
+  requestAnimationFrame(tick);
+}
+
+// Build scoring event list from all active groups
+function buildScoringEvents(combo){
+  const events=[];
+  // Steak boxes — each steak as one event (flatten its groups)
+  for(const sb of G.steakBoxes){
+    const combined=sb.groups.flatMap(g=>g.dice);
+    events.push({dice:combined,type:'steak'});
+  }
+  // Push luck groups — each as one event
+  for(const g of G.currentGroups){
+    events.push({dice:g.dice,type:'push'});
+  }
+  // Current selection
+  if(combo.board&&combo.board.length>0){
+    events.push({dice:combo.board,type:'sel'});
+  }
+  return events;
+}
+
+// Main strike animation — one event per combo group
+// Each stat flashes independently with 500ms gap between them
+const STAT_GAP=500;  // ms between each stat flash
+const STAT_ANIM=900; // ms for each animation (doubled)
+
+function runStrikeAnimation(combo, events, onDone){
+  const gboxes=[...document.querySelectorAll('.gbox')];
+  const selDice=[...document.querySelectorAll('#diceGrid .die:not(.slot)')].filter(
+    d=>d.style.borderColor==='rgb(243, 156, 18)'||d.style.borderColor.includes('243')
+  );
+
+  let rDmg=0, rBonus=G.bonusDmg, rFlux=G.flux, rMana=G.mana, rShield=G.shield;
+  let globalDelay=0; // cumulative delay across all events
+
+  events.forEach((ev,i)=>{
+    const s=scoreGroup(ev.dice);
+
+    // ① Flash matching gbox at start of this event
+    const evStart=globalDelay;
+    setTimeout(()=>{
+      const box=gboxes[i];
+      if(box){
+        box.style.animation='none';void box.offsetWidth;
+        box.style.animation='gbox-flash .9s ease';
+        setTimeout(()=>box.style.animation='',900);
+      }
+      // Dice animation for selection event
+      if(ev.type==='sel'&&selDice.length>0){
+        selDice.forEach((die,di)=>{
+          setTimeout(()=>{
+            die.classList.remove('scoring');void die.offsetWidth;
+            die.classList.add('scoring');
+            setTimeout(()=>die.classList.remove('scoring'),600);
+          },di*60);
+        });
+      }
+    }, evStart);
+
+    // ② Each stat gets its own slot with STAT_GAP between them
+    globalDelay+=800; // 300 gbox anim + 500ms extra pause before stats
+    if(s.ad>0){
+      const t=globalDelay; const v=rDmg+=s.ad;
+      setTimeout(()=>flashPop('fDmg',v),t);
+      globalDelay+=STAT_GAP;
+    }
+    if(s.fluxG>0){
+      const t=globalDelay; rFlux+=s.fluxG; const fx=rFlux;
+      setTimeout(()=>flashPop('fFlux','×'+(Number.isInteger(fx)?fx:fx.toFixed(1))),t);
+      globalDelay+=STAT_GAP;
+    }
+    if(s.bdmgG>0){
+      const t=globalDelay; const v=rBonus+=s.bdmgG;
+      setTimeout(()=>flashPop('fBonus','+'+v),t);
+      globalDelay+=STAT_GAP;
+    }
+    if(s.manaG>0){
+      const t=globalDelay; rMana=Math.min(G.maxMana,rMana+s.manaG); const m=rMana;
+      setTimeout(()=>flashPop('valMana',m+'/'+G.maxMana),t);
+      globalDelay+=STAT_GAP;
+    }
+    if(s.shieldG>0){
+      const t=globalDelay;
+      setTimeout(()=>popStat('shieldBadge','gain'),t);
+      globalDelay+=STAT_GAP;
+    }
+    globalDelay+=200; // pause between events
+  });
+
+  // Callback after all events + last animation finishes
+  setTimeout(onDone, globalDelay+STAT_ANIM);
 }
 
 function doStrike(){
   if(G.busy||G.phase!=='rolled')return;const combo=calcCombo();if(!combo)return;
   G.busy=true;G.phase='striking';hideBanners();renderBtns();
-  G.mana=Math.min(G.maxMana,G.mana+combo.manaG);G.bonusDmg+=combo.bdmgG;G.shield+=combo.shieldG;
-  const td=combo.totalDmg;G.eHp=Math.max(0,G.eHp-td);
-  flashEnemy(td);
-  const extras=[];if(combo.bdmgG>0)extras.push('+'+combo.bdmgG+'BD');if(combo.shieldG>0)extras.push('🛡️+'+combo.shieldG);
-  feedback('⚔️ Strike! −'+td+' dmg'+(extras.length?' ('+extras.join(' ')+'!)':''),'info',1800);
-  updateUI();
-  setTimeout(()=>{
-    if(G.eHp<=0){triggerVictory();return;}
-    setTimeout(()=>{applyEnemyHit();
-      if(G.pHp<=0){G.busy=false;G.phase='idle';setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),400);return;}
-      setTimeout(()=>{G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];hideBanners();renderGroups();renderDice();updateFormula();updateUI();},700);
-    },500);
-  },500);
+
+  // Build per-group events for incremental animation
+  const events=buildScoringEvents(combo);
+
+  runStrikeAnimation(combo, events, ()=>{
+    // Apply all stats after animation completes
+    G.mana=Math.min(G.maxMana,G.mana+combo.manaG);
+    G.bonusDmg+=combo.bdmgG;G.shield+=combo.shieldG;
+    const td=combo.totalDmg;G.eHp=Math.max(0,G.eHp-td);
+    flashEnemy(td);
+    const extras=[];if(combo.bdmgG>0)extras.push('+'+combo.bdmgG+'BD');if(combo.shieldG>0)extras.push('🛡️+'+combo.shieldG);
+    feedback('⚔️ Strike! −'+td+' dmg'+(extras.length?' ('+extras.join(' ')+'!)':''),'info',2000);
+    updateUI();
+
+    setTimeout(()=>{
+      if(G.eHp<=0){triggerVictory();return;}
+
+      // Enemy counter-attack
+      setTimeout(()=>{
+        const hpBefore=G.pHp;
+        applyEnemyHit();
+        // HP counts down over 600ms — slow and painful
+        if(G.pHp<hpBefore) animHpDown(hpBefore,G.pHp,900);
+        if(G.pHp<=0){
+          G.busy=false;G.phase='idle';
+          setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),500);
+          return;
+        }
+        setTimeout(()=>{
+          G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
+          G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
+          hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
+        },700);
+      },350);
+    },300);
+  });
 }
 
 $('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();else if(G.phase==='rolled')doPushLuck();};
