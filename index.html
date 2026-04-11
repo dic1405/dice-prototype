@@ -3,15 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roguelike v9.8</title>
+<title>Dice Roguelike v9.9</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
 body{height:100%;overflow:hidden;display:flex;justify-content:center;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 .phone{background:#f8f8f8;width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
-
-/* ── ENEMY BAR ── */
 .ez{background:#fff;padding:7px 12px 5px;border-bottom:1px solid #eee;flex-shrink:0}
 .er{display:flex;gap:8px;align-items:center}
 .av{width:38px;height:38px;border-radius:10px;background:#f5eeff;border:2px solid #9b59b6;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;overflow:hidden}
@@ -25,44 +23,16 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .ibadge{display:inline-flex;align-items:center;gap:3px;background:#fff0f0;border:1px solid #fcc;border-radius:5px;padding:1px 5px;font-size:9px;color:#c0392b}
 .idot{width:4px;height:4px;border-radius:50%;background:#e74c3c;flex-shrink:0}
 .rbtn{background:#f0f0f0;border:1px solid #ddd;color:#888;border-radius:5px;padding:2px 6px;font-size:8px}
-
-/* ── COMBO HINT: below enemy bar, right-aligned ── */
-.combo-hint{
-  background:#fff;border-bottom:1px solid #eee;
-  padding:3px 12px 4px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:flex-end;
-  min-height:22px;gap:4px;flex-wrap:wrap;
-}
-.combo-chip{
-  display:inline-flex;align-items:center;gap:3px;
-  background:#f0f7ff;border:1px solid #aed6f1;
-  border-radius:5px;padding:1px 5px;font-size:8px;color:#1a5276;
-  white-space:nowrap;
-}
-.combo-chip img{width:10px;height:10px;object-fit:contain}
-.combo-chip.special{background:#fff3e0;border-color:#f5cba7;color:#d35400}
-.combo-chip.steak{background:#fff3e0;border-color:#f39c12;color:#e67e22}
-.combo-empty{font-size:8px;color:#ccc;font-style:italic}
-
-/* ── BANNERS ── */
 .ban{display:none;text-align:center;padding:3px 10px;font-size:11px;font-weight:500;flex-shrink:0}
 .ban.bust{background:#ffeaea;color:#c0392b;border-bottom:1px solid #e74c3c}
 .ban.steak{background:#fff3e0;color:#d35400;border-bottom:1px solid #f39c12}
 .ban.on{display:block}
-
-/* ── ARENA ── */
 .arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:5px 12px;overflow:hidden}
 .dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:252px}
 .dw{display:flex;flex-direction:column;align-items:center;gap:2px}
-.die{
-  width:100%;aspect-ratio:1;border-radius:12px;
-  border:2px solid #ddd;background:#fff; /* always white */
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;user-select:none;overflow:hidden;
-  transition:border-color .12s;
-}
+.die{width:100%;aspect-ratio:1;border-radius:12px;border:2px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;overflow:hidden;transition:border-color .12s}
 .die:active{transform:scale(.86)}
-.die img{width:70%;height:70%;object-fit:contain;pointer-events:none;display:block} /* 70% = +20% vs 58% */
+.die img{width:70%;height:70%;object-fit:contain;pointer-events:none;display:block}
 .die.sel{border-color:#f39c12;background:#fff}
 .die.slot{border:2px dashed #e8e8e8;background:#fafafa;cursor:default}
 .die.slot img{opacity:.12}
@@ -79,8 +49,6 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .hrow.shake{animation:hpshake .4s ease}
 .dlbl{font-size:7px;color:#ccc;user-select:none;line-height:1}
 .dlbl.s{color:#f39c12}.dlbl.inv{color:#e74c3c}
-
-/* Groups */
 .groups-area{display:flex;flex-direction:column;gap:3px;width:100%;max-width:320px}
 .gbox{border-radius:7px;padding:3px 7px;display:flex;align-items:flex-start;gap:4px;animation:boxin .2s ease}
 .gbox.steak{background:#fff3e0;border:1.5px solid #f39c12}
@@ -101,8 +69,6 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .gbox.steak .gbox-score{color:#e67e22}
 .gbox.pushrow .gbox-score{color:#aaa}
 .gbox.selbox .gbox-score{color:#2980b9}
-
-/* ── BOTTOM ── */
 .bottom{background:#fff;padding:5px 12px 8px;border-top:1px solid #eee;flex-shrink:0}
 .fr{display:flex;gap:5px;align-items:stretch;margin-bottom:5px}
 .fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:5px 10px;display:flex;align-items:center;justify-content:space-around}
@@ -123,6 +89,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .bf{height:100%;border-radius:3px;transition:width .4s}
 .bhp{background:#e74c3c}.bmp{background:#2980b9}
 .bv{font-size:7px;color:#bbb;text-align:right}
+.hbtn{width:16px;height:16px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:2px}
 .btc{flex:1;display:flex;flex-direction:column;gap:4px}
 .skrow{display:flex;gap:4px}
 .sk{flex:1;border-radius:8px;padding:4px 2px;text-align:center;border:1.5px solid #bbb;background:#f9f9f9;position:relative}
@@ -149,6 +116,23 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .os{font-size:11px;color:#888;margin-bottom:14px;line-height:1.6}
 .ob{width:100%;border:none;border-radius:10px;padding:10px;font-size:12px;font-weight:600;cursor:pointer}
 .ob.ok{background:#27ae60;color:#fff}.ob.danger{background:#e74c3c;color:#fff}
+
+/* ── GUIDE OVERLAY ── */
+.tov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.5);align-items:flex-end;z-index:60}
+.tov.on{display:flex}
+.tc{background:#fff;border-radius:16px 16px 0 0;width:100%;max-height:85%;overflow-y:auto;padding:12px 12px 20px}
+.th{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tt{font-size:13px;font-weight:600;color:#111}
+.tbk{background:#f0f0f0;border:none;border-radius:8px;padding:4px 10px;font-size:11px;color:#555;cursor:pointer}
+.gsec{font-size:8px;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px 2px}
+.grow{background:#f8f8f8;border-radius:8px;padding:5px 8px;display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.gicon{width:30px;height:30px;border-radius:8px;background:#fff;border:1.5px solid #eee;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gicon img{width:18px;height:18px;object-fit:contain}
+.ginfo{flex:1}
+.gname{font-size:10px;font-weight:600;color:#111}
+.gdesc{font-size:8px;color:#aaa;margin-top:1px}
+.gnote{margin-top:8px;padding:6px 8px;background:#f8f8f8;border-radius:8px;font-size:8px;color:#888;line-height:1.8}
+
 .toast{position:absolute;top:36%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,20,.86);color:#fff;border-radius:10px;padding:6px 14px;font-size:11px;text-align:center;pointer-events:none;opacity:0;transition:opacity .18s;z-index:99;white-space:nowrap}
 .toast.on{opacity:1}
 </style>
@@ -168,20 +152,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       </div>
     </div>
   </div>
-
-  <!-- Combo hint bar: right-aligned, below enemy UI -->
-  <div class="combo-hint" id="comboHint">
-    <span class="combo-empty">Roll dice to see combos</span>
-  </div>
-
   <div class="ban bust" id="bustBanner">💀 Break! Flux & Bonus lost</div>
   <div class="ban steak" id="steakBanner">🔥 Steak! Flux ×2 — Rolling fresh 6...</div>
-
   <div class="arena">
     <div class="dg" id="diceGrid"></div>
     <div class="groups-area" id="groupsArea"></div>
   </div>
-
   <div class="bottom">
     <div class="fr">
       <div class="fbox-db">
@@ -199,11 +175,13 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
         <div style="height:2px"></div>
         <div class="brow"><div class="bi">💧</div><div class="bg"><div class="bf bmp" id="barMana" style="width:0%"></div></div></div>
         <div class="bv" id="valMana" style="color:#2980b9">0/10</div>
-        <!-- No ? button — removed -->
+        <div style="display:flex;justify-content:center;margin-top:2px">
+          <button class="hbtn" id="btnHelp">?</button>
+        </div>
       </div>
       <div class="btc">
         <div class="skrow">
-          <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">5dmg·2MP</div></button>
+          <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">10dmg+5BD·2MP</div></button>
           <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+10blk·2MP</div><div class="sbadge" id="shieldBadge">0</div></button>
           <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc" id="rrSub">sel·2MP</div></button>
         </div>
@@ -214,29 +192,78 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       </div>
     </div>
   </div>
-
   <div class="toast" id="toast"></div>
   <div class="ov" id="overlay"><div class="oc" id="ocard"></div></div>
+
+  <!-- Guide overlay -->
+  <div class="tov" id="tutOv">
+    <div class="tc">
+      <div class="th">
+        <div class="tt">Combo Guide — v3.1</div>
+        <button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Close</button>
+      </div>
+      <div class="gsec">Attack — single die counts</div>
+      <div class="grow">
+        <div class="gicon" id="gi0"></div>
+        <div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2 · ×2=5 · ×3=16 · ×4=35 · ×5=75 · ×6=140 AD</div></div>
+      </div>
+      <div class="grow">
+        <div class="gicon" id="gi1"></div>
+        <div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=6 · ×2=15 · ×3=42 · ×4=105 · ×5=225 · ×6=420 AD</div></div>
+      </div>
+      <div class="gsec">Combo — Pair minimum</div>
+      <div class="grow">
+        <div class="gicon" id="gi2"></div>
+        <div class="ginfo"><div class="gname">Mana</div><div class="gdesc">pair=8AD+1MP · triple=12AD+3MP · quad=50AD+5MP · quint=105AD+8MP</div></div>
+      </div>
+      <div class="grow">
+        <div class="gicon" id="gi3"></div>
+        <div class="ginfo"><div class="gname">Shield</div><div class="gdesc">pair=4blk · triple=12blk · quad=28blk · quint=60blk · sext=120blk</div></div>
+      </div>
+      <div class="grow">
+        <div class="gicon" id="gi4"></div>
+        <div class="ginfo"><div class="gname">Flux ⭐</div><div class="gdesc">pair=8AD(no fx) · triple=22AD+1.0fx · quad=50AD+2.5fx · quint=105AD+5.0fx</div></div>
+      </div>
+      <div class="grow">
+        <div class="gicon" id="gi5"></div>
+        <div class="ginfo"><div class="gname">Bonus Damage</div><div class="gdesc">pair=+4BD · triple=10AD+20BD · quad=22AD+50BD · quint=45AD+100BD</div></div>
+      </div>
+      <div class="gsec">Special</div>
+      <div class="grow" style="background:#fff3e0;border:1px solid #f5cba7">
+        <div class="ginfo"><div class="gname" style="color:#c0392b">🔥 Steak!</div><div class="gdesc" style="color:#e67e22">Push Luck all 6 → Flux ×2 → roll fresh 6 dice</div></div>
+      </div>
+      <div class="grow">
+        <div class="ginfo"><div class="gname">4-Different</div><div class="gdesc">4 icons khác nhau = 30AD · 5-diff = 60AD · 6-diff = 110AD</div></div>
+      </div>
+      <div class="gnote">Total = (Damage + BonusDmg) × Flux · BonusDmg resets per enemy · Mana persists run · Player HP: 100</div>
+    </div>
+  </div>
 </div>
 
 <script>
 const BASE = 'https://raw.githubusercontent.com/dic1405/dice-prototype/main/';
 const ICON_URLS = [
-  BASE + 'Icon_Dice_Basic_NormalAttack.png',  // 0 — Normal Attack (new)
-  BASE + 'Icon_Dice_Basic_HeavyAttack.png',   // 1 — Strong Attack
-  BASE + 'Icon_Dice_Basic_Wine.png',          // 2 — Mana
-  BASE + 'Icon_Dice_Basic_Shield.png',        // 3 — Shield
-  BASE + 'Icon_Dice_Basic_CannonBall.png',    // 4 — Flux
-  BASE + 'Icon_Dice_Basic_Hat.png',           // 5 — Bonus Damage
+  BASE + 'Icon_Dice_Basic_NormalAttack.png',   // 0 — Normal Attack
+  BASE + 'Icon_Dice_Strong_Attack.png',         // 1 — Strong Attack (correct filename)
+  BASE + 'Icon_Dice_Basic_Wine.png',            // 2 — Mana
+  BASE + 'Icon_Dice_Basic_Shield.png',          // 3 — Shield
+  BASE + 'Icon_Dice_Basic_CannonBall.png',      // 4 — Flux
+  BASE + 'Icon_Dice_Basic_Hat.png',             // 5 — Bonus Damage
 ];
-const ICON_ROLLING = BASE + 'Icon_rolling.png'; // rolling animation icon
+const ICON_ROLLING = BASE + 'Icon_rolling.png';
 
-// Icon names for combo display
-const ICON_NAMES = ['Normal Atk','Heavy Atk','Mana','Shield','Flux','Bonus Dmg'];
+// Populate guide icons with PNG
+window.addEventListener('DOMContentLoaded', () => {
+  for (let i = 0; i < 6; i++) {
+    const el = document.getElementById('gi' + i);
+    if (el) { const img = document.createElement('img'); img.src = ICON_URLS[i]; img.style.cssText='width:18px;height:18px;object-fit:contain'; el.appendChild(img); }
+  }
+});
 
 function mkImg(url, size='70%') {
   const img = document.createElement('img');
-  img.src = url; img.style.cssText = `width:${size};height:${size};object-fit:contain;pointer-events:none;display:block`;
+  img.src = url;
+  img.style.cssText = `width:${size};height:${size};object-fit:contain;pointer-events:none;display:block`;
   img.draggable = false; return img;
 }
 function mkIconImg(idx, size='70%') { return mkImg(ICON_URLS[idx], size); }
@@ -299,88 +326,12 @@ function calcCombo(){
   return{ad:tAD,fluxG:tFx,manaG:tMana,shieldG:tShield,bdmgG:tBD,effectiveFlux,totalDmg,board};
 }
 
-// ── COMBO HINT: analyse current dice & show possible combos ──
-function buildComboHint(diceArr) {
-  const hint = $('comboHint');
-  hint.innerHTML = '';
-  if (!diceArr || !diceArr.length) {
-    hint.innerHTML = '<span class="combo-empty">Roll dice to see combos</span>';
-    return;
-  }
-  const c = {}; diceArr.forEach(d => c[d] = (c[d]||0)+1);
-  const chips = [];
-
-  // Single die combos (0,1 always count solo)
-  if (c[0]) {
-    const n = c[0], vals = [2,5,16,35,75,140];
-    chips.push({icon:0, label: n+'× Normal → '+(n===1?2:n===2?5:n===3?16:n===4?35:n===5?75:140)+' AD', special:false});
-  }
-  if (c[1]) {
-    const n = c[1], vals = [6,15,42,105,225,420];
-    chips.push({icon:1, label: n+'× Heavy → '+(n===1?6:n===2?15:n===3?42:n===4?105:n===5?225:420)+' AD', special:false});
-  }
-
-  // Pair+ combos
-  [2,3,4,5].forEach(ic => {
-    const n = c[ic]||0; if(n<2) return;
-    let lbl = '';
-    if(ic===2){
-      const ad=n===2?8:n===3?12:n===4?50:n===5?105:195;
-      const mp=n===2?1:n===3?3:n===4?5:n===5?8:10;
-      lbl = n+'× Mana → '+ad+'AD +'+mp+'MP';
-    } else if(ic===3){
-      const blk=n===2?4:n===3?12:n===4?28:n===5?60:120;
-      lbl = n+'× Shield → +'+blk+' blk';
-    } else if(ic===4){
-      const ad=n===2?8:n===3?22:n===4?50:n===5?105:195;
-      const fx=n>=3?(n===3?1:n===4?2.5:5):0;
-      lbl = n+'× Flux → '+ad+'AD'+(fx>0?' +'+fx+'fx':'');
-    } else if(ic===5){
-      const ad=n>=3?(n===3?10:n===4?22:45):0;
-      const bd=n===2?4:n===3?20:n===4?50:100;
-      lbl = n+'× BonusDmg → '+(ad?ad+'AD ':'')+'BD+'+bd;
-    }
-    chips.push({icon:ic, label:lbl, special:false});
-  });
-
-  // 4-different special
-  const allDiff = !Object.values(c).some(v=>v>1);
-  if(allDiff && diceArr.length>=4){
-    const ad = diceArr.length===4?30:diceArr.length===5?60:110;
-    chips.push({icon:null, label: diceArr.length+'-Different → '+ad+' AD', special:true});
-  }
-
-  // Steak check
-  if(diceArr.length===6){
-    chips.push({icon:null, label:'🔥 Push all → Steak!', special:true, steak:true});
-  }
-
-  if(!chips.length){
-    hint.innerHTML = '<span class="combo-empty">No combos yet</span>';
-    return;
-  }
-
-  chips.forEach(ch => {
-    const chip = document.createElement('div');
-    chip.className = 'combo-chip' + (ch.steak?' steak':ch.special?' special':'');
-    if(ch.icon !== null) {
-      chip.appendChild(mkIconImg(ch.icon, '10px'));
-    }
-    const txt = document.createElement('span');
-    txt.textContent = ch.label;
-    chip.appendChild(txt);
-    hint.appendChild(chip);
-  });
-}
-
 function makeDie(iconIdx,cls,lbl,onClick,inv=false){
   const w=document.createElement('div');w.className='dw';
   const d=document.createElement('div');d.className='die '+cls;
-  // Always white background — no tint
   d.style.background='#fff';
   d.style.borderColor=inv?'#e74c3c':cls==='sel'?'#f39c12':'#ddd';
-  d.appendChild(mkIconImg(iconIdx));
-  if(onClick)d.onclick=onClick;
+  d.appendChild(mkIconImg(iconIdx));if(onClick)d.onclick=onClick;
   const l=document.createElement('div');l.className='dlbl'+(lbl==='keep?'?' s':lbl==='no pair'?' inv':'');l.textContent=lbl;
   w.appendChild(d);w.appendChild(l);return w;
 }
@@ -395,7 +346,6 @@ function makeAnim(steak=false){
   const w=document.createElement('div');w.className='dw';
   const d=document.createElement('div');d.className='die '+(steak?'hotdie':'free')+' rolling';
   d.style.background='#fff';
-  // Use Icon_rolling.png for rolling animation
   d.appendChild(mkImg(ICON_ROLLING,'70%'));
   const l=document.createElement('div');l.className='dlbl';l.style.color=steak?'#e67e22':'';l.textContent=steak?'steak!':'rolling';
   w.appendChild(d);w.appendChild(l);return w;
@@ -411,16 +361,12 @@ function renderDice(){
     grid.appendChild(makeDie(d,G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?(isInv?'no pair':'keep?'):'free',()=>tapDie(i),isInv));
   });
   for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
-  // Update combo hint with remaining free dice
-  const freeDice=G.dice.filter((_,i)=>G.ds[i]!==DS.ST);
-  buildComboHint(G.phase==='rolled'?freeDice:null);
   renderGroups();updateFormula();renderBtns();
 }
 function showAnimGrid(count,steak=false){
   const grid=$('diceGrid');grid.innerHTML='';
   for(let i=0;i<count;i++)grid.appendChild(makeAnim(steak));
   for(let i=count;i<6;i++)grid.appendChild(makeSlot());
-  buildComboHint(null);
 }
 function showRerolling(selIdxs){
   const grid=$('diceGrid');grid.innerHTML='';const sel=new Set(selIdxs);let vis=0;
@@ -490,14 +436,20 @@ function applyEnemyHit(){
   else toast('Enemy hits! −'+dmgToHp+' HP',1900);
   updateUI();renderBtns();
 }
+
+// ── VICTORY HELPER ─────────────────────────────────────────────
+function triggerVictory(){
+  G.busy=false;G.phase='idle';
+  showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');
+}
+
 function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
 function doBreak(){
   if(G.steakActive){G.flux=1.0;G.bonusDmg=0;G.steakActive=false;}
   G.steakBoxes=[];G.currentGroups=[];renderGroups();$('bustBanner').classList.add('on');renderBtns();renderDice();updateUI();
-  buildComboHint(null);
   setTimeout(()=>{$('bustBanner').classList.remove('on');applyEnemyHit();
     if(G.pHp<=0){G.busy=false;G.phase='idle';setTimeout(()=>showOverlay('<div class="ot">Run over 💀</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),400);return;}
-    setTimeout(()=>{G.flux=1.0;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakBoxes=[];G.currentGroups=[];hideBanners();renderGroups();renderDice();updateFormula();updateUI();buildComboHint(null);},900);
+    setTimeout(()=>{G.flux=1.0;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakBoxes=[];G.currentGroups=[];hideBanners();renderGroups();renderDice();updateFormula();updateUI();},900);
   },1800);
 }
 function doRoll(){
@@ -521,7 +473,7 @@ function doPushLuck(){
   if(!fi.length){hideBanners();renderDice();updateUI();return;}
   G.busy=true;G.phase='pushing';
   const grid=$('diceGrid');grid.innerHTML='';G.ds.forEach(s=>{if(s===DS.ST)return;grid.appendChild(makeAnim(false));});
-  renderGroups();renderBtns();buildComboHint(null);
+  renderGroups();renderBtns();
   setTimeout(()=>{fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});G.phase='rolled';G.busy=false;hideBanners();if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();else{renderDice();updateUI();}},ANIM);
 }
 function doStrike(){
@@ -533,25 +485,41 @@ function doStrike(){
   const extras=[];if(combo.bdmgG>0)extras.push('+'+combo.bdmgG+'BD');if(combo.shieldG>0)extras.push('🛡️+'+combo.shieldG);
   toast(td+' dmg!'+(extras.length?' ('+extras.join(' ')+'!)':''));updateUI();
   setTimeout(()=>{
-    if(G.eHp<=0){G.busy=false;G.phase='idle';showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');return;}
+    if(G.eHp<=0){triggerVictory();return;}
     setTimeout(()=>{applyEnemyHit();
       if(G.pHp<=0){G.busy=false;G.phase='idle';setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),400);return;}
-      setTimeout(()=>{G.steakBoxes=[];G.currentGroups=[];G.flux=1.0;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakActive=false;hideBanners();renderGroups();renderDice();updateFormula();updateUI();buildComboHint(null);},700);
+      setTimeout(()=>{G.steakBoxes=[];G.currentGroups=[];G.flux=1.0;G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakActive=false;hideBanners();renderGroups();renderDice();updateFormula();updateUI();},700);
     },500);
   },500);
 }
+
 $('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();else if(G.phase==='rolled')doPushLuck();};
 $('btnStrike').onclick=doStrike;
-$('btnFireball').onclick=()=>{if(G.mana<2)return;G.mana-=2;G.eHp=Math.max(0,G.eHp-5);flashEnemy(5);toast('Fireball! −5 HP');updateUI();renderBtns();};
+
+// ── FIREBALL: 10 dmg + 5 BonusDmg, check victory ─────────────
+$('btnFireball').onclick=()=>{
+  if(G.mana<2)return;
+  G.mana-=2;
+  G.eHp=Math.max(0,G.eHp-10);
+  G.bonusDmg+=5;                         // +5 Bonus Damage
+  flashEnemy(10);
+  toast('🔥 Fireball! −10 HP  +5 BD');
+  updateUI();renderBtns();
+  // ── BUG FIX: check if enemy dies from fireball ──
+  if(G.eHp<=0){triggerVictory();}
+};
+
 $('btnShield').onclick=()=>{if(G.mana<2)return;G.mana-=2;G.shield+=10;toast('Shield +10! Total: '+G.shield);updateUI();renderBtns();};
 $('btnReroll').onclick=()=>{
   if(G.mana<2||G.phase!=='rolled'||G.busy)return;
   const sel=G.ds.map((s,i)=>s===DS.S?i:-1).filter(i=>i>=0);
   if(!sel.length){toast('Select dice to reroll first');return;}
-  G.mana-=2;G.busy=true;G.phase='pushing';showRerolling(sel);renderBtns();buildComboHint(null);
+  G.mana-=2;G.busy=true;G.phase='pushing';showRerolling(sel);renderBtns();
   setTimeout(()=>{sel.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});G.busy=false;G.phase='rolled';hideBanners();renderDice();updateUI();toast('Rerolled '+sel.length+' dice!');},ANIM);
 };
+$('btnHelp').onclick=()=>$('tutOv').classList.add('on');
 $('btnRestart').onclick=doRestart;
+
 const ENEMIES=[
   {name:'Rusty Cutlass · Act 1',icon:'⚓',hp:60,dmg:11},
   {name:'The Bilge Rat · Act 1',icon:'🐀',hp:75,dmg:13},
@@ -560,9 +528,9 @@ const ENEMIES=[
   {name:'Black Corsair · Act 1',icon:'💀',hp:130,dmg:18},
 ];
 function setEnemy(idx){const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];G.enemyIdx=idx;G.eHp=e.hp;G.eMaxHp=e.hp;G.eDmg=e.dmg;$('eavatar').textContent=e.icon;$('ename').textContent=e.name;$('itxt').textContent='Attack '+e.dmg+' dmg';updateUI();}
-function doRestart(){window.hideOverlay();Object.assign(G,{pHp:100,mana:0,flux:1.0,bonusDmg:0,shield:0,busy:false,steakActive:false,phase:'idle',dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0});setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();buildComboHint(null);}
+function doRestart(){window.hideOverlay();Object.assign(G,{pHp:100,mana:0,flux:1.0,bonusDmg:0,shield:0,busy:false,steakActive:false,phase:'idle',dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0});setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();}
 window.restart=doRestart;
-window.nextEnemy=()=>{hideOverlay();Object.assign(G,{bonusDmg:0,shield:0,flux:1.0,busy:false,steakActive:false,phase:'idle',dice:[],ds:[],steakBoxes:[],currentGroups:[]});setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();buildComboHint(null);};
+window.nextEnemy=()=>{hideOverlay();Object.assign(G,{bonusDmg:0,shield:0,flux:1.0,busy:false,steakActive:false,phase:'idle',dice:[],ds:[],steakBoxes:[],currentGroups:[]});setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();};
 doRestart();
 </script>
 </body>
