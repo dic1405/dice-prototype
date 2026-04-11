@@ -992,17 +992,47 @@ $('btnHelp').onclick=()=>$('tutOv').classList.add('on');
 $('btnRestart').onclick=doRestart;
 
 const ENEMIES=[
-  {name:'Rusty Cutlass · Act 1',icon:'⚓',hp:60,dmg:11},
-  {name:'The Bilge Rat · Act 1',icon:'🐀',hp:75,dmg:13},
-  {name:'Saltwind Marauder · Act 1',icon:'🏴‍☠️',hp:95,dmg:14},
-  {name:'Crimson Brigantine · Act 1',icon:'⚡',hp:115,dmg:16},
-  {name:'Black Corsair · Act 1',icon:'💀',hp:130,dmg:18},
+  // ── ACT 1 — Pirates ──
+  {name:'Rusty Cutlass · Act 1',    icon:'⚓', hp:60,  dmg:11, act:1},
+  {name:'The Bilge Rat · Act 1',    icon:'🐀', hp:75,  dmg:13, act:1},
+  {name:'Saltwind Marauder · Act 1',icon:'🏴‍☠️', hp:95,  dmg:14, act:1},
+  {name:'Crimson Brigantine · Act 1',icon:'⚡',hp:115, dmg:16, act:1},
+  {name:'Black Corsair · Act 1',    icon:'💀', hp:130, dmg:18, act:1},
+  {name:'THE COLLECTOR ★ Boss',     icon:'👑', hp:200, dmg:17, act:1, boss:true},
+  // ── ACT 2 — Navy ──
+  {name:'Scout Frigate · Act 2',    icon:'🚢', hp:100, dmg:14, act:2},
+  {name:'HMS Ironclad · Act 2',     icon:'⚙️', hp:125, dmg:16, act:2},
+  {name:'Naval Gunboat · Act 2',    icon:'🔱', hp:140, dmg:17, act:2},
+  {name:'HMS Relentless · Act 2',   icon:'⚔️', hp:165, dmg:19, act:2},
+  {name:'The Dreadnought · Act 2',  icon:'🛡️', hp:190, dmg:21, act:2},
+  {name:'THE IRON ADMIRAL ★ Boss',  icon:'🎖️', hp:300, dmg:13, act:2, boss:true, pattern:[13,19,28]},
+  // ── ACT 3 — Monsters ──
+  {name:'Shore Crab · Act 3',       icon:'🦀', hp:140, dmg:16, act:3},
+  {name:'Reef Lurker · Act 3',      icon:'🐙', hp:155, dmg:17, act:3},
+  {name:'Stormfin · Act 3',         icon:'🦈', hp:170, dmg:19, act:3},
+  {name:'Deepfang · Act 3',         icon:'🐟', hp:195, dmg:21, act:3},
+  {name:'Abyssal Leviathan · Act 3',icon:'🌊', hp:220, dmg:23, act:3},
+  {name:'KRAKEN ★ Boss',            icon:'🐲', hp:420, dmg:20, act:3, boss:true},
+  // ── ACT 4 — Ghost Ships ──
+  {name:'The Wanderer · Act 4',     icon:'👻', hp:180, dmg:20, act:4},
+  {name:'Pale Widow · Act 4',       icon:'💀', hp:210, dmg:22, act:4},
+  {name:'Bone Galleon · Act 4',     icon:'🏴‍☠️', hp:230, dmg:23, act:4},
+  {name:'The Maelstrom Queen · Act 4',icon:'🌀',hp:255,dmg:25, act:4},
+  {name:'Wraith Galleon · Act 4',   icon:'⛵', hp:275, dmg:27, act:4},
+  {name:'THE ETERNAL TIDE ★ Boss',  icon:'🌊', hp:400, dmg:22, act:4, boss:true},
 ];
 
 function setEnemy(idx){
   const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];
   G.enemyIdx=idx;G.eHp=e.hp;G.eMaxHp=e.hp;G.eDmg=e.dmg;
-  $('eavatar').textContent=e.icon;$('ename').textContent=e.name;$('itxt').textContent='Attack '+e.dmg+' dmg';updateUI();
+  $('eavatar').textContent=e.icon;
+  $('ename').textContent=e.name;
+  $('itxt').textContent='Attack '+e.dmg+' dmg';
+  // Boss styling
+  const av=$('eavatar');
+  av.style.borderColor=e.boss?'#e74c3c':'#9b59b6';
+  av.style.background=e.boss?'#fff0f0':'#f5eeff';
+  updateUI();
 }
 
 function doRestart(){
