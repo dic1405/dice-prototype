@@ -53,11 +53,15 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .steak-title{font-size:22px;font-weight:700;color:#d35400;line-height:1.1}
 .steak-sub{font-size:12px;color:#e67e22;margin-top:3px}
 
-/* ── FORMULA BAR — above dice, separated from action area ── */
+/* ── FORMULA BAR — floats between arena and bottom, separated from both ── */
 .formula-bar{
-  background:#fff;border-bottom:1.5px solid #eee;
-  padding:5px 14px;flex-shrink:0;
+  background:#fff;
+  border-top:1.5px solid #eee;
+  border-bottom:1.5px solid #eee;
+  padding:7px 14px;
+  flex-shrink:0;
   display:flex;gap:6px;align-items:stretch;
+  margin-bottom:0;
 }
 .fbox-db{flex:2;background:#f0f7ff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 10px;display:flex;align-items:center;justify-content:space-around}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
@@ -193,7 +197,13 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <div class="ban bust" id="bustBanner">💀 Break! Flux & Bonus lost</div>
   <div class="ban feedback" id="feedbackBanner"></div>
 
-  <!-- Formula bar — separated above dice grid -->
+  <!-- Arena -->
+  <div class="arena">
+    <div class="dg" id="diceGrid"></div>
+    <div class="groups-area" id="groupsArea"></div>
+  </div>
+
+  <!-- Formula bar — between arena and bottom -->
   <div class="formula-bar">
     <div class="fbox-db">
       <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
@@ -204,11 +214,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
   </div>
 
-  <!-- Arena -->
-  <div class="arena">
-    <div class="dg" id="diceGrid"></div>
-    <div class="groups-area" id="groupsArea"></div>
-  </div>
+  <!-- Spacer — visual gap between formula and action area -->
+  <div style="height:10px;background:#f0f0f0;flex-shrink:0;border-top:1px solid #e8e8e8;border-bottom:1px solid #e8e8e8;"></div>
 
   <!-- Bottom action area -->
   <div class="bottom">
