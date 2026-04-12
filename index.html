@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roguelike v12.0</title>
+<title>Dice Roguelike v13.0</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
@@ -11,8 +11,124 @@ body{height:100%;overflow:hidden;display:flex;justify-content:center;background:
 .phone{background:#f8f8f8;width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
+
+/* ── SHIP SCENE ── */
+.ship-scene{
+  position:relative;width:100%;flex-shrink:0;
+  height:28vh;min-height:140px;max-height:200px;
+  background:linear-gradient(180deg,#1a1230 0%,#2d1b4e 30%,#3d2a5e 50%,#1a3a4a 70%,#1a4a5a 85%,#0d3040 100%);
+  overflow:hidden;
+}
+/* Sky rays */
+.scene-rays{position:absolute;inset:0;pointer-events:none}
+/* Water */
+.scene-water{
+  position:absolute;bottom:0;left:0;right:0;height:42%;
+  background:linear-gradient(180deg,#1a5a6e 0%,#0d3a4e 60%,#081e2e 100%);
+  border-top:2px solid #2a8a9e;
+}
+/* Wave animation */
+@keyframes wave{0%,100%{transform:translateX(0)}50%{transform:translateX(-8px)}}
+.scene-wave{
+  position:absolute;top:-3px;left:-10px;right:-10px;height:6px;
+  background:repeating-linear-gradient(90deg,transparent 0px,transparent 12px,rgba(100,200,220,.4) 12px,rgba(100,200,220,.4) 24px);
+  animation:wave 3s ease-in-out infinite;
+}
+/* Player ship — left */
+.ship-player{
+  position:absolute;bottom:28%;left:5%;
+  width:42%;max-width:160px;
+}
+/* Enemy ship — right, flipped */
+.ship-enemy{
+  position:absolute;bottom:28%;right:3%;
+  width:38%;max-width:145px;
+  transform:scaleX(-1);
+}
+/* Ship shake on hit */
+@keyframes ship-hit{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+@keyframes ship-hit-r{0%,100%{transform:scaleX(-1) translateX(0)}20%{transform:scaleX(-1) translateX(-6px)}40%{transform:scaleX(-1) translateX(5px)}60%{transform:scaleX(-1) translateX(-3px)}80%{transform:scaleX(-1) translateX(2px)}}
+.ship-player.hit{animation:ship-hit .5s ease}
+.ship-enemy.hit{animation:ship-hit-r .5s ease}
+/* Cannonball */
+@keyframes cannon-fly{
+  0%{left:42%;bottom:34%;opacity:1;transform:scale(1)}
+  50%{bottom:42%}
+  100%{left:85%;bottom:32%;opacity:0;transform:scale(.5)}
+}
+@keyframes cannon-fly-r{
+  0%{right:40%;bottom:34%;opacity:1;transform:scale(1)}
+  50%{bottom:42%}
+  100%{right:88%;bottom:32%;opacity:0;transform:scale(.5)}
+}
+.cannonball{
+  position:absolute;width:8px;height:8px;
+  background:#333;border-radius:50%;
+  box-shadow:0 0 3px rgba(255,150,0,.7);
+  display:none;pointer-events:none;
+}
+.cannonball.fly-player{display:block;animation:cannon-fly .5s ease forwards}
+.cannonball.fly-enemy{display:block;animation:cannon-fly-r .5s ease forwards}
+/* Smoke puff */
+@keyframes smoke{0%{opacity:.8;transform:scale(.5)}100%{opacity:0;transform:scale(2.5) translateY(-12px)}}
+.smoke-puff{
+  position:absolute;width:16px;height:16px;border-radius:50%;
+  background:rgba(180,180,180,.6);pointer-events:none;
+  animation:smoke .8s ease forwards;
+}
+/* Player stat overlays on ships */
+.ship-stat-player{
+  position:absolute;bottom:2px;left:5%;
+  width:42%;max-width:160px;
+  display:flex;flex-direction:column;gap:2px;
+  pointer-events:none;
+}
+.ship-stat-enemy{
+  position:absolute;bottom:2px;right:3%;
+  width:38%;max-width:145px;
+  display:flex;flex-direction:column;gap:2px;
+  pointer-events:none;
+}
+.sbar-row{display:flex;align-items:center;gap:3px}
+.sbar-icon{font-size:8px;flex-shrink:0;line-height:1}
+.sbar-track{flex:1;height:4px;border-radius:2px;background:rgba(0,0,0,.4);overflow:hidden}
+.sbar-fill{height:100%;border-radius:2px;transition:width .4s}
+.sbar-fill-hp{background:#e74c3c}
+.sbar-fill-mp{background:#3498db}
+.sbar-val{font-size:7px;color:#fff;min-width:28px;text-align:right;font-weight:600;text-shadow:0 0 3px rgba(0,0,0,.8)}
+/* Enemy name tag */
+.enemy-nametag{
+  position:absolute;top:4px;right:3%;
+  background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.15);
+  border-radius:4px;padding:2px 5px;
+  font-size:8px;font-weight:600;color:#fff;
+  white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;
+  text-shadow:none;
+}
+.enemy-dmgtag{
+  position:absolute;top:16px;right:3%;
+  background:rgba(180,0,0,.5);border:1px solid rgba(255,100,100,.3);
+  border-radius:3px;padding:1px 4px;
+  font-size:7px;color:#ffaaaa;
+}
+/* Floating damage number */
+@keyframes dmg-float{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-36px) scale(1.3)}}
+.dmg-float{
+  position:absolute;font-size:14px;font-weight:800;color:#ff4444;
+  text-shadow:0 0 6px rgba(255,0,0,.8),0 1px 0 #000;
+  pointer-events:none;animation:dmg-float .9s ease forwards;
+  z-index:20;
+}
+.dmg-float.player{color:#ff8800;text-shadow:0 0 6px rgba(255,130,0,.8),0 1px 0 #000}
+/* Restart btn in scene */
+.scene-restart{
+  position:absolute;top:4px;left:4px;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);
+  color:#aaa;border-radius:5px;padding:2px 6px;font-size:8px;cursor:pointer;
+}
+
 /* ── ENEMY BAR ── */
-.ez{background:#fff;padding:7px 12px 5px;border-bottom:1px solid #eee;flex-shrink:0}
+.ez{display:none}
 .er{display:flex;gap:8px;align-items:center}
 .av{width:38px;height:38px;border-radius:10px;background:#f5eeff;border:2px solid #9b59b6;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;overflow:hidden}
 .ei{flex:1;min-width:0}
@@ -134,7 +250,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .bb{display:flex;flex-direction:column;gap:0}
 .hbtn{width:20px;height:20px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 /* ── PLAYER STAT ROW — bottom, HP left / MP right ── */
-.stat-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}
+.stat-row{display:none}
 .stat-side{display:flex;align-items:center;gap:5px;flex:1}
 .stat-side.right{justify-content:flex-end}
 .stat-icon{font-size:13px;flex-shrink:0}
@@ -201,17 +317,117 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 <body>
 <div class="phone" id="phone">
 
-  <!-- Enemy bar -->
-  <div class="ez">
-    <div class="er">
-      <div class="av" id="eavatar">⚓</div>
-      <div class="ei">
-        <div class="en" id="ename">Rusty Cutlass · Act 1</div>
-        <div class="hrow" id="ehprow"><div class="hbar"><div class="hfil" id="ehpbar" style="width:100%"></div></div><div class="htxt" id="ehptxt">60/60</div></div>
-        <div class="ebot">
-          <div class="ibadge"><div class="idot"></div><span id="itxt">Attack 11 dmg</span></div>
-          <button class="rbtn" id="btnRestart">↺ restart</button>
-        </div>
+  <!-- Ship Battle Scene -->
+  <div class="ship-scene" id="shipScene">
+    <!-- God rays SVG -->
+    <svg class="scene-rays" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rayGrad" cx="50%" cy="0%" r="80%">
+          <stop offset="0%" stop-color="#ffe8a0" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#ffe8a0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="200" cy="0" rx="180" ry="140" fill="url(#rayGrad)"/>
+      <polygon points="180,0 190,120 210,120 220,0" fill="rgba(255,230,120,0.06)"/>
+      <polygon points="155,0 165,140 175,140 170,0" fill="rgba(255,230,120,0.05)"/>
+      <polygon points="225,0 235,140 245,140 230,0" fill="rgba(255,230,120,0.05)"/>
+    </svg>
+
+    <!-- Water -->
+    <div class="scene-water"><div class="scene-wave"></div></div>
+
+    <!-- Player ship SVG (left, facing right) -->
+    <div class="ship-player" id="shipPlayer">
+      <svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hull -->
+        <path d="M10 62 Q60 72 110 62 L100 78 Q60 86 20 78 Z" fill="#7a4a1e"/>
+        <path d="M10 62 Q60 56 110 62 L100 65 Q60 70 20 65 Z" fill="#5a3010"/>
+        <!-- Hull detail lines -->
+        <rect x="20" y="63" width="2" height="12" fill="#4a2808" rx="1"/>
+        <rect x="35" y="64" width="2" height="13" fill="#4a2808" rx="1"/>
+        <rect x="50" y="65" width="2" height="13" fill="#4a2808" rx="1"/>
+        <rect x="65" y="64" width="2" height="13" fill="#4a2808" rx="1"/>
+        <rect x="80" y="63" width="2" height="12" fill="#4a2808" rx="1"/>
+        <!-- Cannon port -->
+        <rect x="22" y="66" width="8" height="4" rx="2" fill="#2a1808"/>
+        <rect x="22" y="67" width="10" height="2" rx="1" fill="#1a0e04"/>
+        <!-- Mast -->
+        <rect x="54" y="12" width="4" height="52" fill="#6a3a10" rx="1"/>
+        <!-- Main sail -->
+        <path d="M58 14 Q95 28 90 56 L58 56 Z" fill="#d4c890" stroke="#a09060" stroke-width="1"/>
+        <line x1="58" y1="14" x2="90" y2="28" stroke="#8a7040" stroke-width="1"/>
+        <!-- Front sail -->
+        <path d="M54 18 Q20 32 25 52 L54 52 Z" fill="#c8bc80" stroke="#a09060" stroke-width="1"/>
+        <!-- Flag -->
+        <rect x="54" y="6" width="2" height="8" fill="#6a3a10"/>
+        <path d="M56 6 L70 9 L56 13 Z" fill="#e74c3c"/>
+        <!-- Smoke from cannon -->
+        <circle cx="18" cy="67" r="4" fill="rgba(200,200,200,0.3)"/>
+        <circle cx="12" cy="65" r="3" fill="rgba(200,200,200,0.2)"/>
+      </svg>
+    </div>
+
+    <!-- Enemy ship SVG (right, mirrored) -->
+    <div class="ship-enemy" id="shipEnemy">
+      <svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hull darker/more menacing -->
+        <path d="M10 62 Q60 72 110 62 L100 78 Q60 86 20 78 Z" fill="#3a2a18"/>
+        <path d="M10 62 Q60 56 110 62 L100 65 Q60 70 20 65 Z" fill="#2a1a0a"/>
+        <!-- Hull planks -->
+        <rect x="20" y="63" width="2" height="12" fill="#1e1008" rx="1"/>
+        <rect x="35" y="64" width="2" height="13" fill="#1e1008" rx="1"/>
+        <rect x="50" y="65" width="2" height="13" fill="#1e1008" rx="1"/>
+        <rect x="65" y="64" width="2" height="13" fill="#1e1008" rx="1"/>
+        <rect x="80" y="63" width="2" height="12" fill="#1e1008" rx="1"/>
+        <!-- Cannon ports (multiple) -->
+        <rect x="18" y="66" width="8" height="4" rx="2" fill="#0a0604"/>
+        <rect x="42" y="66" width="8" height="4" rx="2" fill="#0a0604"/>
+        <rect x="66" y="66" width="8" height="4" rx="2" fill="#0a0604"/>
+        <!-- Mast -->
+        <rect x="54" y="10" width="4" height="54" fill="#2a1a08" rx="1"/>
+        <!-- Dark sails -->
+        <path d="M58 12 Q96 26 92 55 L58 55 Z" fill="#2d3a2a" stroke="#1a2218" stroke-width="1"/>
+        <path d="M54 16 Q18 30 22 52 L54 52 Z" fill="#283228" stroke="#1a2218" stroke-width="1"/>
+        <!-- Skull flag -->
+        <rect x="54" y="4" width="2" height="8" fill="#2a1a08"/>
+        <rect x="56" y="4" width="18" height="12" rx="1" fill="#1a1a1a"/>
+        <circle cx="65" cy="9" r="3" fill="#eee"/>
+        <rect x="62" y="11" width="6" height="2" rx="1" fill="#eee"/>
+        <rect x="63" y="8" width="2" height="3" fill="#1a1a1a"/>
+        <rect x="66" y="8" width="2" height="3" fill="#1a1a1a"/>
+      </svg>
+    </div>
+
+    <!-- Cannonball projectile -->
+    <div class="cannonball" id="cannonball"></div>
+
+    <!-- Enemy name + dmg tag -->
+    <div class="enemy-nametag" id="ename">Rusty Cutlass · Act 1</div>
+    <div class="enemy-dmgtag" id="itxt">⚔ 11 dmg</div>
+
+    <!-- Restart button -->
+    <button class="scene-restart" id="btnRestart">↺</button>
+
+    <!-- Player stats overlay (bottom left, over player ship) -->
+    <div class="ship-stat-player">
+      <div class="sbar-row">
+        <div class="sbar-icon">❤️</div>
+        <div class="sbar-track"><div class="sbar-fill sbar-fill-hp" id="barHp" style="width:100%"></div></div>
+        <div class="sbar-val hp" id="valHp">100</div>
+      </div>
+      <div class="sbar-row">
+        <div class="sbar-icon">💧</div>
+        <div class="sbar-track"><div class="sbar-fill sbar-fill-mp" id="barMana" style="width:0%"></div></div>
+        <div class="sbar-val mp" id="valMana">0/10</div>
+      </div>
+    </div>
+
+    <!-- Enemy HP overlay (bottom right, over enemy ship) -->
+    <div class="ship-stat-enemy">
+      <div class="sbar-row">
+        <div class="sbar-icon">💀</div>
+        <div class="sbar-track"><div class="sbar-fill sbar-fill-hp" id="ehpbar" style="width:100%"></div></div>
+        <div class="sbar-val" id="ehptxt" style="color:#ff8888">60/60</div>
       </div>
     </div>
   </div>
@@ -242,29 +458,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <!-- Bottom action area -->
   <div class="bottom">
     <div class="bb">
-      <!-- Player HP / MP — bottom, HP left · ? centre · MP right -->
-      <div class="stat-row">
-        <div class="stat-side" id="hpRow">
-          <div class="stat-icon">❤️</div>
-          <div class="stat-col">
-            <div class="stat-val hp" id="valHp">100/100</div>
-            <div class="stat-bar"><div class="stat-fill stat-fill-hp" id="barHp" style="width:100%"></div></div>
-          </div>
-        </div>
-        <button class="hbtn" id="btnHelp">?</button>
-        <div class="stat-side right">
-          <div class="stat-col right">
-            <div class="stat-val mp" id="valMana">0/10</div>
-            <div class="stat-bar"><div class="stat-fill stat-fill-mp" id="barMana" style="width:0%"></div></div>
-          </div>
-          <div class="stat-icon">💧</div>
-        </div>
-      </div>
       <div class="btc">
         <div class="skrow">
           <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">10+5BD <span class="mcost">💧💧</span></div></button>
           <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div><div class="sbadge" id="shieldBadge">0</div></button>
           <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc"><span id="rrSub">sel</span> <span class="mcost">💧💧</span></div></button>
+          <button class="hbtn" id="btnHelp" style="flex-shrink:0">?</button>
         </div>
         <div class="mr">
           <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
@@ -533,9 +732,15 @@ function renderBtns(){
 }
 
 function updateUI(){
-  $('barHp').style.width=Math.round(G.pHp/G.pMaxHp*100)+'%';$('valHp').textContent=G.pHp+'/'+G.pMaxHp;
-  $('barMana').style.width=Math.round(G.mana/G.maxMana*100)+'%';$('valMana').textContent=G.mana+'/'+G.maxMana;
-  $('ehpbar').style.width=Math.round(Math.max(0,G.eHp)/G.eMaxHp*100)+'%';$('ehptxt').textContent=Math.max(0,G.eHp)+'/'+G.eMaxHp;
+  const hpPct=Math.round(G.pHp/G.pMaxHp*100);
+  $('barHp').style.width=hpPct+'%';
+  $('valHp').textContent=G.pHp+'/'+G.pMaxHp;
+  $('barMana').style.width=Math.round(G.mana/G.maxMana*100)+'%';
+  $('valMana').textContent=G.mana+'/'+G.maxMana;
+  $('ehpbar').style.width=Math.round(Math.max(0,G.eHp)/G.eMaxHp*100)+'%';
+  $('ehptxt').textContent=Math.max(0,G.eHp)+'/'+G.eMaxHp;
+  // HP bar color warning
+  $('barHp').style.background=G.pHp<30?'#c0392b':G.pHp<60?'#e67e22':'#e74c3c';
 }
 
 // ── FEEDBACK ───────────────────────────────────────────────────
@@ -570,12 +775,53 @@ function hideSteakBanner(){const el=document.getElementById('steakBannerEl');if(
 function showOverlay(html){$('ocard').innerHTML=html;$('overlay').classList.add('on')}
 window.hideOverlay=()=>$('overlay').classList.remove('on');
 
-function flashEnemy(dmg){const av=$('eavatar');av.classList.remove('flash','bigshake');void av.offsetWidth;if(dmg>50){av.classList.add('bigshake');setTimeout(()=>av.classList.remove('bigshake'),650);}else{av.classList.add('flash');setTimeout(()=>av.classList.remove('flash'),400);}}
-function shakeHp(){const r=$('hpRow');if(!r)return;r.classList.remove('shake');void r.offsetWidth;r.classList.add('shake');setTimeout(()=>r.classList.remove('shake'),400);}
+function spawnDmgFloat(val, isPlayer=false){
+  const scene=$('shipScene');
+  const el=document.createElement('div');
+  el.className='dmg-float'+(isPlayer?' player':'');
+  el.textContent=(isPlayer?'−':'-')+val;
+  // position: enemy right area or player left area
+  el.style.cssText=isPlayer
+    ? 'left:20%;bottom:45%;'
+    : 'right:10%;bottom:45%;';
+  scene.appendChild(el);
+  setTimeout(()=>el.remove(),900);
+}
+function fireCannonball(fromPlayer=true){
+  const cb=$('cannonball');
+  cb.className='cannonball';
+  void cb.offsetWidth;
+  cb.className='cannonball '+(fromPlayer?'fly-player':'fly-enemy');
+  setTimeout(()=>{cb.className='cannonball';},520);
+}
+function spawnSmoke(x,y){
+  const scene=$('shipScene');
+  const el=document.createElement('div');el.className='smoke-puff';
+  el.style.cssText='left:'+x+'%;bottom:'+y+'%;';
+  scene.appendChild(el);setTimeout(()=>el.remove(),800);
+}
+function flashEnemy(dmg){
+  fireCannonball(true);
+  setTimeout(()=>{
+    $('shipEnemy').classList.remove('hit');void $('shipEnemy').offsetWidth;
+    $('shipEnemy').classList.add('hit');
+    spawnSmoke(72,36);spawnDmgFloat(dmg,false);
+    setTimeout(()=>$('shipEnemy').classList.remove('hit'),500);
+  },480);
+}
+function shakeHp(){
+  fireCannonball(false);
+  setTimeout(()=>{
+    $('shipPlayer').classList.remove('hit');void $('shipPlayer').offsetWidth;
+    $('shipPlayer').classList.add('hit');
+    setTimeout(()=>$('shipPlayer').classList.remove('hit'),500);
+  },480);
+}
 
 function applyEnemyHit(){
   const blocked=Math.min(G.shield,G.eDmg),dmgToHp=G.eDmg-blocked;
   G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);shakeHp();
+  if(dmgToHp>0) setTimeout(()=>spawnDmgFloat(dmgToHp,true),500);
   if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
   else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
   else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
@@ -671,14 +917,13 @@ function popStat(elId,type='gain'){
   setTimeout(()=>el.style.animation='',450);
 }
 
-// Animate HP counting down over dur ms
 function animHpDown(from, to, dur){
   const el=$('valHp');if(!el)return;
   const bar=$('barHp');
   const start=performance.now();
   function tick(now){
     const t=Math.min(1,(now-start)/dur);
-    const ease=1-Math.pow(1-t,3); // ease-out cubic
+    const ease=1-Math.pow(1-t,3);
     const val=Math.round(from+(to-from)*ease);
     el.textContent=val+'/'+G.pMaxHp;
     if(bar)bar.style.width=Math.round(val/G.pMaxHp*100)+'%';
@@ -859,7 +1104,9 @@ const ENEMIES=[
 function setEnemy(idx){
   const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];
   G.enemyIdx=idx;G.eHp=e.hp;G.eMaxHp=e.hp;G.eDmg=e.dmg;
-  $('eavatar').textContent=e.icon;$('ename').textContent=e.name;$('itxt').textContent='Attack '+e.dmg+' dmg';updateUI();
+  $('ename').textContent=e.name;
+  $('itxt').textContent='⚔ '+e.dmg+' dmg';
+  updateUI();
 }
 
 function doRestart(){
