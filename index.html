@@ -67,8 +67,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   box-shadow:0 0 3px rgba(255,150,0,.7);
   display:none;pointer-events:none;
 }
-.cannonball.fly-player{display:block;animation:cannon-fly .5s ease forwards}
-.cannonball.fly-enemy{display:block;animation:cannon-fly-r .5s ease forwards}
+.cannonball.fly-player{display:block;animation:cannon-fly 0.85s ease forwards}
+.cannonball.fly-enemy{display:block;animation:cannon-fly-r 0.85s ease forwards}
 /* Smoke puff */
 @keyframes smoke{0%{opacity:.8;transform:scale(.5)}100%{opacity:0;transform:scale(2.5) translateY(-12px)}}
 .smoke-puff{
@@ -792,7 +792,7 @@ function fireCannonball(fromPlayer=true){
   cb.className='cannonball';
   void cb.offsetWidth;
   cb.className='cannonball '+(fromPlayer?'fly-player':'fly-enemy');
-  setTimeout(()=>{cb.className='cannonball';},520);
+  setTimeout(()=>{cb.className='cannonball';},900);
 }
 function spawnSmoke(x,y){
   const scene=$('shipScene');
@@ -802,12 +802,13 @@ function spawnSmoke(x,y){
 }
 function flashEnemy(dmg){
   fireCannonball(true);
+  // Wait for ball to land (850ms) then shake + smoke + float
   setTimeout(()=>{
     $('shipEnemy').classList.remove('hit');void $('shipEnemy').offsetWidth;
     $('shipEnemy').classList.add('hit');
     spawnSmoke(72,36);spawnDmgFloat(dmg,false);
     setTimeout(()=>$('shipEnemy').classList.remove('hit'),500);
-  },480);
+  },850);
 }
 function shakeHp(){
   fireCannonball(false);
@@ -815,7 +816,7 @@ function shakeHp(){
     $('shipPlayer').classList.remove('hit');void $('shipPlayer').offsetWidth;
     $('shipPlayer').classList.add('hit');
     setTimeout(()=>$('shipPlayer').classList.remove('hit'),500);
-  },480);
+  },850);
 }
 
 function applyEnemyHit(){
@@ -954,8 +955,8 @@ function buildScoringEvents(combo){
 
 // Main strike animation — one event per combo group
 // Each stat flashes independently with 500ms gap between them
-const STAT_GAP=500;  // ms between each stat flash
-const STAT_ANIM=900; // ms for each animation (doubled)
+const STAT_GAP=550;  // ms between each stat flash
+const STAT_ANIM=900; // ms for each animation
 
 function runStrikeAnimation(combo, events, onDone){
   const gboxes=[...document.querySelectorAll('.gbox')];
@@ -1017,7 +1018,7 @@ function runStrikeAnimation(combo, events, onDone){
       setTimeout(()=>popStat('shieldBadge','gain'),t);
       globalDelay+=STAT_GAP;
     }
-    globalDelay+=200; // pause between events
+    globalDelay+=300; // pause between events
   });
 
   // Callback after all events + last animation finishes
@@ -1041,27 +1042,28 @@ function doStrike(){
     feedback('⚔️ Strike! −'+td+' dmg'+(extras.length?' ('+extras.join(' ')+'!)':''),'info',2000);
     updateUI();
 
+    // Wait for cannonball to land + impact (850ms fly + 450ms impact pause)
     setTimeout(()=>{
       if(G.eHp<=0){triggerVictory();return;}
 
-      // Enemy counter-attack
+      // Enemy counter-attack — clear pause so player reads the hit before enemy fires
       setTimeout(()=>{
         const hpBefore=G.pHp;
         applyEnemyHit();
-        // HP counts down over 600ms — slow and painful
         if(G.pHp<hpBefore) animHpDown(hpBefore,G.pHp,900);
         if(G.pHp<=0){
           G.busy=false;G.phase='idle';
           setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),500);
           return;
         }
+        // Wait for enemy cannonball to land before resetting dice
         setTimeout(()=>{
           G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
           G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
           hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
-        },700);
-      },350);
-    },300);
+        },1100);
+      },1400);
+    },1300);
   });
 }
 
