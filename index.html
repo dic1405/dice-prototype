@@ -38,7 +38,11 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
 /* ── FORMULA BAR — inside arena, same width/alignment as Steak/Selection boxes ── */
-.formula-bar{width:100%;display:flex;gap:6px;align-items:stretch;margin-top:2px;flex-shrink:0}
+.formula-bar{
+  width:100%;max-width:320px;
+  display:flex;gap:6px;align-items:stretch;
+  margin-top:2px;
+}
 .fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 10px;display:flex;align-items:center;justify-content:space-around}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
 .fdc-val{font-size:16px;font-weight:700;line-height:1}
@@ -59,29 +63,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .die img{width:72%;height:72%;object-fit:contain;pointer-events:none;display:block}
 .die.sel{border-color:#f39c12;background:#fff}
 .die.slot{border:2px dashed #e8e8e8;background:#fafafa;cursor:default}
-/* Enemy attack popup */
-@keyframes atk-in{0%{transform:translateY(-16px) scale(.85);opacity:0}50%{transform:translateY(4px) scale(1.04);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
-@keyframes atk-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.9) translateY(6px)}}
-.enemy-atk-pop{
-  position:absolute;left:50%;transform:translateX(-50%);
-  background:#c0392b;color:#fff;
-  border-radius:10px;padding:7px 18px;
-  font-size:13px;font-weight:700;text-align:center;
-  white-space:nowrap;pointer-events:none;
-  box-shadow:0 3px 14px rgba(192,57,43,.35);
-  z-index:70;
-  animation:atk-in .3s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-.enemy-atk-pop.out{animation:atk-out .25s ease forwards}
-.enemy-atk-pop .atk-sub{font-size:10px;font-weight:400;opacity:.85;display:block;margin-top:2px}
-.die.locked{border:2px solid #c8e6c9;background:#f1f8f1;cursor:default;opacity:.5}
-.die.locked img{filter:grayscale(.4)}
 .die.slot img{opacity:.1}
 @keyframes spin{0%{transform:rotate(-25deg) scale(.72)}20%{transform:rotate(22deg) scale(1.14)}45%{transform:rotate(-14deg) scale(.92)}65%{transform:rotate(10deg) scale(1.04)}82%{transform:rotate(-5deg) scale(.98)}100%{transform:rotate(0) scale(1)}}
 @keyframes hotpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 @keyframes flash{0%,100%{background:#f5eeff}30%{background:#ffe8e8}70%{background:#f5eeff}}
 @keyframes bigshake{0%,100%{transform:translateX(0) scale(1)}12%{transform:translateX(-9px) scale(1.1) rotate(-3deg)}28%{transform:translateX(8px) scale(1.08) rotate(2deg)}44%{transform:translateX(-6px)}58%{transform:translateX(5px)}72%{transform:translateX(-3px)}86%{transform:translateX(2px)}}
-@keyframes hpshake{0%{transform:translateX(0)}10%{transform:translateX(-10px) scale(1.04)}20%{transform:translateX(9px)}30%{transform:translateX(-8px)}40%{transform:translateX(7px)}50%{transform:translateX(-5px)}65%{transform:translateX(4px)}80%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+@keyframes hpshake{0%,100%{transform:translateX(0)}15%{transform:translateX(-4px)}30%{transform:translateX(4px)}45%{transform:translateX(-3px)}60%{transform:translateX(3px)}75%{transform:translateX(-1px)}}
 @keyframes boxin{0%{transform:scale(.88);opacity:0}70%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
 .die.rolling{animation:spin 2.4s ease forwards}
 /* Strike scoring animations */
@@ -116,35 +103,31 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .die.hotdie{border-color:#f39c12;background:#fff;animation:hotpulse .5s ease 4}
 .av.flash{animation:flash .4s ease}
 .av.bigshake{animation:bigshake .6s ease}
-.hrow.shake{animation:hpshake .7s ease}
+.hrow.shake{animation:hpshake .4s ease}
 .dlbl{font-size:7px;color:#ccc;user-select:none;line-height:1}
 .dlbl.s{color:#f39c12}.dlbl.inv{color:#e74c3c}
 
 /* Groups */
-.groups-area{display:flex;flex-direction:column;gap:3px;width:100%}
-.gbox{border-radius:9px;padding:6px 10px;display:flex;align-items:flex-start;gap:8px;animation:boxin .2s ease}
+.groups-area{display:flex;flex-direction:column;gap:3px;width:100%;max-width:320px}
+.gbox{border-radius:7px;padding:3px 7px;display:flex;align-items:flex-start;gap:4px;animation:boxin .2s ease}
 .gbox.steak-box{background:#fff3e0;border:1.5px solid #f39c12}
 .gbox.pushrow{background:#f5f5f5;border:1px solid #e8e8e8}
-.gbox.selbox{background:#fff;border:1.5px solid #2980b9;padding:5px 8px;gap:6px}
-.gbox-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0;padding-top:2px;min-width:52px;line-height:1.3}
+.gbox.selbox{background:#fff;border:1.5px solid #2980b9}
+.gbox-lbl{font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0;padding-top:2px;min-width:40px;line-height:1.3}
 .gbox.steak-box .gbox-lbl{color:#e67e22}
 .gbox.pushrow .gbox-lbl{color:#bbb}
-.gbox.selbox .gbox-lbl{color:#2980b9;min-width:36px;font-size:9px}
-.gbox-content{display:flex;align-items:center;flex-wrap:wrap;gap:4px;flex:1}
-.gchip{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.gchip img{width:18px;height:18px;object-fit:contain}
+.gbox.selbox .gbox-lbl{color:#2980b9}
+.gbox-content{display:flex;align-items:center;flex-wrap:wrap;gap:2px;flex:1}
+.gchip{width:16px;height:16px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gchip img{width:10px;height:10px;object-fit:contain}
 .gbox.steak-box .gchip{background:#fff;border:1px solid #f5cba7}
 .gbox.pushrow .gchip{background:#fff;border:1px solid #ddd}
-.gbox.selbox .gchip{background:#eef6ff;border:1px solid #aed6f1;width:22px;height:22px}
-.gbox.selbox .gchip img{width:14px;height:14px}
-.gbox.selbox .gchip.dim{opacity:.25;filter:grayscale(.5)}
-.gbox.selbox .gchip.valid{opacity:1}
-.sel-empty{width:22px;height:22px;border-radius:4px;border:2px dashed #aed6f1;background:transparent;flex-shrink:0}
+.gbox.selbox .gchip{background:#eef6ff;border:1px solid #aed6f1}
 .gcomma{font-size:8px;color:#ccc;align-self:center;margin:0 1px}
-.gbox-score{font-size:12px;font-weight:700;flex-shrink:0;padding-top:2px;text-align:right;line-height:1.4;min-width:52px}
+.gbox-score{font-size:8px;font-weight:600;flex-shrink:0;padding-top:2px;text-align:right;line-height:1.4;min-width:38px}
 .gbox.steak-box .gbox-score{color:#e67e22}
 .gbox.pushrow .gbox-score{color:#aaa}
-.gbox.selbox .gbox-score{color:#2980b9;min-width:44px;font-size:11px}
+.gbox.selbox .gbox-score{color:#2980b9}
 
 /* ── BOTTOM — action area only ── */
 .bottom{background:#fff;padding:5px 12px 20px;border-top:1px solid #eee;flex-shrink:0}
@@ -318,8 +301,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 <script>
 const BASE='https://raw.githubusercontent.com/dic1405/dice-prototype/main/';
 const ICON_URLS=[
-  BASE+'Icon_Dice_Basic_NormalAttack.png',
-  BASE+'Icon_Dice_Strong_Attack.png',
+  BASE+'Icon_Dice_Basic_Attack.png',
+  BASE+'Icon_Dice_Basic_HeavyAttack.png',
   BASE+'Icon_Dice_Basic_Wine.png',
   BASE+'Icon_Dice_Basic_Shield.png',
   BASE+'Icon_Dice_Basic_CannonBall.png',
@@ -449,13 +432,6 @@ function makeSlot(){
   const l=document.createElement('div');l.className='dlbl';l.textContent='—';
   w.appendChild(d);w.appendChild(l);return w;
 }
-function makeLockedDie(iconIdx){
-  const w=document.createElement('div');w.className='dw';
-  const d=document.createElement('div');d.className='die locked';
-  d.appendChild(mkIconImg(iconIdx,'72%'));
-  const l=document.createElement('div');l.className='dlbl';l.style.color='#27ae60';l.textContent='✓';
-  w.appendChild(d);w.appendChild(l);return w;
-}
 function makeAnim(steak=false){
   const w=document.createElement('div');w.className='dw';
   if(steak){
@@ -473,24 +449,18 @@ function makeAnim(steak=false){
   }
   return w;
 }
-function makeChip(idx){const ch=document.createElement('div');ch.className='gchip';ch.appendChild(mkIconImg(idx,'18px'));return ch;}
+function makeChip(idx){const ch=document.createElement('div');ch.className='gchip';ch.appendChild(mkIconImg(idx,'10px'));return ch;}
 
-function renderDice(skipFormula=false){
+function renderDice(){
   const grid=$('diceGrid');grid.innerHTML='';
-  const{ii}=analyze();const inv=new Set(ii);
-  for(let i=0;i<6;i++){
-    if(G.ds[i]===DS.ST){
-      grid.appendChild(G.dice[i]!==undefined?makeLockedDie(G.dice[i]):makeSlot());
-    } else if(!G.dice.length||G.phase==='idle'){
-      grid.appendChild(makeSlot());
-    } else {
-      const isInv=G.ds[i]===DS.S&&inv.has(i);
-      grid.appendChild(makeDie(G.dice[i],G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?(isInv?'no pair':'keep?'):'free',()=>tapDie(i),isInv));
-    }
-  }
-  renderGroups();
-  if(!skipFormula) updateFormula();
-  renderBtns();
+  const{ii}=analyze();const inv=new Set(ii);let vis=0;
+  G.dice.forEach((d,i)=>{
+    if(G.ds[i]===DS.ST)return;vis++;
+    const isInv=G.ds[i]===DS.S&&inv.has(i);
+    grid.appendChild(makeDie(d,G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?(isInv?'no pair':'keep?'):'free',()=>tapDie(i),isInv));
+  });
+  for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
+  renderGroups();updateFormula();renderBtns();
 }
 function showAnimGrid(count,steak=false){
   const grid=$('diceGrid');grid.innerHTML='';
@@ -498,12 +468,9 @@ function showAnimGrid(count,steak=false){
   for(let i=count;i<6;i++)grid.appendChild(makeSlot());
 }
 function showRerolling(selIdxs){
-  const grid=$('diceGrid');grid.innerHTML='';const sel=new Set(selIdxs);
-  for(let i=0;i<6;i++){
-    if(G.ds[i]===DS.ST) grid.appendChild(makeLockedDie(G.dice[i]));
-    else if(sel.has(i)) grid.appendChild(makeAnim(false));
-    else grid.appendChild(makeDie(G.dice[i],G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?'keep?':'free',null));
-  }
+  const grid=$('diceGrid');grid.innerHTML='';const sel=new Set(selIdxs);let vis=0;
+  G.dice.forEach((d,i)=>{if(G.ds[i]===DS.ST)return;vis++;grid.appendChild(sel.has(i)?makeAnim(false):makeDie(d,G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?'keep?':'free',null));});
+  for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
 }
 
 function renderGroups(newSteakIdx=-1){
@@ -519,62 +486,31 @@ function renderGroups(newSteakIdx=-1){
   G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak-box','🔥 Steak!',sb.groups,i===newSteakIdx)));
   if(G.currentGroups.length>0)area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups));
   if(G.phase==='rolled'&&G.dice.length>0){
-    const{vi,ii,hasInvalid}=analyze();
-    const hasSel=G.ds.some(s=>s===DS.S);
-    const invSet=new Set(ii);
-    const allSelIdxs=G.ds.map((s,i)=>s===DS.S?i:-1).filter(i=>i>=0);
-
-    // Always show selection box when rolled
-    const box=document.createElement('div');box.className='gbox selbox';
-    const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
-    const content=document.createElement('div');content.className='gbox-content';
-    const sc=document.createElement('div');sc.className='gbox-score';
-
-    if(!hasSel){
-      // No dice selected — 1 empty placeholder square
-      const empty=document.createElement('div');empty.className='sel-empty';
-      content.appendChild(empty);
-      sc.textContent='—';
-    } else if(hasInvalid){
-      // Invalid combo — show all selected dice dimmed
-      allSelIdxs.forEach(i=>{
-        const chip=makeChip(G.dice[i]);
-        chip.classList.add(invSet.has(i)?'dim':'dim'); // all dim if any invalid
-        content.appendChild(chip);
-      });
-      sc.textContent='invalid';sc.style.color='#e74c3c';
-    } else {
-      // Valid combo — show vi dice clearly
-      vi.forEach(i=>{
-        const chip=makeChip(G.dice[i]);
-        chip.classList.add('valid');
-        content.appendChild(chip);
-      });
-      sc.textContent=scoreLabel([{dice:vi.map(i=>G.dice[i])}]);
+    const{vi,hasInvalid}=analyze();
+    if(vi.length>0&&!hasInvalid){
+      const selDice=vi.map(i=>G.dice[i]);
+      const box=document.createElement('div');box.className='gbox selbox';
+      const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
+      const content=document.createElement('div');content.className='gbox-content';
+      selDice.forEach(ic=>content.appendChild(makeChip(ic)));
+      const sc=document.createElement('div');sc.className='gbox-score';sc.textContent=scoreLabel([{dice:selDice}]);
+      box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
     }
-
-    box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
   }
 }
 
 function updateFormula(){
   const combo=calcCombo();
-  const{hasInvalid}=analyze();
-  const hasSel=G.ds.some(s=>s===DS.S);
   if(combo){
     $('fDmg').textContent=combo.ad;
     $('fBonus').textContent='+'+(G.bonusDmg+combo.bdmgG);
     $('fBonusLbl').textContent=combo.bdmgG>0?'Bonus(+'+combo.bdmgG+')':'Bonus';
     $('fFlux').textContent='×'+(Number.isInteger(combo.effectiveFlux)?combo.effectiveFlux:combo.effectiveFlux.toFixed(1));
     $('fFluxLbl').textContent='Flux';
-  } else if(hasInvalid){
-    // Invalid selection — keep current displayed values, don't reset
-    $('fBonusLbl').textContent='Bonus';$('fFluxLbl').textContent='Flux';
-  } else {
-    // No selection or idle — show base state
-    $('fDmg').textContent='0';
-    $('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';
-    $('fFlux').textContent='×'+G.flux;$('fFluxLbl').textContent='Flux';
+    $('sts').textContent='deal '+combo.totalDmg;
+  }else{
+    $('fDmg').textContent='0';$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';
+    $('fFlux').textContent='×'+G.flux;$('fFluxLbl').textContent='Flux';$('sts').textContent='select combo';
   }
 }
 
@@ -635,51 +571,15 @@ function showOverlay(html){$('ocard').innerHTML=html;$('overlay').classList.add(
 window.hideOverlay=()=>$('overlay').classList.remove('on');
 
 function flashEnemy(dmg){const av=$('eavatar');av.classList.remove('flash','bigshake');void av.offsetWidth;if(dmg>50){av.classList.add('bigshake');setTimeout(()=>av.classList.remove('bigshake'),650);}else{av.classList.add('flash');setTimeout(()=>av.classList.remove('flash'),400);}}
-function shakeHp(){
-  const r=$('hpRow');if(!r)return;
-  r.classList.remove('shake');void r.offsetWidth;
-  r.classList.add('shake');
-  setTimeout(()=>r.classList.remove('shake'),700);
-}
-
-function showEnemyAtkPop(dmg,blocked){
-  // Remove any existing popup
-  const old=document.getElementById('atkPop');if(old)old.remove();
-  const pop=document.createElement('div');
-  pop.id='atkPop';pop.className='enemy-atk-pop';
-  // Position just above dice area
-  const arena=document.querySelector('.arena');
-  const arenaRect=arena?arena.getBoundingClientRect():null;
-  const phone=document.querySelector('.phone');
-  const phoneRect=phone?phone.getBoundingClientRect():null;
-  if(arenaRect&&phoneRect){
-    pop.style.top=(arenaRect.top-phoneRect.top+6)+'px';
-  } else {
-    pop.style.top='140px';
-  }
-  const label=blocked>0&&dmg===0?'Shield blocked!':blocked>0?'Enemy Attack':'Enemy Attack';
-  const sub=blocked>0&&dmg===0?'Fully blocked — '+G.shield+' shield left':blocked>0?'−'+dmg+' HP (blocked '+blocked+')':'−'+dmg+' HP';
-  pop.innerHTML=label+'<span class="atk-sub">'+sub+'</span>';
-  phone.appendChild(pop);
-  // Auto dismiss after 1.6s
-  setTimeout(()=>{if(pop.parentNode){pop.classList.add('out');setTimeout(()=>pop.remove(),250);}},1600);
-}
+function shakeHp(){const r=$('hpRow');if(!r)return;r.classList.remove('shake');void r.offsetWidth;r.classList.add('shake');setTimeout(()=>r.classList.remove('shake'),400);}
 
 function applyEnemyHit(){
   const blocked=Math.min(G.shield,G.eDmg),dmgToHp=G.eDmg-blocked;
-  G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);
-
-  // Step 1: show popup immediately
-  showEnemyAtkPop(dmgToHp,blocked);
-
-  // Step 2: 500ms gap, then shake HP bar + update UI
-  setTimeout(()=>{
-    shakeHp();
-    updateUI();renderBtns();
-    if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
-    else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
-    else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
-  },500);
+  G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);shakeHp();
+  if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
+  else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
+  else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
+  updateUI();renderBtns();
 }
 
 function triggerVictory(){
@@ -687,7 +587,7 @@ function triggerVictory(){
   showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');
 }
 
-function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice(true);}
+function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
 
 function doBreak(){
   G.steakCount=0;G.flux=1;G.bonusDmg=0;G.breakStreak++;
@@ -725,76 +625,33 @@ function doRoll(){
 
 function doPushLuck(){
   if(G.busy||G.phase!=='rolled')return;if(!canPush()){feedback('⚠️ Fix invalid dice first','warn');return;}
-  const{vi}=analyze();
-  const groupDice=vi.map(i=>G.dice[i]);
-  const grpScore=scoreGroup(groupDice);
-
-  G.currentGroups.push({dice:groupDice});
+  const{vi}=analyze();G.currentGroups.push({dice:vi.map(i=>G.dice[i])});
   vi.forEach(i=>G.ds[i]=DS.ST);G.ds.forEach((s,i)=>{if(s===DS.S)G.ds[i]=DS.F;});
   const pushed=G.ds.filter(s=>s===DS.ST).length;
+  if(pushed===6){
+    // STEAK — increment steakCount, apply Fibonacci flux
+    G.steakCount++;
+    const newFlux=getFlux(G.steakCount);
+    const prevFlux=G.steakCount>1?getFlux(G.steakCount-1):1;
+    const fluxGain=newFlux-prevFlux;
+    const newSteakIdx=G.steakBoxes.length;
+    G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
+    G.flux=newFlux;G.busy=true;G.phase='pushing';
+    showSteakBanner(fluxGain);showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
+    setTimeout(()=>{
+      G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
+      G.phase='rolled';G.busy=false;
+      hideSteakBanner();
+      if(!hasCombo(G.dice))doBreak();
+      else{renderDice();updateUI();feedback('🔥 Steak! Flux +'+fluxGain,'info',2400);}
+    },ANIM);return;
+  }
+  const fi=G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
+  if(!fi.length){hideBanners();renderDice();updateUI();return;}
   G.busy=true;G.phase='pushing';
-
-  // Phase 1: Show locked dice + flash them
-  renderDice(true); renderGroups(); renderBtns();
-  const lockedEls=[...document.querySelectorAll('#diceGrid .die.locked')];
-  lockedEls.forEach((d,idx)=>{
-    setTimeout(()=>{
-      d.style.animation='none';void d.offsetWidth;
-      d.classList.add('scoring');
-      setTimeout(()=>d.classList.remove('scoring'),500);
-    },idx*55);
-  });
-
-  // Phase 2 (300ms): Flash formula values with this group's contribution
-  setTimeout(()=>{
-    // Compute running totals across all committed groups
-    let rDmg=0,rFlux=G.flux,rBonus=G.bonusDmg;
-    for(const sb of G.steakBoxes)for(const g of sb.groups){const s=scoreGroup(g.dice);rDmg+=s.ad;rFlux+=s.fluxG;rBonus+=s.bdmgG;}
-    for(const g of G.currentGroups){const s=scoreGroup(g.dice);rDmg+=s.ad;rFlux+=s.fluxG;rBonus+=s.bdmgG;}
-    let fDelay=0;
-    if(grpScore.ad>0){setTimeout(()=>flashPop('fDmg',rDmg),fDelay);fDelay+=120;}
-    if(grpScore.fluxG>0){const fx=rFlux;setTimeout(()=>flashPop('fFlux','×'+(Number.isInteger(fx)?fx:fx.toFixed(1))),fDelay);fDelay+=120;}
-    if(grpScore.bdmgG>0){setTimeout(()=>flashPop('fBonus','+'+rBonus),fDelay);fDelay+=120;}
-    if(grpScore.manaG>0){const m=Math.min(G.maxMana,G.mana+grpScore.manaG);setTimeout(()=>flashPop('valMana',m+'/'+G.maxMana),fDelay);fDelay+=120;}
-    if(grpScore.shieldG>0){setTimeout(()=>popStat('shieldBadge','gain'),fDelay);}
-
-    // Phase 3 (300ms after formula): Rolling animation
-    setTimeout(()=>{
-      if(pushed===6){
-        // STEAK
-        G.steakCount++;
-        const newFlux=getFlux(G.steakCount);
-        const prevFlux=G.steakCount>1?getFlux(G.steakCount-1):1;
-        const fluxGain=newFlux-prevFlux;
-        const newSteakIdx=G.steakBoxes.length;
-        G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
-        G.flux=newFlux;
-        showSteakBanner(fluxGain);showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
-        setTimeout(()=>{
-          G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
-          G.phase='rolled';G.busy=false;hideSteakBanner();
-          if(!hasCombo(G.dice))doBreak();
-          else{renderDice();updateUI();feedback('🔥 Steak! Flux +'+fluxGain,'info',2400);}
-        },ANIM);
-        return;
-      }
-      const fi=G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
-      if(!fi.length){hideBanners();renderDice();updateUI();return;}
-      const grid=$('diceGrid');grid.innerHTML='';
-      for(let i=0;i<6;i++){
-        if(G.ds[i]===DS.ST) grid.appendChild(makeLockedDie(G.dice[i]));
-        else grid.appendChild(makeAnim(false));
-      }
-      renderGroups();renderBtns();
-      setTimeout(()=>{
-        fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});
-        G.phase='rolled';G.busy=false;
-        $('bustBanner').classList.remove('on');
-        if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();
-        else{renderDice();updateUI();}
-      },ANIM);
-    },300);
-  },300);
+  const grid=$('diceGrid');grid.innerHTML='';G.ds.forEach(s=>{if(s===DS.ST)return;grid.appendChild(makeAnim(false));});
+  renderGroups();renderBtns();
+  setTimeout(()=>{fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});G.phase='rolled';G.busy=false;$('bustBanner').classList.remove('on');if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();else{renderDice();updateUI();}},ANIM);
 }
 
 // ── STRIKE ANIMATION HELPERS ──────────────────────────────────
@@ -992,47 +849,17 @@ $('btnHelp').onclick=()=>$('tutOv').classList.add('on');
 $('btnRestart').onclick=doRestart;
 
 const ENEMIES=[
-  // ── ACT 1 — Pirates ──
-  {name:'Rusty Cutlass · Act 1',    icon:'⚓', hp:60,  dmg:11, act:1},
-  {name:'The Bilge Rat · Act 1',    icon:'🐀', hp:75,  dmg:13, act:1},
-  {name:'Saltwind Marauder · Act 1',icon:'🏴‍☠️', hp:95,  dmg:14, act:1},
-  {name:'Crimson Brigantine · Act 1',icon:'⚡',hp:115, dmg:16, act:1},
-  {name:'Black Corsair · Act 1',    icon:'💀', hp:130, dmg:18, act:1},
-  {name:'THE COLLECTOR ★ Boss',     icon:'👑', hp:200, dmg:17, act:1, boss:true},
-  // ── ACT 2 — Navy ──
-  {name:'Scout Frigate · Act 2',    icon:'🚢', hp:100, dmg:14, act:2},
-  {name:'HMS Ironclad · Act 2',     icon:'⚙️', hp:125, dmg:16, act:2},
-  {name:'Naval Gunboat · Act 2',    icon:'🔱', hp:140, dmg:17, act:2},
-  {name:'HMS Relentless · Act 2',   icon:'⚔️', hp:165, dmg:19, act:2},
-  {name:'The Dreadnought · Act 2',  icon:'🛡️', hp:190, dmg:21, act:2},
-  {name:'THE IRON ADMIRAL ★ Boss',  icon:'🎖️', hp:300, dmg:13, act:2, boss:true, pattern:[13,19,28]},
-  // ── ACT 3 — Monsters ──
-  {name:'Shore Crab · Act 3',       icon:'🦀', hp:140, dmg:16, act:3},
-  {name:'Reef Lurker · Act 3',      icon:'🐙', hp:155, dmg:17, act:3},
-  {name:'Stormfin · Act 3',         icon:'🦈', hp:170, dmg:19, act:3},
-  {name:'Deepfang · Act 3',         icon:'🐟', hp:195, dmg:21, act:3},
-  {name:'Abyssal Leviathan · Act 3',icon:'🌊', hp:220, dmg:23, act:3},
-  {name:'KRAKEN ★ Boss',            icon:'🐲', hp:420, dmg:20, act:3, boss:true},
-  // ── ACT 4 — Ghost Ships ──
-  {name:'The Wanderer · Act 4',     icon:'👻', hp:180, dmg:20, act:4},
-  {name:'Pale Widow · Act 4',       icon:'💀', hp:210, dmg:22, act:4},
-  {name:'Bone Galleon · Act 4',     icon:'🏴‍☠️', hp:230, dmg:23, act:4},
-  {name:'The Maelstrom Queen · Act 4',icon:'🌀',hp:255,dmg:25, act:4},
-  {name:'Wraith Galleon · Act 4',   icon:'⛵', hp:275, dmg:27, act:4},
-  {name:'THE ETERNAL TIDE ★ Boss',  icon:'🌊', hp:400, dmg:22, act:4, boss:true},
+  {name:'Rusty Cutlass · Act 1',icon:'⚓',hp:60,dmg:11},
+  {name:'The Bilge Rat · Act 1',icon:'🐀',hp:75,dmg:13},
+  {name:'Saltwind Marauder · Act 1',icon:'🏴‍☠️',hp:95,dmg:14},
+  {name:'Crimson Brigantine · Act 1',icon:'⚡',hp:115,dmg:16},
+  {name:'Black Corsair · Act 1',icon:'💀',hp:130,dmg:18},
 ];
 
 function setEnemy(idx){
   const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];
   G.enemyIdx=idx;G.eHp=e.hp;G.eMaxHp=e.hp;G.eDmg=e.dmg;
-  $('eavatar').textContent=e.icon;
-  $('ename').textContent=e.name;
-  $('itxt').textContent='Attack '+e.dmg+' dmg';
-  // Boss styling
-  const av=$('eavatar');
-  av.style.borderColor=e.boss?'#e74c3c':'#9b59b6';
-  av.style.background=e.boss?'#fff0f0':'#f5eeff';
-  updateUI();
+  $('eavatar').textContent=e.icon;$('ename').textContent=e.name;$('itxt').textContent='Attack '+e.dmg+' dmg';updateUI();
 }
 
 function doRestart(){
