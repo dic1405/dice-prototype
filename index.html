@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roguelike v11.0</title>
+<title>Dice Roguelike v12.0</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
@@ -281,17 +281,17 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <!-- Guide overlay -->
   <div class="tov" id="tutOv">
     <div class="tc">
-      <div class="th"><div class="tt">Combo Guide — v3.1</div><button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Close</button></div>
+      <div class="th"><div class="tt">Combo Guide — v4.4</div><button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Close</button></div>
       <div class="gsec">Attack — single die counts</div>
-      <div class="grow"><div class="gicon" id="gi0"></div><div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2 · ×2=5 · ×3=16 · ×4=35 · ×5=75 · ×6=140 AD</div></div></div>
-      <div class="grow"><div class="gicon" id="gi1"></div><div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=6 · ×2=15 · ×3=42 · ×4=105 · ×5=225 · ×6=420 AD</div></div></div>
+      <div class="grow"><div class="gicon" id="gi0"></div><div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2 · ×2=5 · ×3=16 · ×4=32 · ×5=60 · ×6=100 AD</div></div></div>
+      <div class="grow"><div class="gicon" id="gi1"></div><div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=6 · ×2=15 · ×3=42 · ×4=95 · ×5=175 · ×6=280 AD</div></div></div>
       <div class="gsec">Combo — Pair minimum</div>
       <div class="grow"><div class="gicon" id="gi2"></div><div class="ginfo"><div class="gname">Mana</div><div class="gdesc">pair=8AD+1MP · triple=12AD+3MP · quad=50AD+5MP</div></div></div>
       <div class="grow"><div class="gicon" id="gi3"></div><div class="ginfo"><div class="gname">Shield</div><div class="gdesc">pair=13blk · triple=30blk · quad=55blk · quint=100blk</div></div></div>
-      <div class="grow"><div class="gicon" id="gi4"></div><div class="ginfo"><div class="gname">Flux</div><div class="gdesc">pair=8AD(no fx) · triple=22AD+1.0fx · quad=50AD+2.5fx</div></div></div>
-      <div class="grow"><div class="gicon" id="gi5"></div><div class="ginfo"><div class="gname">Bonus Damage</div><div class="gdesc">pair=+4BD · triple=10AD+20BD · quad=22AD+50BD</div></div></div>
+      <div class="grow"><div class="gicon" id="gi4"></div><div class="ginfo"><div class="gname">Flux</div><div class="gdesc">pair=5AD · triple=12AD+1.0fx · quad=20AD+1.5fx · quint=28AD+3.0fx · sext=35AD+5.0fx</div></div></div>
+      <div class="grow"><div class="gicon" id="gi5"></div><div class="ginfo"><div class="gname">Bonus Damage</div><div class="gdesc">pair=+4BD · triple=10AD+20BD · quad=22AD+40BD · quint=45AD+75BD · sext=85AD+130BD</div></div></div>
       <div class="gsec">Special</div>
-      <div class="grow" style="background:#fff3e0;border:1px solid #f5cba7"><div class="ginfo"><div class="gname" style="color:#c0392b">🔥 Steak!</div><div class="gdesc" style="color:#e67e22">Push Luck all 6 → Flux Fibonacci (×2, ×3, ×5, ×8...) → roll fresh 6</div></div></div>
+      <div class="grow" style="background:#fff3e0;border:1px solid #f5cba7"><div class="ginfo"><div class="gname" style="color:#c0392b">🔥 Steak!</div><div class="gdesc" style="color:#e67e22">Push Luck all 6 → Flux ×1.5→×2→×3→×5→×8→×13... (cap ×777 at Steak 16) → roll fresh 6</div></div></div>
       <div class="grow"><div class="ginfo"><div class="gname">4-Different</div><div class="gdesc">4 icons khác nhau=30AD · 5-diff=60AD · 6-diff=110AD</div></div></div>
       <div class="gnote">Total = (Damage + BonusDmg) × Flux · BonusDmg resets per enemy · Mana persists run · Player HP: 100</div>
     </div>
@@ -320,8 +320,8 @@ function mkIconImg(idx,size='72%'){return mkImg(ICON_URLS[idx],size);}
 // ── FIBONACCI FLUX ─────────────────────────────────────────────
 
 // STEAK_FLUX lookup — cap Steak 15 = ×777
-const STEAK_FLUX=[0,2,3,5,8,13,20,30,50,70,100,150,200,300,450,777];
-function getFlux(n){if(n>=15)return 777;return STEAK_FLUX[Math.max(1,n)]||1;}
+const STEAK_FLUX=[0,1.5,2,3,5,8,13,21,34,55,100,150,200,300,450,700,777];
+function getFlux(n){if(n>=16)return 777;return STEAK_FLUX[Math.max(1,n)]||1;}
 
 // ── HIDDEN LOGIC ───────────────────────────────────────────────
 // Rule 01: No heavy cluster (4+) on first roll
@@ -367,14 +367,14 @@ function scoreGroup(arr){
   if(!arr.length)return{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
   const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
   let ad=0,fluxG=0,manaG=0,shieldG=0,bdmgG=0;
-  if(c[0]){const n=c[0];ad+=n===1?2:n===2?5:n===3?16:n===4?35:n===5?75:140;}
-  if(c[1]){const n=c[1];ad+=n===1?6:n===2?15:n===3?42:n===4?105:n===5?225:420;}
+  if(c[0]){const n=c[0];ad+=n===1?2:n===2?5:n===3?16:n===4?32:n===5?60:100;}
+  if(c[1]){const n=c[1];ad+=n===1?6:n===2?15:n===3?42:n===4?95:n===5?175:280;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
     if(ic===2){ad+=n===2?8:n===3?12:n===4?50:n===5?105:195;manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
     // Shield rebalanced: pair=13, triple=30, quad=55, quint=100, sextep=160
     else if(ic===3){shieldG+=n===2?13:n===3?30:n===4?55:n===5?100:160;}
-    else if(ic===4){ad+=n===2?8:n===3?22:n===4?50:n===5?105:195;if(n>=3)fluxG+=n===3?1:n===4?2.5:n===5?5:6;}
-    else if(ic===5){ad+=n===2?0:n===3?10:n===4?22:n===5?45:85;bdmgG+=n===2?4:n===3?20:n===4?50:n===5?100:200;}
+    else if(ic===4){ad+=n===2?5:n===3?12:n===4?20:n===5?28:35;if(n>=3)fluxG+=n===3?1.0:n===4?1.5:n===5?3.0:5.0;}
+    else if(ic===5){ad+=n===2?0:n===3?10:n===4?22:n===5?45:85;bdmgG+=n===2?4:n===3?20:n===4?40:n===5?75:130;}
   });
   const allDiff=!Object.values(c).some(v=>v>1);
   if(allDiff){if(arr.length===4)ad+=30;else if(arr.length===5)ad+=60;else if(arr.length===6)ad+=110;}
