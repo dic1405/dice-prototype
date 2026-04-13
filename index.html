@@ -1463,33 +1463,33 @@ $('btnRestart').onclick=doRestart;
 
 const ENEMIES=[
   // ── Act 1 — Pirates ──
-  {name:'Rusty Cutlass · Act 1',      icon:'⚓',  hp:40,  dmg:7},
-  {name:'The Bilge Rat · Act 1',      icon:'🐀',  hp:50,  dmg:7},
-  {name:'Saltwind Marauder · Act 1',  icon:'🏴‍☠️', hp:65,  dmg:9},
-  {name:'Crimson Brigantine · Act 1', icon:'⚡',  hp:80,  dmg:9},
-  {name:'Black Corsair · Act 1',      icon:'💀',  hp:120, dmg:10},
-  {name:'THE COLLECTOR · Boss',       icon:'👁️',  hp:150, dmg:12},
-  // ── Act 2 — Navy ──
-  {name:'Scout Frigate · Act 2',      icon:'🚢',  hp:115, dmg:14},
-  {name:'HMS Ironclad · Act 2',       icon:'🛡️',  hp:145, dmg:16},
-  {name:'Naval Gunboat · Act 2',      icon:'💣',  hp:160, dmg:17},
-  {name:'HMS Relentless · Act 2',     icon:'⚔️',  hp:190, dmg:19},
-  {name:'The Dreadnought · Act 2',    icon:'⚓',  hp:220, dmg:21},
-  {name:'THE IRON ADMIRAL · Boss',    icon:'👑',  hp:350, dmg:13}, // cycle 13→19→28
-  // ── Act 3 — Monsters ──
-  {name:'Shore Crab · Act 3',         icon:'🦀',  hp:160, dmg:16},
-  {name:'Reef Lurker · Act 3',        icon:'🐙',  hp:180, dmg:17},
-  {name:'Stormfin · Act 3',           icon:'🦈',  hp:195, dmg:19},
-  {name:'Deepfang · Act 3',           icon:'🦑',  hp:225, dmg:21},
-  {name:'Abyssal Leviathan · Act 3',  icon:'🌊',  hp:255, dmg:23},
-  {name:'KRAKEN · Boss',              icon:'🐙',  hp:480, dmg:22}, // Phase1 random 19–28 / Phase2=35
-  // ── Act 4 — Ghost Ships ──
-  {name:'The Wanderer · Act 4',       icon:'👻',  hp:210, dmg:20},
-  {name:'Pale Widow · Act 4',         icon:'💀',  hp:240, dmg:22},
-  {name:'Bone Galleon · Act 4',       icon:'☠️',  hp:265, dmg:23},
-  {name:'The Maelstrom Queen · Act 4',icon:'🌀',  hp:295, dmg:25},
-  {name:'Wraith Galleon · Act 4',     icon:'⚓',  hp:315, dmg:27},
-  {name:'THE ETERNAL TIDE · Boss',    icon:'♾️',  hp:460, dmg:22}, // revive +230 HP / Phase2 dmg=44
+  {name:'Rusty Cutlass · Act 1',      icon:'⚓',  hp:35,  dmg:5},
+  {name:'The Bilge Rat · Act 1',      icon:'🐀',  hp:40,  dmg:5},
+  {name:'Saltwind Marauder · Act 1',  icon:'🏴‍☠️', hp:50,  dmg:7},
+  {name:'Crimson Brigantine · Act 1', icon:'⚡',  hp:60,  dmg:7},
+  {name:'Black Corsair · Act 1',      icon:'💀',  hp:80,  dmg:7},
+  {name:'THE COLLECTOR · Boss',       icon:'👁️',  hp:120, dmg:10},
+  // ── Act 2 — Navy (−25%) ──
+  {name:'Scout Frigate · Act 2',      icon:'🚢',  hp:85,  dmg:10},
+  {name:'HMS Ironclad · Act 2',       icon:'🛡️',  hp:110, dmg:10},
+  {name:'Naval Gunboat · Act 2',      icon:'💣',  hp:120, dmg:12},
+  {name:'HMS Relentless · Act 2',     icon:'⚔️',  hp:145, dmg:12},
+  {name:'The Dreadnought · Act 2',    icon:'⚓',  hp:175, dmg:14},
+  {name:'THE IRON ADMIRAL · Boss',    icon:'👑',  hp:265, dmg:10}, // cycle 10→14→21
+  // ── Act 3 — Monsters (−15%) ──
+  {name:'Shore Crab · Act 3',         icon:'🦀',  hp:135, dmg:14},
+  {name:'Reef Lurker · Act 3',        icon:'🐙',  hp:155, dmg:15},
+  {name:'Stormfin · Act 3',           icon:'🦈',  hp:165, dmg:16},
+  {name:'Deepfang · Act 3',           icon:'🦑',  hp:190, dmg:18},
+  {name:'Abyssal Leviathan · Act 3',  icon:'🌊',  hp:215, dmg:20},
+  {name:'KRAKEN · Boss',              icon:'🐙',  hp:410, dmg:16}, // Phase1 random 13–21 / Phase2=27 at ≤205 HP
+  // ── Act 4 — Ghost Ships (−10%) ──
+  {name:'The Wanderer · Act 4',       icon:'👻',  hp:190, dmg:18},
+  {name:'Pale Widow · Act 4',         icon:'💀',  hp:215, dmg:20},
+  {name:'Bone Galleon · Act 4',       icon:'☠️',  hp:240, dmg:21},
+  {name:'The Maelstrom Queen · Act 4',icon:'🌀',  hp:265, dmg:23},
+  {name:'Wraith Galleon · Act 4',     icon:'⚓',  hp:285, dmg:25},
+  {name:'THE ETERNAL TIDE · Boss',    icon:'♾️',  hp:415, dmg:20}, // revive +205 HP / Phase2 dmg=29→40 on revive
 ];
 
 function setEnemy(idx){
