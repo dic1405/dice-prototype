@@ -91,11 +91,11 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 .sbar-row{display:flex;align-items:center;gap:3px}
 .sbar-icon{font-size:8px;flex-shrink:0;line-height:1}
-.sbar-track{flex:1;height:4px;border-radius:2px;background:rgba(0,0,0,.4);overflow:hidden}
-.sbar-fill{height:100%;border-radius:2px;transition:width .4s}
+.sbar-track{flex:1;height:7px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden}
+.sbar-fill{height:100%;border-radius:4px;transition:width .4s}
 .sbar-fill-hp{background:#e74c3c}
 .sbar-fill-mp{background:#3498db}
-.sbar-val{font-size:7px;color:#fff;min-width:28px;text-align:right;font-weight:600;text-shadow:0 0 3px rgba(0,0,0,.8)}
+.sbar-val{font-size:11px;color:#fff;min-width:36px;text-align:right;font-weight:600;text-shadow:0 0 3px rgba(0,0,0,.8)}
 .sbar-row#shieldRow .sbar-val{min-width:auto;text-shadow:0 0 4px rgba(0,0,0,.9)}
 /* Enemy name tag */
 .enemy-nametag{
@@ -121,6 +121,47 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   position:absolute;top:4px;left:4px;
   background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);
   color:#aaa;border-radius:5px;padding:2px 6px;font-size:8px;cursor:pointer;
+}
+
+/* ── BACKPACK ── */
+.backpack{
+  width:100%;flex-shrink:0;
+  background:#e4e4e4;
+  border-bottom:1.5px solid #c8c8c8;
+  padding:3px 0 0;
+  display:flex;align-items:flex-start;justify-content:center;gap:0;
+}
+.backpack-label{
+  font-size:6px;font-weight:700;color:#bbb;
+  text-transform:uppercase;letter-spacing:.6px;
+  writing-mode:vertical-rl;
+  padding:2px 3px 2px 4px;line-height:1;
+  flex-shrink:0;align-self:center;
+}
+.backpack-grid{
+  display:grid;
+  grid-template-columns:repeat(6,32px);
+  grid-template-rows:repeat(2,32px);
+  gap:0;
+  border-left:1px solid #c0c0c0;
+  border-top:1px solid #c0c0c0;
+}
+.bp-slot{
+  width:32px;height:32px;
+  background:#e8e8e8;
+  border-right:1px solid #c0c0c0;
+  border-bottom:1px solid #c0c0c0;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.bp-slot:nth-child(-n+2){background:#f0ede8;}
+.bp-slot:nth-child(n+3){background:#e0e0e0;}
+.bp-slot:nth-child(n+3)::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    45deg,transparent,transparent 3px,
+    rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px
+  );
 }
 
 /* ── ENEMY BAR ── */
@@ -498,6 +539,15 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       <div class="sbar-row" style="justify-content:flex-end;margin-top:1px">
         <div class="sbar-val" id="itxt" style="color:#ffaaaa;font-size:7px;min-width:auto">⚔ 11 dmg</div>
       </div>
+    </div>
+  </div>
+
+  <!-- Backpack -->
+  <div class="backpack">
+    <div class="backpack-label">Backpack</div>
+    <div class="backpack-grid">
+      <div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div>
+      <div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div>
     </div>
   </div>
 
@@ -886,10 +936,10 @@ function updateFormula(){
   // Bonus: shows current accumulated bonus (updates only after Strike)
   $('fBonus').textContent='+'+G.bonusDmg;
   $('fBonusLbl').textContent='Bonus';
-  // Flux: shows G.flux (Steak flux only, not stackFlux)
-  const fx=G.flux;
+  // Flux: G.flux (Steak) + G.stackFlux (carry-over from Stack turns)
+  const fx=G.flux+G.stackFlux;
   $('fFlux').textContent='×'+(Number.isInteger(fx)?fx:fx.toFixed(1));
-  $('fFluxLbl').textContent='Flux';
+  $('fFluxLbl').textContent=G.stackFlux>0?'Flux ⬆':'Flux';
 }
 
 function renderBtns(){
@@ -971,25 +1021,28 @@ function hideSteakBanner(){const el=document.getElementById('steakBannerEl');if(
 function showOverlay(html){$('ocard').innerHTML=html;$('overlay').classList.add('on')}
 window.hideOverlay=()=>$('overlay').classList.remove('on');
 
+function refreshShieldDisplay(){
+  const shRow=$('shieldRow'),shVal=$('valShield');
+  if(G.shield>0){if(shRow)shRow.style.display='flex';if(shVal)shVal.textContent=G.shield;}
+  else{if(shRow)shRow.style.display='none';}
+}
 function applyEnemyHit(){
   const blocked=Math.min(G.shield,G.eDmg),dmgToHp=G.eDmg-blocked;
   const hpBefore=G.pHp;
+  const shieldBefore=G.shield;
   G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);shakeHp();
   if(dmgToHp>0) setTimeout(()=>spawnDmgFloat(dmgToHp,true),500);
   if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
   else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
   else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
-  // Update shield display after 300ms (after cannonball lands visually)
-  const shRow=$('shieldRow'),shVal=$('valShield');
-  setTimeout(()=>{
-    if(G.shield>0){if(shRow)shRow.style.display='flex';if(shVal)shVal.textContent=G.shield;}
-    else{if(shRow)shRow.style.display='none';}
-  },300);
+  // Show PRE-hit shield immediately so player reads what was absorbed
+  // then switch to post-hit value after cannonball lands (~400ms)
+  if(shieldBefore>0){const shRow=$('shieldRow'),shVal=$('valShield');if(shRow)shRow.style.display='flex';if(shVal)shVal.textContent=shieldBefore;}
+  setTimeout(()=>refreshShieldDisplay(),400);
   $('barMana').style.width=Math.round(G.mana/G.maxMana*100)+'%';
   $('valMana').textContent=G.mana+'/'+G.maxMana;
   $('ehpbar').style.width=Math.round(Math.max(0,G.eHp)/G.eMaxHp*100)+'%';
   $('ehptxt').textContent=Math.max(0,G.eHp)+'/'+G.eMaxHp;
-  // HP bar: start animation after 300ms so it visually leads the bar
   if(dmgToHp>0){
     setTimeout(()=>animHpDown(hpBefore,G.pHp,900),300);
   } else {
@@ -1303,7 +1356,7 @@ function doStack(){
   if(combo.fluxG>0)parts.push('⭐+'+combo.fluxG.toFixed(1)+' Flux (carry-over)');
   feedback('📦 Stack & End Turn! '+parts.join(' ')+(G.stackFlux>0?' [Flux carry: +'+G.stackFlux.toFixed(1)+']':''),'info',2800);
   updateUI();
-  // Enemy counter-attacks — 1200ms so player clearly reads shield value before cannonball fires
+  // Enemy counter-attacks — 1200ms so player clearly reads new shield value before cannonball fires
   setTimeout(()=>{
     applyEnemyHit();
     if(G.pHp<=0){
@@ -1325,7 +1378,7 @@ function doStack(){
       G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
       hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
     },1100);
-  },700);
+  },1200);
 }
 
 function doStrike(){
@@ -1338,6 +1391,8 @@ function doStrike(){
   runStrikeAnimation(combo, events, ()=>{
     // Apply all stats after animation completes
     G.bonusDmg+=combo.bdmgG;G.shield+=combo.shieldG;
+    // Show new shield value immediately in ship scene — before enemy counter-attacks
+    refreshShieldDisplay();
     // Update Bonus display after Strike (only time it changes)
     if(combo.bdmgG>0){$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';flashFormulaBar();}
       G.stackBoxes=[];G.stackFlux=0;G.cannonadeDice=0; // consumed on Strike
@@ -1407,11 +1462,34 @@ $('btnHelp').onclick=()=>$('tutOv').classList.add('on');
 $('btnRestart').onclick=doRestart;
 
 const ENEMIES=[
-  {name:'Rusty Cutlass · Act 1',icon:'⚓',hp:60,dmg:11},
-  {name:'The Bilge Rat · Act 1',icon:'🐀',hp:75,dmg:13},
-  {name:'Saltwind Marauder · Act 1',icon:'🏴‍☠️',hp:95,dmg:14},
-  {name:'Crimson Brigantine · Act 1',icon:'⚡',hp:115,dmg:16},
-  {name:'Black Corsair · Act 1',icon:'💀',hp:130,dmg:18},
+  // ── Act 1 — Pirates ──
+  {name:'Rusty Cutlass · Act 1',      icon:'⚓',  hp:55,  dmg:8},
+  {name:'The Bilge Rat · Act 1',      icon:'🐀',  hp:75,  dmg:8},
+  {name:'Saltwind Marauder · Act 1',  icon:'🏴‍☠️', hp:90,  dmg:10},
+  {name:'Crimson Brigantine · Act 1', icon:'⚡',  hp:120, dmg:10},
+  {name:'Black Corsair · Act 1',      icon:'💀',  hp:150, dmg:14},
+  {name:'THE COLLECTOR · Boss',       icon:'👁️',  hp:230, dmg:18},
+  // ── Act 2 — Navy ──
+  {name:'Scout Frigate · Act 2',      icon:'🚢',  hp:115, dmg:14},
+  {name:'HMS Ironclad · Act 2',       icon:'🛡️',  hp:145, dmg:16},
+  {name:'Naval Gunboat · Act 2',      icon:'💣',  hp:160, dmg:17},
+  {name:'HMS Relentless · Act 2',     icon:'⚔️',  hp:190, dmg:19},
+  {name:'The Dreadnought · Act 2',    icon:'⚓',  hp:220, dmg:21},
+  {name:'THE IRON ADMIRAL · Boss',    icon:'👑',  hp:350, dmg:13}, // cycle 13→19→28
+  // ── Act 3 — Monsters ──
+  {name:'Shore Crab · Act 3',         icon:'🦀',  hp:160, dmg:16},
+  {name:'Reef Lurker · Act 3',        icon:'🐙',  hp:180, dmg:17},
+  {name:'Stormfin · Act 3',           icon:'🦈',  hp:195, dmg:19},
+  {name:'Deepfang · Act 3',           icon:'🦑',  hp:225, dmg:21},
+  {name:'Abyssal Leviathan · Act 3',  icon:'🌊',  hp:255, dmg:23},
+  {name:'KRAKEN · Boss',              icon:'🐙',  hp:480, dmg:22}, // Phase1 random 19–28 / Phase2=35
+  // ── Act 4 — Ghost Ships ──
+  {name:'The Wanderer · Act 4',       icon:'👻',  hp:210, dmg:20},
+  {name:'Pale Widow · Act 4',         icon:'💀',  hp:240, dmg:22},
+  {name:'Bone Galleon · Act 4',       icon:'☠️',  hp:265, dmg:23},
+  {name:'The Maelstrom Queen · Act 4',icon:'🌀',  hp:295, dmg:25},
+  {name:'Wraith Galleon · Act 4',     icon:'⚓',  hp:315, dmg:27},
+  {name:'THE ETERNAL TIDE · Boss',    icon:'♾️',  hp:460, dmg:22}, // revive +230 HP / Phase2 dmg=44
 ];
 
 function setEnemy(idx){
