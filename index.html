@@ -16,7 +16,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .ship-scene{
   position:relative;width:100%;flex-shrink:0;
   height:28vh;min-height:140px;max-height:200px;
-  background:linear-gradient(180deg,#1a1230 0%,#2d1b4e 30%,#3d2a5e 50%,#1a3a4a 70%,#1a4a5a 85%,#0d3040 100%);
+  background:linear-gradient(180deg,#a8d8e0 0%,#b8e0e8 30%,#c0e0e4 50%,#9ed0d8 70%,#8ec8d0 85%,#7abec8 100%);
   overflow:hidden;
 }
 /* Sky rays */
@@ -24,7 +24,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 /* Water */
 .scene-water{
   position:absolute;bottom:0;left:0;right:0;height:42%;
-  background:linear-gradient(180deg,#1a5a6e 0%,#0d3a4e 60%,#081e2e 100%);
+  background:linear-gradient(180deg,#5aacbe 0%,#3d94a8 60%,#2a7a8e 100%);
   border-top:2px solid #2a8a9e;
 }
 /* Wave animation */
@@ -62,9 +62,9 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   100%{right:88%;bottom:32%;opacity:0;transform:scale(.5)}
 }
 .cannonball{
-  position:absolute;width:8px;height:8px;
+  position:absolute;width:24px;height:24px;
   background:#333;border-radius:50%;
-  box-shadow:0 0 3px rgba(255,150,0,.7);
+  box-shadow:0 0 8px rgba(255,150,0,.8);
   display:none;pointer-events:none;
 }
 .cannonball.fly-player{display:block;animation:cannon-fly 0.85s ease forwards}
@@ -150,10 +150,17 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
 /* ── FORMULA BAR — inside arena, same width/alignment as Steak/Selection boxes ── */
+@keyframes fb-flash{
+  0%{transform:scale(1);box-shadow:none}
+  35%{transform:scale(1.03);box-shadow:0 0 12px rgba(232,160,32,.5),0 0 4px rgba(155,89,182,.4)}
+  70%{transform:scale(.99)}
+  100%{transform:scale(1);box-shadow:none}
+}
+.formula-bar.flashing{animation:fb-flash .55s cubic-bezier(.34,1.56,.64,1) forwards}
 .formula-bar{
   width:100%;max-width:320px;
+  margin:0 auto;
   display:flex;gap:6px;align-items:stretch;
-  margin-top:2px;
 }
 .fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 10px;display:flex;align-items:center;justify-content:space-around}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
@@ -169,8 +176,22 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
 /* ── ARENA ── */
-.arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:5px 12px;overflow:hidden}
-.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:320px}
+.arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:0}
+/* Dice zone — upper half */
+.dice-zone{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:6px 16px 8px;
+  flex-shrink:0;
+}
+/* Groups zone — lower section, separated with border-top */
+.groups-zone{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:0;
+  padding:8px 16px 6px;
+  border-top:1.5px solid #e8e8e8;
+  background:#f4f4f4;
+  flex:1;overflow-y:auto;
+}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:320px;margin:0 auto}
 .dw{display:flex;flex-direction:column;align-items:center;gap:2px}
 .die{width:100%;aspect-ratio:1;border-radius:14px;border:2px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;overflow:hidden;transition:border-color .12s}
 .die:active{transform:scale(.86)}
@@ -222,7 +243,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .dlbl.s{color:#f39c12}.dlbl.inv{color:#e74c3c}
 
 /* Groups */
-.groups-area{display:flex;flex-direction:column;gap:3px;width:100%;max-width:320px}
+.groups-area{display:flex;flex-direction:column;gap:3px;width:100%;max-width:100%}
 .gbox{border-radius:7px;padding:3px 7px;display:flex;align-items:flex-start;gap:4px;animation:boxin .2s ease}
 .gbox.steak-box{background:#fff3e0;border:1.5px solid #f39c12}
 .gbox.stack-box{background:#e8f4f8;border:1.5px solid #1a5276}
@@ -266,12 +287,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .stat-fill-hp{background:#e74c3c}
 .stat-fill-mp{background:#2980b9}
 .bc{display:none}
-.brow{display:flex;align-items:center;gap:3px}
+
 .bi{width:12px;text-align:center;flex-shrink:0;font-size:9px}
-.bg{flex:1;background:#f0f0f0;border-radius:3px;height:4px;overflow:hidden}
-.bf{height:100%;border-radius:3px;transition:width .4s}
-.bhp{background:#e74c3c}.bmp{background:#2980b9}
-.bv{font-size:7px;color:#bbb;text-align:right}
+
+
+
+
 .btc{flex:1;width:100%;display:flex;flex-direction:column;gap:4px}
 .skrow{display:flex;gap:4px}
 .sk{flex:1;border-radius:8px;padding:4px 2px;text-align:center;border:1.5px solid #bbb;background:#f9f9f9;position:relative}
@@ -314,6 +335,46 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .gicon img{width:18px;height:18px;object-fit:contain}
 .ginfo{flex:1}.gname{font-size:10px;font-weight:600;color:#111}.gdesc{font-size:8px;color:#aaa;margin-top:1px}
 .gnote{margin-top:8px;padding:6px 8px;background:#f8f8f8;border-radius:8px;font-size:8px;color:#888;line-height:1.8}
+
+/* ── STRIKE REVEAL ANIMATION ── */
+.dice-area-wrap{
+  width:100%;max-width:320px;
+  margin:0 auto;
+  overflow:hidden;
+  transition:max-height .35s ease,opacity .3s ease;
+  max-height:400px;
+  opacity:1;
+}
+.dice-area-wrap.strike-hidden{display:none;}
+.dice-zone.strike-hidden{display:none;}
+/* Strike zoom: enlarge chips + box padding in document flow (no overflow) */
+.groups-area.strike-zoom{
+  transition:gap .3s ease;
+  gap:6px;
+}
+.groups-area.strike-zoom .gbox{
+  padding:6px 10px;
+  gap:5px;
+  transition:padding .3s ease,gap .3s ease;
+}
+.groups-area.strike-zoom .gchip{
+  width:40px;
+  height:40px;
+  border-radius:7px;
+  transition:width .3s ease,height .3s ease;
+}
+.groups-area.strike-zoom .gchip img{
+  width:30px !important;
+  height:30px !important;
+}
+.groups-area.strike-zoom .gbox-lbl{
+  font-size:9px;
+  transition:font-size .3s ease;
+}
+.groups-area.strike-zoom .gbox-score{
+  font-size:10px;
+  transition:font-size .3s ease;
+}
 </style>
 </head>
 <body>
@@ -447,17 +508,23 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <!-- Arena -->
   <div class="arena">
     <!-- Formula bar — above dice, always visible -->
-    <div class="formula-bar">
-      <div class="fbox-db">
-        <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
-        <div class="fdiv"></div>
-        <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
+    <!-- Dice zone -->
+    <div class="dice-zone">
+      <div class="formula-bar">
+        <div class="fbox-db">
+          <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
+          <div class="fdiv"></div>
+          <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
+        </div>
+        <div class="fop-mid">×</div>
+        <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
       </div>
-      <div class="fop-mid">×</div>
-      <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
+      <div class="dice-area-wrap" id="diceAreaWrap"><div class="dg" id="diceGrid"></div></div>
     </div>
-    <div class="dg" id="diceGrid"></div>
-    <div class="groups-area" id="groupsArea"></div>
+    <!-- Groups zone -->
+    <div class="groups-zone">
+      <div class="groups-area" id="groupsArea"></div>
+    </div>
   </div>
 
   <!-- Formula bar — between arena and bottom -->
@@ -556,7 +623,7 @@ function rollWithPairGuarantee(){
 }
 
 const DS={F:'free',S:'sel',ST:'stacked'};
-const ANIM=2400;
+const ANIM=2000; // roll animation duration
 const G={
   pHp:100,pMaxHp:100,mana:0,maxMana:10,
   eHp:60,eMaxHp:60,eDmg:11,enemyIdx:0,
@@ -566,7 +633,8 @@ const G={
   breakStreak:0, // Rule 02: losing streak counter
   stackFlux:0,  // carry-over Flux from Stack turns
   stackBoxes:[],  // carry-over combo groups from Stack turns (visual display)
-  dice:[],ds:[],steakBoxes:[],currentGroups:[]
+  dice:[],ds:[],steakBoxes:[],currentGroups:[],
+  cannonadeDice:0
 };
 const $=id=>document.getElementById(id);
 const rnd=()=>Math.floor(Math.random()*6);
@@ -691,7 +759,18 @@ function makeAnim(steak=false){
 }
 function makeChip(idx){const ch=document.createElement('div');ch.className='gchip';ch.appendChild(mkIconImg(idx,'10px'));return ch;}
 
+// Ensure dice-zone is always visible (idempotent - safe to call anytime)
+function ensureDiceZoneVisible(){
+  const dz=document.querySelector('.dice-zone');
+  const wrap=$('diceAreaWrap');
+  const ga=$('groupsArea');
+  if(dz){dz.classList.remove('strike-hidden');dz.style.display='';}
+  if(wrap){wrap.classList.remove('strike-hidden');wrap.style.display='';}
+  if(ga)ga.classList.remove('strike-zoom');
+}
+
 function renderDice(){
+  ensureDiceZoneVisible();
   const grid=$('diceGrid');grid.innerHTML='';
   const{ii}=analyze();const inv=new Set(ii);let vis=0;
   G.dice.forEach((d,i)=>{
@@ -725,7 +804,7 @@ function renderGroups(newSteakIdx=-1){
             const isShield=ic===3;
             const show=cls==='selbox'
               ||(cls==='pushrow'&&(isDmg||isMana||isShield))
-              ||(cls==='stack-box'&&(isDmg||isMana))
+              ||(cls==='stack-box'&&isDmg)  // stack-box: damage only, mana/shield already applied
               ||(isDmg);
             if(show)content.appendChild(makeChip(ic));
           });});
@@ -745,24 +824,54 @@ function renderGroups(newSteakIdx=-1){
       if(hasInvalid)box.style.opacity='0.45';
       const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
       const content=document.createElement('div');content.className='gbox-content';
-      // Render rolled dice with comma separators
-      const allSelected=si.map(i2=>G.dice[i2]);
-      allSelected.forEach((ic,idx)=>{
-        if(idx>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-        content.appendChild(makeChip(ic));
+      // Group by icon value — no comma within a group, comma only between groups
+      const rawSelected=si.map(i2=>G.dice[i2]);
+      const allSelected=!hasInvalid
+        ? [...rawSelected].sort((a,b)=>a-b)
+        : rawSelected;
+
+      // Build groups of consecutive same-icon values
+      const iconGroups=[];
+      allSelected.forEach(ic=>{
+        if(iconGroups.length>0&&iconGroups[iconGroups.length-1].icon===ic){
+          iconGroups[iconGroups.length-1].count++;
+        } else {
+          iconGroups.push({icon:ic,count:1});
+        }
       });
-      // Render cannonade dice with comma separators
+
+      iconGroups.forEach((grp,gi)=>{
+        // Comma between groups (not within)
+        if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+        for(let k=0;k<grp.count;k++) content.appendChild(makeChip(grp.icon));
+      });
+      // Cannonade dice (icon 0) — merge into existing group if last group is also icon 0
       for(let _i=0;_i<G.cannonadeDice;_i++){
-        if(allSelected.length>0||_i>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-        content.appendChild(makeChip(0));
+        const lastGrp=iconGroups[iconGroups.length-1];
+        if(lastGrp&&lastGrp.icon===0){
+          // No comma — extend existing Normal Attack group
+          content.appendChild(makeChip(0));
+        } else {
+          // New group — add comma separator
+          if(iconGroups.length>0||allSelected.length>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+          content.appendChild(makeChip(0));
+        }
+        iconGroups.push({icon:0,count:1}); // track for subsequent cannonade dice
       }
       const sc=document.createElement('div');sc.className='gbox-score';
-      // Score: valid rolled combo only when no invalid; cannonade contributes to totalDmg via calcCombo
+      // Score: only this selection's own dice — NOT push luck or steak contributions
       if(!hasInvalid&&(vi.length>0||G.cannonadeDice>0)){
-        // Show full combo score from calcCombo
-        const combo=calcCombo();
-        if(combo){sc.textContent=combo.totalDmg+' Dmg';}
-        else{sc.innerHTML=scoreHTML(vi.length>0?[{dice:vi.map(i2=>G.dice[i2])}]:[],true);}
+        const selDice=vi.map(i2=>G.dice[i2]);
+        const s=selDice.length>0?scoreGroup(selDice):{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
+        // Add cannonade contribution (each = 1 single Normal Attack = 2 AD)
+        const totalAD=s.ad+G.cannonadeDice*2;
+        const parts=[];
+        if(totalAD>0)    parts.push('<span style="color:#e8a020;font-weight:700">'+totalAD+' AD</span>');
+        if(s.bdmgG>0)    parts.push('<span style="color:#e05530;font-weight:700">+'+s.bdmgG+' BD</span>');
+        if(s.fluxG>0)    parts.push('<span style="color:#9b59b6">+'+( s.fluxG%1?s.fluxG.toFixed(1):s.fluxG)+'fx</span>');
+        if(s.manaG>0)    parts.push('<span style="color:#5dade2">+'+s.manaG+'💧</span>');
+        if(s.shieldG>0)  parts.push('<span style="color:#58d68d">+'+s.shieldG+'🛡️</span>');
+        sc.innerHTML=parts.join('  ')||'—';
       } else if(hasInvalid){
         sc.textContent='Invalid combo';sc.style.cssText='color:#e74c3c;font-size:7px;font-weight:600;font-style:italic;';
       }
@@ -891,6 +1000,7 @@ function applyEnemyHit(){
 
 function triggerVictory(){
   G.busy=false;G.phase='idle';G.breakStreak=0;
+  ensureDiceZoneVisible();
   showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');
 }
 
@@ -925,6 +1035,7 @@ function getFirstRoll(){
 }
 
 function doRoll(){
+  ensureDiceZoneVisible();
   G.busy=true;G.phase='rolling';showAnimGrid(6);renderBtns();hideFeedback();
   G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;G.cannonadeDice=0;
   // G.stackFlux and G.stackBoxes intentionally preserved — carry over across turns
@@ -972,6 +1083,13 @@ function doPushLuck(){
 // ── STRIKE ANIMATION HELPERS ──────────────────────────────────
 
 // Flash a value element with pop animation, optionally update text
+function flashFormulaBar(){
+  const fb=document.querySelector('.formula-bar');if(!fb)return;
+  fb.classList.remove('flashing');void fb.offsetWidth;
+  fb.classList.add('flashing');
+  setTimeout(()=>fb.classList.remove('flashing'),550);
+}
+
 function flashPop(elId, newText){
   const el=$(elId);if(!el)return;
   if(newText!==undefined)el.textContent=newText;
@@ -1051,7 +1169,6 @@ function animEnemyHpDown(from, to, dur){
   requestAnimationFrame(tick);
 }
 
-// Score Rollup: show/hide/reset formula bar
 
 // Build scoring event list from all active groups
 function buildScoringEvents(combo){
@@ -1087,9 +1204,16 @@ function runStrikeAnimation(combo, events, onDone){
     d=>d.style.borderColor==='rgb(243, 156, 18)'||d.style.borderColor.includes('243')
   );
 
+  // ── REVEAL: hide dice grid + formula bar, zoom groups area ──
+  const wrap=$('diceAreaWrap');
+  const fb=document.querySelector('.formula-bar');
+  const ga=$('groupsArea');
+  if(wrap)wrap.classList.add('strike-hidden');
+  if(ga)ga.classList.add('strike-zoom');
+
   // Score Rollup: show formula bar and reset to starting values
   let rDmg=0, rBonus=G.bonusDmg, rFlux=G.flux+G.stackFlux, rMana=G.mana, rShield=G.shield;
-  let globalDelay=0; // no initial pause
+  let globalDelay=300; // small pause to let reveal animation settle
 
   events.forEach((ev,i)=>{
     const s=scoreGroup(ev.dice);
@@ -1128,8 +1252,9 @@ function runStrikeAnimation(combo, events, onDone){
       globalDelay+=STAT_GAP;
     }
     if(s.bdmgG>0){
-      const t=globalDelay; const v=rBonus+=s.bdmgG;
-      setTimeout(()=>flashPop('fBonus','+'+v),t);
+      const t=globalDelay; rBonus+=s.bdmgG;
+      // Flash entire formula bar instead of just Bonus field
+      setTimeout(()=>flashFormulaBar(),t);
       globalDelay+=STAT_GAP;
     }
     if(s.manaG>0){
@@ -1176,7 +1301,7 @@ function doStack(){
   if(combo.manaG>0)parts.push('💧+'+combo.manaG);
   if(combo.bdmgG>0)parts.push('+'+combo.bdmgG+'BD');
   if(combo.fluxG>0)parts.push('⭐+'+combo.fluxG.toFixed(1)+' Flux (carry-over)');
-  feedback('📦 Stack & End Turn! '+parts.join(' ')+(G.stackFlux>0?' [총 stacked Flux: +'+G.stackFlux.toFixed(1)+']':''),'info',2800);
+  feedback('📦 Stack & End Turn! '+parts.join(' ')+(G.stackFlux>0?' [Flux carry: +'+G.stackFlux.toFixed(1)+']':''),'info',2800);
   updateUI();
   // Enemy counter-attacks — 1200ms so player clearly reads shield value before cannonball fires
   setTimeout(()=>{
@@ -1190,8 +1315,12 @@ function doStack(){
       // Store ALL groups — only if at least 1 damage die exists (icon 0,1,4,5)
       const selGroup=combo.board&&combo.board.length>0?[{dice:combo.board}]:[];
       const allGroups=[...G.steakBoxes.flatMap(sb=>sb.groups),...G.currentGroups,...selGroup];
-      const hasVisible=allGroups.some(g=>g.dice.some(d=>d===0||d===1||d===2||d===4||d===5));
-      if(allGroups.length>0&&hasVisible) G.stackBoxes.push({groups:allGroups,flux:combo.fluxG});
+      // Filter each group to only damage-relevant dice (attack/flux/BD) — mana/shield already applied
+      const dmgOnlyGroups=allGroups
+        .map(g=>({dice:g.dice.filter(d=>d===0||d===1||d===4||d===5)}))
+        .filter(g=>g.dice.length>0);
+      // Only push stack box if there's something worth carrying (damage icons remain)
+      if(dmgOnlyGroups.length>0) G.stackBoxes.push({groups:dmgOnlyGroups,flux:combo.fluxG});
       G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
       G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
       hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
@@ -1210,7 +1339,7 @@ function doStrike(){
     // Apply all stats after animation completes
     G.bonusDmg+=combo.bdmgG;G.shield+=combo.shieldG;
     // Update Bonus display after Strike (only time it changes)
-    if(combo.bdmgG>0){$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';flashPop('fBonus','+'+G.bonusDmg);}
+    if(combo.bdmgG>0){$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';flashFormulaBar();}
       G.stackBoxes=[];G.stackFlux=0;G.cannonadeDice=0; // consumed on Strike
     const td=combo.totalDmg;
     const eHpBefore=G.eHp;
@@ -1234,6 +1363,7 @@ function doStrike(){
         applyEnemyHit();
         if(G.pHp<=0){
           G.busy=false;G.phase='idle';
+          ensureDiceZoneVisible();
           setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),500);
           return;
         }
@@ -1241,6 +1371,7 @@ function doStrike(){
         setTimeout(()=>{
           G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
           G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
+          ensureDiceZoneVisible();
           hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
         },1100);
       },1400);
