@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roguelike v13.0</title>
+<title>Dice Roguelike v16.1</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
@@ -96,6 +96,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .sbar-fill-hp{background:#e74c3c}
 .sbar-fill-mp{background:#3498db}
 .sbar-val{font-size:7px;color:#fff;min-width:28px;text-align:right;font-weight:600;text-shadow:0 0 3px rgba(0,0,0,.8)}
+.sbar-row#shieldRow .sbar-val{min-width:auto;text-shadow:0 0 4px rgba(0,0,0,.9)}
 /* Enemy name tag */
 .enemy-nametag{
   position:absolute;top:4px;right:3%;
@@ -105,12 +106,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;
   text-shadow:none;
 }
-.enemy-dmgtag{
-  position:absolute;top:16px;right:3%;
-  background:rgba(180,0,0,.5);border:1px solid rgba(255,100,100,.3);
-  border-radius:3px;padding:1px 4px;
-  font-size:7px;color:#ffaaaa;
-}
+/* enemy-dmgtag removed — now inline in ship-stat-enemy */
 /* Floating damage number */
 @keyframes dmg-float{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-36px) scale(1.3)}}
 .dmg-float{
@@ -163,16 +159,18 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
 .fdc-val{font-size:16px;font-weight:700;line-height:1}
 .fdc-lbl{font-size:8px;color:#888}
-.fdc-dmg .fdc-val{color:#e8a020}.fdc-bonus .fdc-val{color:#e05530}
+.fdc-dmg .fdc-val{color:#e8a020}.fdc-dmg .fdc-lbl{color:#e8a020;opacity:.7}.fdc-bonus .fdc-val{color:#e05530}.fdc-bonus .fdc-lbl{color:#e05530;opacity:.7}
 .fdiv{width:1px;height:20px;background:#aed6f1}
 .fop-mid{display:flex;align-items:center;font-size:14px;color:#bbb;flex-shrink:0}
 .fbox-flux{flex:1;background:#fff;border:1.5px solid #c71585;border-radius:9px;padding:4px 3px;text-align:center}
 .fval-flux{font-size:15px;font-weight:700;color:#9b59b6;line-height:1}
-.fl{font-size:7px;color:#bbb;margin-top:1px}
+.fl{font-size:7px;color:#9b59b6;opacity:.7;margin-top:1px}
+
+
 
 /* ── ARENA ── */
 .arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:5px 12px;overflow:hidden}
-.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:300px}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:320px}
 .dw{display:flex;flex-direction:column;align-items:center;gap:2px}
 .die{width:100%;aspect-ratio:1;border-radius:14px;border:2px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;overflow:hidden;transition:border-color .12s}
 .die:active{transform:scale(.86)}
@@ -227,23 +225,27 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .groups-area{display:flex;flex-direction:column;gap:3px;width:100%;max-width:320px}
 .gbox{border-radius:7px;padding:3px 7px;display:flex;align-items:flex-start;gap:4px;animation:boxin .2s ease}
 .gbox.steak-box{background:#fff3e0;border:1.5px solid #f39c12}
+.gbox.stack-box{background:#e8f4f8;border:1.5px solid #1a5276}
 .gbox.pushrow{background:#f5f5f5;border:1px solid #e8e8e8}
 .gbox.selbox{background:#fff;border:1.5px solid #2980b9}
 .gbox-lbl{font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0;padding-top:2px;min-width:40px;line-height:1.3}
 .gbox.steak-box .gbox-lbl{color:#e67e22}
+.gbox.stack-box .gbox-lbl{color:#1a5276}
 .gbox.pushrow .gbox-lbl{color:#bbb}
 .gbox.selbox .gbox-lbl{color:#2980b9}
 .gbox-content{display:flex;align-items:center;flex-wrap:wrap;gap:2px;flex:1}
 .gchip{width:16px;height:16px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .gchip img{width:10px;height:10px;object-fit:contain}
 .gbox.steak-box .gchip{background:#fff;border:1px solid #f5cba7}
+.gbox.stack-box .gchip{background:#d6eaf8;border:1px solid #85c1e9}
 .gbox.pushrow .gchip{background:#fff;border:1px solid #ddd}
 .gbox.selbox .gchip{background:#eef6ff;border:1px solid #aed6f1}
 .gcomma{font-size:8px;color:#ccc;align-self:center;margin:0 1px}
 .gbox-score{font-size:8px;font-weight:600;flex-shrink:0;padding-top:2px;text-align:right;line-height:1.4;min-width:38px}
-.gbox.steak-box .gbox-score{color:#e67e22}
-.gbox.pushrow .gbox-score{color:#aaa}
-.gbox.selbox .gbox-score{color:#2980b9}
+.gbox.steak-box .gbox-score{color:#888}
+.gbox.stack-box .gbox-score{color:#888}
+.gbox.pushrow .gbox-score{color:#888}
+.gbox.selbox .gbox-score{color:#888}
 
 /* ── BOTTOM — action area only ── */
 .bottom{background:#fff;padding:5px 12px 20px;border-top:1px solid #eee;flex-shrink:0}
@@ -288,7 +290,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .mb:active:not(:disabled){transform:scale(.94)}
 .mb:disabled{opacity:.25;cursor:not-allowed}
 .mb .ms{font-size:7px;display:block;margin-top:1px;opacity:.7;font-weight:400}
-.b-roll{background:#2c3e50;color:#ecf0f1}.b-push{background:#6e2f1a;color:#f0c3a1}.b-strike{background:#1e8449;color:#a9dfbf}
+.b-roll{background:#2c3e50;color:#ecf0f1}.b-push{background:#6e2f1a;color:#f0c3a1}.b-strike{background:#1e8449;color:#a9dfbf}.b-stack{background:#1a5276;color:#aed6f1}
 
 /* ── OVERLAYS ── */
 .ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:50}
@@ -401,9 +403,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     <!-- Cannonball projectile -->
     <div class="cannonball" id="cannonball"></div>
 
-    <!-- Enemy name + dmg tag -->
+    <!-- Enemy name tag -->
     <div class="enemy-nametag" id="ename">Rusty Cutlass · Act 1</div>
-    <div class="enemy-dmgtag" id="itxt">⚔ 11 dmg</div>
 
     <!-- Restart button -->
     <button class="scene-restart" id="btnRestart">↺</button>
@@ -420,6 +421,10 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
         <div class="sbar-track"><div class="sbar-fill sbar-fill-mp" id="barMana" style="width:0%"></div></div>
         <div class="sbar-val mp" id="valMana">0/10</div>
       </div>
+      <div class="sbar-row" id="shieldRow" style="display:none">
+        <div class="sbar-icon">🛡️</div>
+        <div class="sbar-val" id="valShield" style="color:#27ae60;font-size:8px;font-weight:700">0</div>
+      </div>
     </div>
 
     <!-- Enemy HP overlay (bottom right, over enemy ship) -->
@@ -428,6 +433,9 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
         <div class="sbar-icon">💀</div>
         <div class="sbar-track"><div class="sbar-fill sbar-fill-hp" id="ehpbar" style="width:100%"></div></div>
         <div class="sbar-val" id="ehptxt" style="color:#ff8888">60/60</div>
+      </div>
+      <div class="sbar-row" style="justify-content:flex-end;margin-top:1px">
+        <div class="sbar-val" id="itxt" style="color:#ffaaaa;font-size:7px;min-width:auto">⚔ 11 dmg</div>
       </div>
     </div>
   </div>
@@ -438,9 +446,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
   <!-- Arena -->
   <div class="arena">
-    <div class="dg" id="diceGrid"></div>
-    <div class="groups-area" id="groupsArea"></div>
-    <!-- Formula bar — same alignment as Steak/Selection boxes -->
+    <!-- Formula bar — above dice, always visible -->
     <div class="formula-bar">
       <div class="fbox-db">
         <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
@@ -450,6 +456,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       <div class="fop-mid">×</div>
       <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
     </div>
+    <div class="dg" id="diceGrid"></div>
+    <div class="groups-area" id="groupsArea"></div>
   </div>
 
   <!-- Formula bar — between arena and bottom -->
@@ -460,14 +468,14 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     <div class="bb">
       <div class="btc">
         <div class="skrow">
-          <button class="sk fire" id="btnFireball" disabled><div class="sn">Fireball</div><div class="sc">10+5BD <span class="mcost">💧💧</span></div></button>
-          <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div><div class="sbadge" id="shieldBadge">0</div></button>
+          <button class="sk fire" id="btnFireball" disabled><div class="sn">Cannonade</div><div class="sc">+1 Attack die <span class="mcost">💧💧</span></div></button>
+          <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div></button>
           <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc"><span id="rrSub">sel</span> <span class="mcost">💧💧</span></div></button>
           <button class="hbtn" id="btnHelp" style="flex-shrink:0">?</button>
         </div>
         <div class="mr">
           <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
-          <button class="mb b-strike" id="btnStrike" disabled>Strike<span class="ms" id="sts">select combo</span></button>
+          <button class="mb b-strike" id="btnStrike" disabled><span id="btnStrikeLbl">Strike</span><span class="ms" id="sts">select combo</span></button>
         </div>
       </div>
     </div>
@@ -480,19 +488,19 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <!-- Guide overlay -->
   <div class="tov" id="tutOv">
     <div class="tc">
-      <div class="th"><div class="tt">Combo Guide — v4.4</div><button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Close</button></div>
+      <div class="th"><div class="tt">Combo Guide — v4.7</div><button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Close</button></div>
       <div class="gsec">Attack — single die counts</div>
-      <div class="grow"><div class="gicon" id="gi0"></div><div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2 · ×2=5 · ×3=16 · ×4=32 · ×5=60 · ×6=100 AD</div></div></div>
-      <div class="grow"><div class="gicon" id="gi1"></div><div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=6 · ×2=15 · ×3=42 · ×4=95 · ×5=175 · ×6=280 AD</div></div></div>
+      <div class="grow"><div class="gicon" id="gi0"></div><div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2 · ×2=8 · ×3=16 · ×4=40 · ×5=80 · ×6=150 Damage</div></div></div>
+      <div class="grow"><div class="gicon" id="gi1"></div><div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=4 · ×2=12 · ×3=34 · ×4=76 · ×5=140 · ×6=225 Damage</div></div></div>
       <div class="gsec">Combo — Pair minimum</div>
-      <div class="grow"><div class="gicon" id="gi2"></div><div class="ginfo"><div class="gname">Mana</div><div class="gdesc">pair=8AD+1MP · triple=12AD+3MP · quad=50AD+5MP</div></div></div>
+      <div class="grow"><div class="gicon" id="gi2"></div><div class="ginfo"><div class="gname">Mana</div><div class="gdesc">pair=1MP · triple=3MP · quad=5MP · quint=8MP · sext=10MP · 0 Damage</div></div></div>
       <div class="grow"><div class="gicon" id="gi3"></div><div class="ginfo"><div class="gname">Shield</div><div class="gdesc">pair=13blk · triple=30blk · quad=55blk · quint=100blk</div></div></div>
-      <div class="grow"><div class="gicon" id="gi4"></div><div class="ginfo"><div class="gname">Flux</div><div class="gdesc">pair=5AD · triple=12AD+1.0fx · quad=20AD+1.5fx · quint=28AD+3.0fx · sext=35AD+5.0fx</div></div></div>
-      <div class="grow"><div class="gicon" id="gi5"></div><div class="ginfo"><div class="gname">Bonus Damage</div><div class="gdesc">pair=+4BD · triple=10AD+20BD · quad=22AD+40BD · quint=45AD+75BD · sext=85AD+130BD</div></div></div>
+      <div class="grow"><div class="gicon" id="gi4"></div><div class="ginfo"><div class="gname">Flux</div><div class="gdesc">pair=+0.5 Flux · triple=+1.5 Flux · quad=+2.5 Flux · quint=+5.0 Flux · sext=+7.0 Flux · 0 Damage — cần ⚔️ để Strike</div></div></div>
+      <div class="grow"><div class="gicon" id="gi5"></div><div class="ginfo"><div class="gname">Bonus Damage</div><div class="gdesc">pair=+5 Bonus · triple=+25 Bonus · quad=+50 Bonus · quint=+90 Bonus · sext=+155 Bonus · 0 Damage</div></div></div>
       <div class="gsec">Special</div>
       <div class="grow" style="background:#fff3e0;border:1px solid #f5cba7"><div class="ginfo"><div class="gname" style="color:#c0392b">🔥 Steak!</div><div class="gdesc" style="color:#e67e22">Push Luck all 6 → Flux ×1.5→×2→×3→×5→×8→×13... (cap ×777 at Steak 16) → roll fresh 6</div></div></div>
-      <div class="grow"><div class="ginfo"><div class="gname">4-Different</div><div class="gdesc">4 icons khác nhau=30AD · 5-diff=60AD · 6-diff=110AD</div></div></div>
-      <div class="gnote">Total = (Damage + BonusDmg) × Flux · BonusDmg resets per enemy · Mana persists run · Player HP: 100</div>
+      <div class="grow"><div class="ginfo"><div class="gname">4-Different</div><div class="gdesc">4 icons khác nhau=30 Damage · 5 icons=60 Damage · 6 icons=110 Damage</div></div></div>
+      <div class="gnote">Total = (Damage + Bonus) × Flux · Strike cần ≥1 Attack die ⚔️/🗡️ · Không có Attack → Stack & End Turn · Steak! tăng Flux · Break mất Flux & Bonus</div>
     </div>
   </div>
 </div>
@@ -556,6 +564,8 @@ const G={
   busy:false,phase:'idle',
   steakCount:0,  // tracks fibonacci level
   breakStreak:0, // Rule 02: losing streak counter
+  stackFlux:0,  // carry-over Flux from Stack turns
+  stackBoxes:[],  // carry-over combo groups from Stack turns (visual display)
   dice:[],ds:[],steakBoxes:[],currentGroups:[]
 };
 const $=id=>document.getElementById(id);
@@ -566,23 +576,42 @@ function scoreGroup(arr){
   if(!arr.length)return{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
   const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
   let ad=0,fluxG=0,manaG=0,shieldG=0,bdmgG=0;
-  if(c[0]){const n=c[0];ad+=n===1?2:n===2?5:n===3?16:n===4?32:n===5?60:100;}
-  if(c[1]){const n=c[1];ad+=n===1?6:n===2?15:n===3?42:n===4?95:n===5?175:280;}
+  if(c[0]){const n=c[0];ad+=n===1?2:n===2?8:n===3?16:n===4?40:n===5?80:150;}
+  if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?34:n===4?76:n===5?140:225;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
-    if(ic===2){ad+=n===2?8:n===3?12:n===4?50:n===5?105:195;manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
+    if(ic===2){// 💧 Mana: 0 AD — mana only
+    manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
     // Shield rebalanced: pair=13, triple=30, quad=55, quint=100, sextep=160
     else if(ic===3){shieldG+=n===2?13:n===3?30:n===4?55:n===5?100:160;}
-    else if(ic===4){ad+=n===2?5:n===3?12:n===4?20:n===5?28:35;if(n>=3)fluxG+=n===3?1.0:n===4?1.5:n===5?3.0:5.0;}
-    else if(ic===5){ad+=n===2?0:n===3?10:n===4?22:n===5?45:85;bdmgG+=n===2?4:n===3?20:n===4?40:n===5?75:130;}
+    else if(ic===4){// ⭐ Flux die: 0 AD, pure Flux multiplier only
+    if(n>=2)fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
+    else if(ic===5){// 💥 BD: 0 AD — BD slightly increased to compensate
+    bdmgG+=n===2?5:n===3?25:n===4?50:n===5?90:155;}
   });
   const allDiff=!Object.values(c).some(v=>v>1);
   if(allDiff){if(arr.length===4)ad+=30;else if(arr.length===5)ad+=60;else if(arr.length===6)ad+=110;}
   return{ad,fluxG,manaG,shieldG,bdmgG};
 }
+function scoreHTML(groups,showUtil=false,showMana=false){
+  let ad=0,flux=0,bonus=0,mana=0,shield=0;
+  for(const g of groups){const s=scoreGroup(g.dice);ad+=s.ad;flux+=s.fluxG;bonus+=s.bdmgG;mana+=s.manaG;shield+=s.shieldG;}
+  const parts=[];
+  if(ad>0)   parts.push('<span style="color:#e8a020">'+ad+' Damage</span>');
+  if(flux>0) parts.push('<span style="color:#9b59b6">+'+(Number.isInteger(flux)?flux:flux.toFixed(1))+' Flux</span>');
+  if(bonus>0)parts.push('<span style="color:#e05530">+'+bonus+' Bonus</span>');
+  if((showUtil||showMana)&&mana>0)  parts.push('<span style="color:#5dade2;opacity:.85">💧'+mana+'</span>');
+  if(showUtil&&shield>0)            parts.push('<span style="color:#58d68d;opacity:.8">🛡️'+shield+'</span>');
+  return parts.join(' ')||'—';
+}
+// Keep scoreLabel as plain text fallback
 function scoreLabel(groups){
-  let ad=0;const e=[];
-  for(const g of groups){const s=scoreGroup(g.dice);ad+=s.ad;if(s.fluxG>0)e.push('+'+s.fluxG.toFixed(1)+'fx');if(s.manaG>0)e.push('+'+s.manaG+'MP');if(s.shieldG>0)e.push('+'+s.shieldG+'blk');if(s.bdmgG>0)e.push('+'+s.bdmgG+'BD↑');}
-  let l=ad>0?ad+' AD':'';if(e.length)l+=(l?' ':'')+e.join(' ');return l||'—';
+  let ad=0,flux=0,bonus=0;
+  for(const g of groups){const s=scoreGroup(g.dice);ad+=s.ad;flux+=s.fluxG;bonus+=s.bdmgG;}
+  const parts=[];
+  if(ad>0)   parts.push(ad+' Damage');
+  if(flux>0) parts.push('+'+(Number.isInteger(flux)?flux:flux.toFixed(1))+' Flux');
+  if(bonus>0)parts.push('+'+bonus+' Bonus');
+  return parts.join(' ')||'—';
 }
 function analyze(){
   const si=G.ds.map((s,i)=>s===DS.S?i:-1).filter(i=>i>=0);
@@ -609,10 +638,22 @@ function calcCombo(){
   for(const sb of G.steakBoxes)for(const g of sb.groups){const s=scoreGroup(g.dice);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
   for(const g of G.currentGroups){const s=scoreGroup(g.dice);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
   if(board.length){const s=scoreGroup(board);tAD+=s.ad;tFx+=s.fluxG;tMana+=s.manaG;tShield+=s.shieldG;tBD+=s.bdmgG;}
+  if(G.cannonadeDice>0)tAD+=G.cannonadeDice*2; // Cannonade skill: each die = single Normal Attack (2 AD)
   if(!tAD&&!tShield&&!tBD&&!tMana&&!tFx)return null;
-  const effectiveFlux=G.flux+tFx; // steak flux + star combo flux, tracked separately
+  const effectiveFlux=G.flux+tFx+G.stackFlux; // steak flux + star flux + carry-over Stack flux
   const totalDmg=Math.round((tAD+G.bonusDmg+tBD)*effectiveFlux);
   return{ad:tAD,fluxG:tFx,manaG:tMana,shieldG:tShield,bdmgG:tBD,effectiveFlux,totalDmg,board};
+}
+
+// Check if any attack die (icon 0 or 1) exists anywhere in the current turn
+function hasAttackInTurn(){
+  const atk=arr=>arr.some(d=>d===0||d===1);
+  for(const sb of G.steakBoxes)for(const g of sb.groups)if(atk(g.dice))return true;
+  for(const g of G.currentGroups)if(atk(g.dice))return true;
+  const{vi}=analyze();
+  if(vi.some(i=>G.dice[i]===0||G.dice[i]===1))return true;
+  if(G.cannonadeDice>0)return true; // Cannonade dice provide attack
+  return false;
 }
 
 // ── RENDER ─────────────────────────────────────────────────────
@@ -674,43 +715,72 @@ function showRerolling(selIdxs){
 
 function renderGroups(newSteakIdx=-1){
   const area=$('groupsArea');area.innerHTML='';
-  function makeBox(cls,label,groups,animate=false){
+  function makeBox(cls,label,groups,animate=false,showUtil=false,showMana=false){
     const box=document.createElement('div');box.className='gbox '+cls+(animate?' new':'');
     const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent=label;
     const content=document.createElement('div');content.className='gbox-content';
-    groups.forEach((g,gi)=>{if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}g.dice.forEach(ic=>content.appendChild(makeChip(ic)));});
-    const sc=document.createElement('div');sc.className='gbox-score';sc.textContent=scoreLabel(groups);
+    groups.forEach((g,gi)=>{if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}g.dice.forEach(ic=>{
+            const isDmg=ic===0||ic===1||ic===4||ic===5;
+            const isMana=ic===2;
+            const isShield=ic===3;
+            const show=cls==='selbox'
+              ||(cls==='pushrow'&&(isDmg||isMana||isShield))
+              ||(cls==='stack-box'&&(isDmg||isMana))
+              ||(isDmg);
+            if(show)content.appendChild(makeChip(ic));
+          });});
+    const sc=document.createElement('div');sc.className='gbox-score';sc.innerHTML=scoreHTML(groups,showUtil,showMana);
     box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);return box;
   }
+  G.stackBoxes.forEach((sb,i)=>area.appendChild(makeBox('stack-box','📦 Stack',sb.groups,false,false,false)));
   G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak-box','🔥 Steak!',sb.groups,i===newSteakIdx)));
-  if(G.currentGroups.length>0)area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups));
-  if(G.phase==='rolled'&&G.dice.length>0){
-    const{vi,hasInvalid}=analyze();
-    if(vi.length>0&&!hasInvalid){
-      const selDice=vi.map(i=>G.dice[i]);
+  if(G.currentGroups.length>0)area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups,false,true));
+  if(G.phase==='rolled'){
+    const{vi,ii,hasInvalid}=analyze();
+    const si=G.ds.map((s,i2)=>s===DS.S?i2:-1).filter(i2=>i2>=0);
+    const hasAnySel=si.length>0||G.cannonadeDice>0;
+    // Show selbox when any die selected (rolled or cannonade)
+    if(hasAnySel){
       const box=document.createElement('div');box.className='gbox selbox';
+      if(hasInvalid)box.style.opacity='0.45';
       const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
       const content=document.createElement('div');content.className='gbox-content';
-      selDice.forEach(ic=>content.appendChild(makeChip(ic)));
-      const sc=document.createElement('div');sc.className='gbox-score';sc.textContent=scoreLabel([{dice:selDice}]);
+      // Render rolled dice with comma separators
+      const allSelected=si.map(i2=>G.dice[i2]);
+      allSelected.forEach((ic,idx)=>{
+        if(idx>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+        content.appendChild(makeChip(ic));
+      });
+      // Render cannonade dice with comma separators
+      for(let _i=0;_i<G.cannonadeDice;_i++){
+        if(allSelected.length>0||_i>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+        content.appendChild(makeChip(0));
+      }
+      const sc=document.createElement('div');sc.className='gbox-score';
+      // Score: valid rolled combo only when no invalid; cannonade contributes to totalDmg via calcCombo
+      if(!hasInvalid&&(vi.length>0||G.cannonadeDice>0)){
+        // Show full combo score from calcCombo
+        const combo=calcCombo();
+        if(combo){sc.textContent=combo.totalDmg+' Dmg';}
+        else{sc.innerHTML=scoreHTML(vi.length>0?[{dice:vi.map(i2=>G.dice[i2])}]:[],true);}
+      } else if(hasInvalid){
+        sc.textContent='Invalid combo';sc.style.cssText='color:#e74c3c;font-size:7px;font-weight:600;font-style:italic;';
+      }
       box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
     }
   }
 }
 
 function updateFormula(){
-  const combo=calcCombo();
-  if(combo){
-    $('fDmg').textContent=combo.ad;
-    $('fBonus').textContent='+'+(G.bonusDmg+combo.bdmgG);
-    $('fBonusLbl').textContent=combo.bdmgG>0?'Bonus(+'+combo.bdmgG+')':'Bonus';
-    $('fFlux').textContent='×'+(Number.isInteger(combo.effectiveFlux)?combo.effectiveFlux:combo.effectiveFlux.toFixed(1));
-    $('fFluxLbl').textContent='Flux';
-    $('sts').textContent='deal '+combo.totalDmg;
-  }else{
-    $('fDmg').textContent='0';$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';
-    $('fFlux').textContent='×'+G.flux;$('fFluxLbl').textContent='Flux';$('sts').textContent='select combo';
-  }
+  // Damage: always 0 — only updates during Strike rollup animation
+  $('fDmg').textContent='0';
+  // Bonus: shows current accumulated bonus (updates only after Strike)
+  $('fBonus').textContent='+'+G.bonusDmg;
+  $('fBonusLbl').textContent='Bonus';
+  // Flux: shows G.flux (Steak flux only, not stackFlux)
+  const fx=G.flux;
+  $('fFlux').textContent='×'+(Number.isInteger(fx)?fx:fx.toFixed(1));
+  $('fFluxLbl').textContent='Flux';
 }
 
 function renderBtns(){
@@ -720,10 +790,23 @@ function renderBtns(){
   if(anim){bl.className='mb b-roll';bl.disabled=true;bll.textContent='Roll';bls.textContent='rolling...';}
   else if(ph==='idle'){bl.className='mb b-roll';bl.disabled=false;bll.textContent='Roll';bls.textContent='start turn';}
   else{bl.className='mb b-push';bl.disabled=!_can;bll.textContent='Push Luck';bls.textContent=hasInvalid?'remove invalid':!hc?'select combo':'lock & roll rest';}
-  $('btnStrike').disabled=!combo||anim||ph!=='rolled';$('btnFireball').disabled=!mp||anim;
-  const shBtn=$('btnShield'),badge=$('shieldBadge');
-  if(G.shield>0){shBtn.classList.add('has-shield');badge.textContent=G.shield;badge.classList.add('on');}
-  else{shBtn.classList.remove('has-shield');badge.classList.remove('on');}
+  const hasAtk=ph==='rolled'?hasAttackInTurn():false;
+  const canStrike=!!combo&&!anim&&ph==='rolled'&&hasAtk;
+  const canStack=!!combo&&!anim&&ph==='rolled'&&!hasAtk;
+  const sb=$('btnStrike'),sts2=$('sts');
+  if(canStack){
+    sb.disabled=false;sb.className='mb b-stack';
+    const lbl2=$('btnStrikeLbl');if(lbl2)lbl2.textContent='Stack & End Turn';
+    sts2.textContent='Store resources · no attack';
+  } else {
+    sb.disabled=!canStrike||anim||ph!=='rolled';sb.className='mb b-strike';
+    const lbl3=$('btnStrikeLbl');if(lbl3)lbl3.textContent='Strike';
+    sts2.textContent=canStrike?'→ '+(combo?combo.totalDmg:'')+' Damage':'need attack die';
+  }
+  $('btnFireball').disabled=!mp||anim||ph!=='rolled';
+  const shBtn=$('btnShield');
+  if(G.shield>0){shBtn.classList.add('has-shield');}
+  else{shBtn.classList.remove('has-shield');}
   shBtn.disabled=!mp||anim;$('btnReroll').disabled=!mp||anim||ph!=='rolled'||!hasSel;
   const rrBtn=document.getElementById('btnReroll');
   const rrMcost=rrBtn?rrBtn.querySelector('.mcost'):null;
@@ -741,6 +824,10 @@ function updateUI(){
   $('ehptxt').textContent=Math.max(0,G.eHp)+'/'+G.eMaxHp;
   // HP bar color warning
   $('barHp').style.background=G.pHp<30?'#c0392b':G.pHp<60?'#e67e22':'#e74c3c';
+  // Shield display in ship stats
+  const shRow=$('shieldRow'),shVal=$('valShield');
+  if(G.shield>0){if(shRow)shRow.style.display='flex';if(shVal)shVal.textContent=G.shield;}
+  else{if(shRow)shRow.style.display='none';}
 }
 
 // ── FEEDBACK ───────────────────────────────────────────────────
@@ -775,58 +862,31 @@ function hideSteakBanner(){const el=document.getElementById('steakBannerEl');if(
 function showOverlay(html){$('ocard').innerHTML=html;$('overlay').classList.add('on')}
 window.hideOverlay=()=>$('overlay').classList.remove('on');
 
-function spawnDmgFloat(val, isPlayer=false){
-  const scene=$('shipScene');
-  const el=document.createElement('div');
-  el.className='dmg-float'+(isPlayer?' player':'');
-  el.textContent=(isPlayer?'−':'-')+val;
-  // position: enemy right area or player left area
-  el.style.cssText=isPlayer
-    ? 'left:20%;bottom:45%;'
-    : 'right:10%;bottom:45%;';
-  scene.appendChild(el);
-  setTimeout(()=>el.remove(),900);
-}
-function fireCannonball(fromPlayer=true){
-  const cb=$('cannonball');
-  cb.className='cannonball';
-  void cb.offsetWidth;
-  cb.className='cannonball '+(fromPlayer?'fly-player':'fly-enemy');
-  setTimeout(()=>{cb.className='cannonball';},900);
-}
-function spawnSmoke(x,y){
-  const scene=$('shipScene');
-  const el=document.createElement('div');el.className='smoke-puff';
-  el.style.cssText='left:'+x+'%;bottom:'+y+'%;';
-  scene.appendChild(el);setTimeout(()=>el.remove(),800);
-}
-function flashEnemy(dmg){
-  fireCannonball(true);
-  // Wait for ball to land (850ms) then shake + smoke + float
-  setTimeout(()=>{
-    $('shipEnemy').classList.remove('hit');void $('shipEnemy').offsetWidth;
-    $('shipEnemy').classList.add('hit');
-    spawnSmoke(72,36);spawnDmgFloat(dmg,false);
-    setTimeout(()=>$('shipEnemy').classList.remove('hit'),500);
-  },850);
-}
-function shakeHp(){
-  fireCannonball(false);
-  setTimeout(()=>{
-    $('shipPlayer').classList.remove('hit');void $('shipPlayer').offsetWidth;
-    $('shipPlayer').classList.add('hit');
-    setTimeout(()=>$('shipPlayer').classList.remove('hit'),500);
-  },850);
-}
-
 function applyEnemyHit(){
   const blocked=Math.min(G.shield,G.eDmg),dmgToHp=G.eDmg-blocked;
+  const hpBefore=G.pHp;
   G.shield=Math.max(0,G.shield-G.eDmg);G.pHp=Math.max(0,G.pHp-dmgToHp);shakeHp();
   if(dmgToHp>0) setTimeout(()=>spawnDmgFloat(dmgToHp,true),500);
   if(blocked>0&&dmgToHp===0)feedback('🛡️ Fully blocked! Shield: '+G.shield+' left','info',2000);
   else if(blocked>0)feedback('🛡️ Blocked '+blocked+' → took −'+dmgToHp+' HP','warn',2000);
   else feedback('💥 Enemy hits! −'+dmgToHp+' HP','dmg',2000);
-  updateUI();renderBtns();
+  // Update shield display after 300ms (after cannonball lands visually)
+  const shRow=$('shieldRow'),shVal=$('valShield');
+  setTimeout(()=>{
+    if(G.shield>0){if(shRow)shRow.style.display='flex';if(shVal)shVal.textContent=G.shield;}
+    else{if(shRow)shRow.style.display='none';}
+  },300);
+  $('barMana').style.width=Math.round(G.mana/G.maxMana*100)+'%';
+  $('valMana').textContent=G.mana+'/'+G.maxMana;
+  $('ehpbar').style.width=Math.round(Math.max(0,G.eHp)/G.eMaxHp*100)+'%';
+  $('ehptxt').textContent=Math.max(0,G.eHp)+'/'+G.eMaxHp;
+  // HP bar: start animation after 300ms so it visually leads the bar
+  if(dmgToHp>0){
+    setTimeout(()=>animHpDown(hpBefore,G.pHp,900),300);
+  } else {
+    updateUI();
+  }
+  renderBtns();
 }
 
 function triggerVictory(){
@@ -837,13 +897,14 @@ function triggerVictory(){
 function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
 
 function doBreak(){
-  G.steakCount=0;G.flux=1;G.bonusDmg=0;G.breakStreak++;
+  G.busy=true;G.phase='break'; // Lock interaction during break animation
+  G.steakCount=0;G.flux=1;G.bonusDmg=0;G.stackFlux=0;G.stackBoxes=[];G.breakStreak++; // Break loses stack
   G.steakBoxes=[];G.currentGroups=[];renderGroups();
   $('bustBanner').classList.add('on');renderBtns();renderDice();updateUI();
   setTimeout(()=>{
     $('bustBanner').classList.remove('on');applyEnemyHit();
     if(G.pHp<=0){G.busy=false;G.phase='idle';setTimeout(()=>showOverlay('<div class="ot">Run over 💀</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),400);return;}
-    setTimeout(()=>{G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakBoxes=[];G.currentGroups=[];hideBanners();renderGroups();renderDice();updateFormula();updateUI();},900);
+    setTimeout(()=>{G.busy=false;G.phase='idle';G.dice=[];G.ds=[];G.steakBoxes=[];G.currentGroups=[];hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();},900);
   },1800);
 }
 
@@ -865,7 +926,10 @@ function getFirstRoll(){
 
 function doRoll(){
   G.busy=true;G.phase='rolling';showAnimGrid(6);renderBtns();hideFeedback();
-  G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
+  G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;G.cannonadeDice=0;
+  // G.stackFlux and G.stackBoxes intentionally preserved — carry over across turns
+  // Reset formula: Damage→0, Flux→×1 (Bonus stays — reflects accumulated value)
+  $('fDmg').textContent='0';$('fFlux').textContent='×1';
   G.dice=getFirstRoll();G.ds=Array(6).fill(DS.F);
   setTimeout(()=>{G.phase='rolled';G.busy=false;$('bustBanner').classList.remove('on');if(!hasCombo(G.dice))doBreak();else{renderDice();updateUI();}},ANIM);
 }
@@ -883,7 +947,11 @@ function doPushLuck(){
     const fluxGain=newFlux-prevFlux;
     const newSteakIdx=G.steakBoxes.length;
     G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
-    G.flux=newFlux;G.busy=true;G.phase='pushing';
+    G.flux=newFlux;
+    // Update Flux display on Steak success
+    const fxStr='×'+(Number.isInteger(newFlux)?newFlux:newFlux.toFixed(1));
+    $('fFlux').textContent=fxStr;flashPop('fFlux',fxStr);
+    G.busy=true;G.phase='pushing';
     showSteakBanner(fluxGain);showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
     setTimeout(()=>{
       G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
@@ -918,6 +986,40 @@ function popStat(elId,type='gain'){
   setTimeout(()=>el.style.animation='',450);
 }
 
+function fireCannonball(fromPlayer=true){
+  const cb=$('cannonball');if(!cb)return;
+  cb.className='cannonball';void cb.offsetWidth;
+  cb.className='cannonball '+(fromPlayer?'fly-player':'fly-enemy');
+  setTimeout(()=>{cb.className='cannonball';},900);
+}
+function flashEnemy(dmg){
+  const ship=$('shipEnemy');if(!ship)return;
+  fireCannonball(true);
+  setTimeout(()=>{
+    ship.classList.remove('hit');void ship.offsetWidth;
+    ship.classList.add('hit');
+    setTimeout(()=>ship.classList.remove('hit'),500);
+  },850);
+}
+function shakeHp(){
+  const ship=$('shipPlayer');if(!ship)return;
+  fireCannonball(false);
+  setTimeout(()=>{
+    ship.classList.remove('hit');void ship.offsetWidth;
+    ship.classList.add('hit');
+    setTimeout(()=>ship.classList.remove('hit'),500);
+  },850);
+}
+function spawnDmgFloat(dmg,isPlayer=false){
+  const scene=document.querySelector('.ship-scene');if(!scene)return;
+  const el=document.createElement('div');
+  el.className='dmg-float'+(isPlayer?' player':'');
+  el.textContent='−'+dmg;
+  el.style.cssText='position:absolute;'+(isPlayer?'left:20%':'right:20%')+';top:40%;z-index:20';
+  scene.appendChild(el);
+  setTimeout(()=>{if(el.parentNode)el.parentNode.removeChild(el);},900);
+}
+
 function animHpDown(from, to, dur){
   const el=$('valHp');if(!el)return;
   const bar=$('barHp');
@@ -933,6 +1035,23 @@ function animHpDown(from, to, dur){
   }
   requestAnimationFrame(tick);
 }
+
+// Animate enemy HP bar counting down
+function animEnemyHpDown(from, to, dur){
+  const bar=$('ehpbar'),txt=$('ehptxt');if(!bar)return;
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min(1,(now-start)/dur);
+    const ease=1-Math.pow(1-t,3);
+    const val=Math.round(from+(to-from)*ease);
+    if(bar)bar.style.width=Math.round(Math.max(0,val)/G.eMaxHp*100)+'%';
+    if(txt)txt.textContent=Math.max(0,val)+'/'+G.eMaxHp;
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Score Rollup: show/hide/reset formula bar
 
 // Build scoring event list from all active groups
 function buildScoringEvents(combo){
@@ -950,22 +1069,27 @@ function buildScoringEvents(combo){
   if(combo.board&&combo.board.length>0){
     events.push({dice:combo.board,type:'sel'});
   }
+  // Cannonade skill dice — one event per die
+  for(let _i=0;_i<G.cannonadeDice;_i++){
+    events.push({dice:[0],type:'cannonade'});
+  }
   return events;
 }
 
 // Main strike animation — one event per combo group
 // Each stat flashes independently with 500ms gap between them
-const STAT_GAP=550;  // ms between each stat flash
-const STAT_ANIM=900; // ms for each animation
+const STAT_GAP=380;  // ms between each stat flash
+const STAT_ANIM=500; // ms for each animation
 
 function runStrikeAnimation(combo, events, onDone){
-  const gboxes=[...document.querySelectorAll('.gbox')];
+  const gboxes=[...document.querySelectorAll('.gbox:not(.selbox)')];
   const selDice=[...document.querySelectorAll('#diceGrid .die:not(.slot)')].filter(
     d=>d.style.borderColor==='rgb(243, 156, 18)'||d.style.borderColor.includes('243')
   );
 
-  let rDmg=0, rBonus=G.bonusDmg, rFlux=G.flux, rMana=G.mana, rShield=G.shield;
-  let globalDelay=0; // cumulative delay across all events
+  // Score Rollup: show formula bar and reset to starting values
+  let rDmg=0, rBonus=G.bonusDmg, rFlux=G.flux+G.stackFlux, rMana=G.mana, rShield=G.shield;
+  let globalDelay=0; // no initial pause
 
   events.forEach((ev,i)=>{
     const s=scoreGroup(ev.dice);
@@ -992,7 +1116,7 @@ function runStrikeAnimation(combo, events, onDone){
     }, evStart);
 
     // ② Each stat gets its own slot with STAT_GAP between them
-    globalDelay+=800; // 300 gbox anim + 500ms extra pause before stats
+    globalDelay+=500; // box flash + pause before stats
     if(s.ad>0){
       const t=globalDelay; const v=rDmg+=s.ad;
       setTimeout(()=>flashPop('fDmg',v),t);
@@ -1015,14 +1139,64 @@ function runStrikeAnimation(combo, events, onDone){
     }
     if(s.shieldG>0){
       const t=globalDelay;
-      setTimeout(()=>popStat('shieldBadge','gain'),t);
+      setTimeout(()=>{if($('shieldRow'))$('shieldRow').style.display='flex';popStat('valShield','gain');},t);
       globalDelay+=STAT_GAP;
     }
-    globalDelay+=300; // pause between events
+    globalDelay+=150; // pause between events
   });
 
+  // Final: flash total damage in formula subtitle
+  const totalFinalDelay = globalDelay+200;
+  setTimeout(()=>{
+    const td=combo.totalDmg;
+    $('sts').textContent='→ '+td+' Damage';
+    const stsEl=$('sts');
+    stsEl.style.animation='none';void stsEl.offsetWidth;
+    stsEl.style.fontWeight='700';stsEl.style.color='#e8a020';
+    stsEl.style.animation='val-pop .7s ease';
+    setTimeout(()=>{stsEl.style.fontWeight='';stsEl.style.color='';},700);
+  },totalFinalDelay);
+
   // Callback after all events + last animation finishes
-  setTimeout(onDone, globalDelay+STAT_ANIM);
+  setTimeout(onDone, globalDelay+STAT_ANIM+400);
+}
+
+function doStack(){
+  if(G.busy||G.phase!=='rolled')return;
+  const combo=calcCombo();if(!combo)return;
+  G.busy=true;G.phase='striking';hideBanners();renderBtns();
+  // Apply shield + mana immediately
+  G.shield+=combo.shieldG;
+  G.mana=Math.min(G.maxMana,G.mana+combo.manaG);
+  G.bonusDmg+=combo.bdmgG;
+  G.stackFlux+=combo.fluxG; // carry over flux
+  G.cannonadeDice=0; // cannonade consumed on Stack
+  const parts=[];
+  if(combo.shieldG>0)parts.push('🛡️+'+combo.shieldG);
+  if(combo.manaG>0)parts.push('💧+'+combo.manaG);
+  if(combo.bdmgG>0)parts.push('+'+combo.bdmgG+'BD');
+  if(combo.fluxG>0)parts.push('⭐+'+combo.fluxG.toFixed(1)+' Flux (carry-over)');
+  feedback('📦 Stack & End Turn! '+parts.join(' ')+(G.stackFlux>0?' [총 stacked Flux: +'+G.stackFlux.toFixed(1)+']':''),'info',2800);
+  updateUI();
+  // Enemy counter-attacks — 1200ms so player clearly reads shield value before cannonball fires
+  setTimeout(()=>{
+    applyEnemyHit();
+    if(G.pHp<=0){
+      G.busy=false;G.phase='idle';
+      setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),500);
+      return;
+    }
+    setTimeout(()=>{
+      // Store ALL groups — only if at least 1 damage die exists (icon 0,1,4,5)
+      const selGroup=combo.board&&combo.board.length>0?[{dice:combo.board}]:[];
+      const allGroups=[...G.steakBoxes.flatMap(sb=>sb.groups),...G.currentGroups,...selGroup];
+      const hasVisible=allGroups.some(g=>g.dice.some(d=>d===0||d===1||d===2||d===4||d===5));
+      if(allGroups.length>0&&hasVisible) G.stackBoxes.push({groups:allGroups,flux:combo.fluxG});
+      G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
+      G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
+      hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
+    },1100);
+  },700);
 }
 
 function doStrike(){
@@ -1034,23 +1208,30 @@ function doStrike(){
 
   runStrikeAnimation(combo, events, ()=>{
     // Apply all stats after animation completes
-    G.mana=Math.min(G.maxMana,G.mana+combo.manaG);
     G.bonusDmg+=combo.bdmgG;G.shield+=combo.shieldG;
-    const td=combo.totalDmg;G.eHp=Math.max(0,G.eHp-td);
+    // Update Bonus display after Strike (only time it changes)
+    if(combo.bdmgG>0){$('fBonus').textContent='+'+G.bonusDmg;$('fBonusLbl').textContent='Bonus';flashPop('fBonus','+'+G.bonusDmg);}
+      G.stackBoxes=[];G.stackFlux=0;G.cannonadeDice=0; // consumed on Strike
+    const td=combo.totalDmg;
+    const eHpBefore=G.eHp;
+    G.eHp=Math.max(0,G.eHp-td);
     flashEnemy(td);
     const extras=[];if(combo.bdmgG>0)extras.push('+'+combo.bdmgG+'BD');if(combo.shieldG>0)extras.push('🛡️+'+combo.shieldG);
     feedback('⚔️ Strike! −'+td+' dmg'+(extras.length?' ('+extras.join(' ')+'!)':''),'info',2000);
-    updateUI();
+    // Update mana immediately (player can see it right away), delay enemy HP bar
+    G.mana=Math.min(G.maxMana,G.mana+combo.manaG);
+    $('barMana').style.width=Math.round(G.mana/G.maxMana*100)+'%';
+    $('valMana').textContent=G.mana+'/'+G.maxMana;
 
     // Wait for cannonball to land + impact (850ms fly + 450ms impact pause)
+    // Then animate enemy HP bar counting down
     setTimeout(()=>{
-      if(G.eHp<=0){triggerVictory();return;}
+      animEnemyHpDown(eHpBefore,G.eHp,700);
+      if(G.eHp<=0){setTimeout(()=>triggerVictory(),750);return;}
 
       // Enemy counter-attack — clear pause so player reads the hit before enemy fires
       setTimeout(()=>{
-        const hpBefore=G.pHp;
         applyEnemyHit();
-        if(G.pHp<hpBefore) animHpDown(hpBefore,G.pHp,900);
         if(G.pHp<=0){
           G.busy=false;G.phase='idle';
           setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),500);
@@ -1068,14 +1249,13 @@ function doStrike(){
 }
 
 $('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();else if(G.phase==='rolled')doPushLuck();};
-$('btnStrike').onclick=doStrike;
+$('btnStrike').onclick=()=>{if(G.phase!=='rolled'||G.busy)return;if(hasAttackInTurn())doStrike();else doStack();};
 
 $('btnFireball').onclick=()=>{
-  if(G.mana<2)return;
-  G.mana-=2;G.eHp=Math.max(0,G.eHp-10);G.bonusDmg+=5;
-  flashEnemy(10);feedback('🔥 Fireball! −10 HP  BD+5','dmg',1800);
-  updateUI();renderBtns();
-  if(G.eHp<=0){triggerVictory();}
+  if(G.mana<2||G.phase!=='rolled'||G.busy)return;
+  G.mana-=2;G.cannonadeDice+=1;
+  feedback('💥 Cannonade! +'+G.cannonadeDice+' Attack die'+(G.cannonadeDice>1?'s':''),'info',1800);
+  updateUI();renderDice();renderBtns();
 };
 
 $('btnShield').onclick=()=>{
@@ -1113,13 +1293,13 @@ function setEnemy(idx){
 
 function doRestart(){
   window.hideOverlay();
-  Object.assign(G,{pHp:100,mana:0,flux:1,bonusDmg:0,shield:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0});
+  Object.assign(G,{pHp:100,mana:0,flux:1,bonusDmg:0,shield:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0});
   setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 }
 window.restart=doRestart;
 window.nextEnemy=()=>{
   hideOverlay();
-  Object.assign(G,{bonusDmg:0,shield:0,flux:1,busy:false,phase:'idle',steakCount:0,dice:[],ds:[],steakBoxes:[],currentGroups:[]});
+  Object.assign(G,{bonusDmg:0,shield:0,flux:1,stackFlux:0,stackBoxes:[],busy:false,phase:'idle',steakCount:0,dice:[],ds:[],steakBoxes:[],currentGroups:[],cannonadeDice:0});
   setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 };
 doRestart();
