@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dice Roguelike v16.1</title>
+<meta name="viewport" content="width=1100, initial-scale=1.0">
+<title>Dice Roguelike — Synergy Test</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
-body{height:100%;overflow:hidden;display:flex;justify-content:center;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.phone{background:#f8f8f8;width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+body{height:100%;overflow:hidden;display:flex;justify-content:center;align-items:stretch;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.app-wrap{display:flex;flex-direction:row;height:100dvh;gap:0;align-items:stretch}
+.phone{background:#f8f8f8;width:430px;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
@@ -139,6 +140,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   flex-shrink:0;align-self:center;
 }
 .backpack-grid{
+  position:relative;
   display:grid;
   grid-template-columns:repeat(6,32px);
   grid-template-rows:repeat(2,32px);
@@ -148,21 +150,102 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 .bp-slot{
   width:32px;height:32px;
-  background:#e8e8e8;
+  background:#ececec;
   border-right:1px solid #c0c0c0;
   border-bottom:1px solid #c0c0c0;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+  position:relative;
+  box-sizing:border-box;
 }
-.bp-slot:nth-child(-n+2){background:#f0ede8;}
-.bp-slot:nth-child(n+3){background:#e0e0e0;}
-.bp-slot:nth-child(n+3)::after{
+.bp-slot.slot-open{background:#f0ede8;}
+.bp-slot.slot-locked{background:#e0e0e0;}
+.bp-slot.slot-locked::after{
   content:'';position:absolute;inset:0;
   background:repeating-linear-gradient(
     45deg,transparent,transparent 3px,
     rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px
   );
 }
+.bp-slot.drag-over{background:#d4ecd4!important;outline:1.5px dashed #27ae60;}
+.bp-slot.drag-invalid{background:#ffd4d4!important;}
+
+/* Sigil items — absolutely positioned over the grid */
+.bp-sigil{
+  position:absolute;
+  border-radius:5px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;
+  cursor:grab;
+  user-select:none;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+  transition:box-shadow .1s, transform .1s;
+  z-index:10;
+  touch-action:none;
+}
+.bp-sigil:active{cursor:grabbing;transform:scale(1.04);box-shadow:0 4px 12px rgba(0,0,0,.28);z-index:20;}
+.bp-sigil.dragging{opacity:.85;z-index:30;transition:none;}
+.bp-sigil-icon{font-size:14px;line-height:1;}
+.bp-sigil-name{font-size:5px;font-weight:700;text-align:center;line-height:1.2;padding:0 2px;opacity:.85;}
+.bp-sigil-effect{font-size:4.5px;text-align:center;line-height:1.2;padding:0 2px;opacity:.7;}
+
+/* Sigil themes */
+.bp-sigil.sigil-lucky-draw{
+  background:linear-gradient(135deg,#fff8ee,#ffe9cc);
+  border:1.5px solid #e8a020;
+  color:#8a5200;
+}
+.bp-sigil.sigil-deep-reservoir{
+  background:linear-gradient(135deg,#eef4ff,#cce0ff);
+  border:1.5px solid #2980b9;
+  color:#1a4a7a;
+}
+
+/* ── INVENTORY PANEL ── */
+.inv-panel{
+  width:560px;flex-shrink:0;height:100dvh;
+  background:#1e2235;border-left:2px solid #2d3455;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.inv-header{padding:10px 14px 6px;flex-shrink:0;border-bottom:1px solid #2d3455;}
+.inv-title{font-size:11px;font-weight:700;color:#7b8ab8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;}
+.inv-subtitle{font-size:9px;color:#4a5580;margin-bottom:4px;}
+.inv-section-label{font-size:8px;font-weight:700;color:#5a6890;text-transform:uppercase;letter-spacing:.5px;padding:6px 0 3px;}
+.inv-scroll{flex:1;overflow-y:auto;padding:8px 14px 14px;}
+.inv-grid{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(10,52px);
+  grid-template-rows:repeat(2,52px);
+  gap:0;
+  border-left:1px solid #2d3455;
+  border-top:1px solid #2d3455;
+  background:#181c2e;
+}
+.inv-slot{
+  width:52px;height:52px;background:#1a1e30;
+  border-right:1px solid #252a3e;border-bottom:1px solid #252a3e;
+  position:relative;
+}
+.inv-slot.drag-over{background:#1e3a1e!important;outline:1.5px dashed #27ae60;}
+.inv-slot.drag-invalid{background:#3a1e1e!important;}
+.inv-grid .bp-sigil .bp-sigil-icon{font-size:18px;}
+.inv-grid .bp-sigil .bp-sigil-name{font-size:7px;}
+.inv-grid .bp-sigil .bp-sigil-effect{font-size:6px;}
+
+/* ── PREP PHASE ── */
+.prep-bar{
+  background:#fff;padding:8px 12px 16px;
+  border-top:2px solid #8e44ad;flex-shrink:0;display:none;
+}
+.prep-bar.active{display:block;}
+.b-ready{
+  width:100%;border:none;border-radius:10px;
+  padding:12px;font-size:15px;font-weight:700;
+  background:#8e44ad;color:#fff;cursor:pointer;
+}
+.b-ready:active{transform:scale(.96);}
+.prep-hint{text-align:center;font-size:9px;color:#aaa;margin-top:5px;}
+.combat-bar.active{display:block;}
+.combat-bar{display:none;}
 
 /* ── ENEMY BAR ── */
 .ez{display:none}
@@ -419,6 +502,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 </style>
 </head>
 <body>
+<div class="app-wrap">
 <div class="phone" id="phone">
 
   <!-- Ship Battle Scene -->
@@ -542,12 +626,23 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     </div>
   </div>
 
-  <!-- Backpack — hidden for now, re-enable by removing style="display:none" -->
-  <div class="backpack" style="display:none">
+  <!-- Backpack -->
+  <div class="backpack" id="backpackArea">
     <div class="backpack-label">Backpack</div>
-    <div class="backpack-grid">
-      <div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div>
-      <div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div><div class="bp-slot"></div>
+    <div class="backpack-grid" id="backpackGrid">
+      <!-- 12 slots: first 2 open, rest locked -->
+      <div class="bp-slot slot-open"  data-col="0" data-row="0"></div>
+      <div class="bp-slot slot-open"  data-col="1" data-row="0"></div>
+      <div class="bp-slot slot-locked" data-col="2" data-row="0"></div>
+      <div class="bp-slot slot-locked" data-col="3" data-row="0"></div>
+      <div class="bp-slot slot-locked" data-col="4" data-row="0"></div>
+      <div class="bp-slot slot-locked" data-col="5" data-row="0"></div>
+      <div class="bp-slot slot-open"  data-col="0" data-row="1"></div>
+      <div class="bp-slot slot-open"  data-col="1" data-row="1"></div>
+      <div class="bp-slot slot-locked" data-col="2" data-row="1"></div>
+      <div class="bp-slot slot-locked" data-col="3" data-row="1"></div>
+      <div class="bp-slot slot-locked" data-col="4" data-row="1"></div>
+      <div class="bp-slot slot-locked" data-col="5" data-row="1"></div>
     </div>
   </div>
 
@@ -578,12 +673,17 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   </div>
 
   <!-- Formula bar — between arena and bottom -->
-    <!-- Spacer — visual gap between formula and action area -->
 
-  <!-- Bottom action area -->
-  <div class="bottom">
-    <div class="bb">
-      <div class="btc">
+  <!-- PREP phase -->
+  <div class="prep-bar active" id="prepBar">
+    <button class="b-ready" id="btnReady">⚔️ Start Combat</button>
+    <div class="prep-hint">Drag sigils from Inventory → Backpack · Only backpack sigils affect combat</div>
+  </div>
+
+  <!-- COMBAT phase action area -->
+  <div class="combat-bar" id="combatBar">
+    <div class="bottom">
+      <div class="bb"><div class="btc">
         <div class="skrow">
           <button class="sk fire" id="btnFireball" disabled><div class="sn">Cannonade</div><div class="sc">+1 Attack die <span class="mcost">💧💧</span></div></button>
           <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div></button>
@@ -594,33 +694,51 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
           <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
           <button class="mb b-strike" id="btnStrike" disabled><span id="btnStrikeLbl">Strike</span><span class="ms" id="sts">select combo</span></button>
         </div>
-      </div>
+      </div></div>
     </div>
   </div>
 
-
-
   <div class="ov" id="overlay"><div class="oc" id="ocard"></div></div>
-
-  <!-- Guide overlay -->
   <div class="tov" id="tutOv">
     <div class="tc">
       <div class="th"><div class="tt">Combo Guide — v4.7</div><button class="tbk" onclick="document.getElementById('tutOv').classList.remove('on')">Close</button></div>
       <div class="gsec">Attack — single die counts</div>
-      <div class="grow"><div class="gicon" id="gi0"></div><div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2 · ×2=8 · ×3=16 · ×4=40 · ×5=80 · ×6=150 Damage</div></div></div>
-      <div class="grow"><div class="gicon" id="gi1"></div><div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=4 · ×2=12 · ×3=34 · ×4=76 · ×5=140 · ×6=225 Damage</div></div></div>
-      <div class="gsec">Combo — Pair minimum</div>
-      <div class="grow"><div class="gicon" id="gi2"></div><div class="ginfo"><div class="gname">Mana</div><div class="gdesc">pair=1MP · triple=3MP · quad=5MP · quint=8MP · sext=10MP · 0 Damage</div></div></div>
-      <div class="grow"><div class="gicon" id="gi3"></div><div class="ginfo"><div class="gname">Shield</div><div class="gdesc">pair=13blk · triple=30blk · quad=55blk · quint=100blk</div></div></div>
-      <div class="grow"><div class="gicon" id="gi4"></div><div class="ginfo"><div class="gname">Flux</div><div class="gdesc">pair=+0.5 Flux · triple=+1.5 Flux · quad=+2.5 Flux · quint=+5.0 Flux · sext=+7.0 Flux · 0 Damage — cần ⚔️ để Strike</div></div></div>
-      <div class="grow"><div class="gicon" id="gi5"></div><div class="ginfo"><div class="gname">Bonus Damage</div><div class="gdesc">pair=+5 Bonus · triple=+25 Bonus · quad=+50 Bonus · quint=+90 Bonus · sext=+155 Bonus · 0 Damage</div></div></div>
-      <div class="gsec">Special</div>
-      <div class="grow" style="background:#fff3e0;border:1px solid #f5cba7"><div class="ginfo"><div class="gname" style="color:#c0392b">🔥 Steak!</div><div class="gdesc" style="color:#e67e22">Push Luck all 6 → Flux ×1.5→×2→×3→×5→×8→×13... (cap ×777 at Steak 16) → roll fresh 6</div></div></div>
-      <div class="grow"><div class="ginfo"><div class="gname">4-Different</div><div class="gdesc">4 icons khác nhau=30 Damage · 5 icons=60 Damage · 6 icons=110 Damage</div></div></div>
-      <div class="gnote">Total = (Damage + Bonus) × Flux · Strike cần ≥1 Attack die ⚔️/🗡️ · Không có Attack → Stack & End Turn · Steak! tăng Flux · Break mất Flux & Bonus</div>
+      <div class="grow"><div class="gicon" id="gi0"></div><div class="ginfo"><div class="gname">Normal Attack</div><div class="gdesc">×1=2·×2=8·×3=16·×4=40·×5=80·×6=150</div></div></div>
+      <div class="grow"><div class="gicon" id="gi1"></div><div class="ginfo"><div class="gname">Strong Attack</div><div class="gdesc">×1=4·×2=12·×3=34·×4=76·×5=140·×6=225</div></div></div>
+      <div class="gsec">Combo</div>
+      <div class="grow"><div class="gicon" id="gi4"></div><div class="ginfo"><div class="gname">Flux ⭐</div><div class="gdesc">pair=+0.5·triple=+1.5·quad=+2.5·quint=+5·sext=+7 · 0 AD</div></div></div>
+      <div class="grow"><div class="gicon" id="gi3"></div><div class="ginfo"><div class="gname">Shield 🛡️</div><div class="gdesc">pair=13·triple=30·quad=55·quint=100·sext=160</div></div></div>
+      <div class="grow"><div class="gicon" id="gi2"></div><div class="ginfo"><div class="gname">Mana 💧</div><div class="gdesc">pair=1·triple=3·quad=5·quint=8·sext=10 MP</div></div></div>
+      <div class="grow"><div class="gicon" id="gi5"></div><div class="ginfo"><div class="gname">Bonus Dmg 💥</div><div class="gdesc">pair=+5·triple=+25·quad=+50·quint=+90·sext=+155 BD</div></div></div>
+      <div class="gnote">Total=(AD+BD)×Flux · Strike needs ≥1 Attack die · No Attack → Stack & End Turn</div>
     </div>
   </div>
+
+</div><!-- end .phone -->
+
+<!-- ── INVENTORY PANEL ── -->
+<div class="inv-panel" id="invPanel">
+  <div class="inv-header">
+    <div class="inv-title">📦 Inventory — All Sigils</div>
+    <div class="inv-subtitle">Drag to Backpack to equip · Only equipped sigils affect combat</div>
+  </div>
+  <div class="inv-scroll">
+    <div class="inv-section-label">🥩 Steak Snowball</div>
+    <div class="inv-grid" id="invGrid-steak" style="grid-template-rows:repeat(2,52px)"></div>
+    <div class="inv-section-label">⭐ Sextep Flux</div>
+    <div class="inv-grid" id="invGrid-sextep" style="grid-template-rows:repeat(2,52px)"></div>
+    <div class="inv-section-label">🛡️ Shield Tank</div>
+    <div class="inv-grid" id="invGrid-shield" style="grid-template-rows:repeat(2,52px)"></div>
+    <div class="inv-section-label">💥 BD Ramp</div>
+    <div class="inv-grid" id="invGrid-bd" style="grid-template-rows:repeat(2,52px)"></div>
+    <div class="inv-section-label">🔀 Hybrid / Neutral</div>
+    <div class="inv-grid" id="invGrid-hybrid" style="grid-template-rows:repeat(2,52px)"></div>
+    <div class="inv-section-label">🧪 Test Sigils</div>
+    <div class="inv-grid" id="invGrid-test" style="grid-template-rows:repeat(2,52px)"></div>
+  </div>
 </div>
+
+</div><!-- end .app-wrap -->
 
 <script>
 const BASE='https://raw.githubusercontent.com/dic1405/dice-prototype/main/';
@@ -1100,6 +1218,11 @@ function doRoll(){
 
 function doPushLuck(){
   if(G.busy||G.phase!=='rolled')return;if(!canPush()){feedback('⚠️ Fix invalid dice first','warn');return;}
+  // ── SIGIL: Lucky Draw — +1 Mana per Push Luck, reset to 0 on Steak ──
+  if(hasSigil('lucky-draw')){
+    G.mana=Math.min(G.maxMana,G.mana+1);
+  }
+  // ─────────────────────────────────────────────────────────────
   const{vi}=analyze();G.currentGroups.push({dice:vi.map(i=>G.dice[i])});
   vi.forEach(i=>G.ds[i]=DS.ST);G.ds.forEach((s,i)=>{if(s===DS.S)G.ds[i]=DS.F;});
   const pushed=G.ds.filter(s=>s===DS.ST).length;
@@ -1112,6 +1235,9 @@ function doPushLuck(){
     const newSteakIdx=G.steakBoxes.length;
     G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
     G.flux=newFlux;
+    // ── SIGIL: Lucky Draw — Mana về 0 khi Steak thành công ──────
+    if(hasSigil('lucky-draw')){ G.mana=0; }
+    // ─────────────────────────────────────────────────────────────
     // Update Flux display on Steak success
     const fxStr='×'+(Number.isInteger(newFlux)?newFlux:newFlux.toFixed(1));
     $('fFlux').textContent=fxStr;flashPop('fFlux',fxStr);
@@ -1459,9 +1585,13 @@ $('btnReroll').onclick=()=>{
 };
 
 $('btnHelp').onclick=()=>$('tutOv').classList.add('on');
-$('btnRestart').onclick=doRestart;
+$('btnRestart').onclick=()=>enterPrep();
 
-const ENEMIES=[
+// ── BRANCH: steak-ceiling ─────────────────────────────────────
+// Official enemy table DEACTIVATED for ceiling test.
+// To restore: swap ENEMIES_OFFICIAL back to ENEMIES.
+// ──────────────────────────────────────────────────────────────
+const ENEMIES_OFFICIAL=[
   // ── Act 1 — Pirates ──
   {name:'Rusty Cutlass · Act 1',      icon:'⚓',  hp:35,  dmg:5},
   {name:'The Bilge Rat · Act 1',      icon:'🐀',  hp:40,  dmg:5},
@@ -1475,21 +1605,26 @@ const ENEMIES=[
   {name:'Naval Gunboat · Act 2',      icon:'💣',  hp:120, dmg:12},
   {name:'HMS Relentless · Act 2',     icon:'⚔️',  hp:145, dmg:12},
   {name:'The Dreadnought · Act 2',    icon:'⚓',  hp:175, dmg:14},
-  {name:'THE IRON ADMIRAL · Boss',    icon:'👑',  hp:265, dmg:10}, // cycle 10→14→21
+  {name:'THE IRON ADMIRAL · Boss',    icon:'👑',  hp:265, dmg:10},
   // ── Act 3 — Monsters (−15%) ──
   {name:'Shore Crab · Act 3',         icon:'🦀',  hp:135, dmg:14},
   {name:'Reef Lurker · Act 3',        icon:'🐙',  hp:155, dmg:15},
   {name:'Stormfin · Act 3',           icon:'🦈',  hp:165, dmg:16},
   {name:'Deepfang · Act 3',           icon:'🦑',  hp:190, dmg:18},
   {name:'Abyssal Leviathan · Act 3',  icon:'🌊',  hp:215, dmg:20},
-  {name:'KRAKEN · Boss',              icon:'🐙',  hp:410, dmg:16}, // Phase1 random 13–21 / Phase2=27 at ≤205 HP
+  {name:'KRAKEN · Boss',              icon:'🐙',  hp:410, dmg:16},
   // ── Act 4 — Ghost Ships (−10%) ──
   {name:'The Wanderer · Act 4',       icon:'👻',  hp:190, dmg:18},
   {name:'Pale Widow · Act 4',         icon:'💀',  hp:215, dmg:20},
   {name:'Bone Galleon · Act 4',       icon:'☠️',  hp:240, dmg:21},
   {name:'The Maelstrom Queen · Act 4',icon:'🌀',  hp:265, dmg:23},
   {name:'Wraith Galleon · Act 4',     icon:'⚓',  hp:285, dmg:25},
-  {name:'THE ETERNAL TIDE · Boss',    icon:'♾️',  hp:415, dmg:20}, // revive +205 HP / Phase2 dmg=29→40 on revive
+  {name:'THE ETERNAL TIDE · Boss',    icon:'♾️',  hp:415, dmg:20},
+];
+
+// ── ACTIVE: Ceiling Test Dummy ──
+const ENEMIES=[
+  {name:'🧪 CEILING DUMMY — Steak Test', icon:'🎯', hp:100000, dmg:1},
 ];
 
 function setEnemy(idx){
@@ -1503,15 +1638,369 @@ function setEnemy(idx){
 function doRestart(){
   window.hideOverlay();
   Object.assign(G,{pHp:100,mana:0,flux:1,bonusDmg:0,shield:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0});
+  applyMaxManaFromSigils();
   setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 }
-window.restart=doRestart;
+window.restart=()=>{ enterPrep(); };
 window.nextEnemy=()=>{
   hideOverlay();
   Object.assign(G,{bonusDmg:0,shield:0,flux:1,stackFlux:0,stackBoxes:[],busy:false,phase:'idle',steakCount:0,dice:[],ds:[],steakBoxes:[],currentGroups:[],cannonadeDice:0});
   setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 };
-doRestart();
+
+// ══════════════════════════════════════════════════════════════
+// ── SIGIL SYSTEM — FULL ──────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+const BP_SLOT  = 32; // backpack cell px
+const INV_SLOT = 52; // inventory cell px (double size for readability)
+const BP_COLS  = 6;
+const BP_ROWS  = 2;
+
+// ── SIGIL DEFINITIONS ────────────────────────────────────────
+// w/h in grid cells. All 1×1 unless noted.
+const SIGIL_DEFS = {
+  // ── Test Sigils ──
+  'lucky-draw':      { id:'lucky-draw',      name:'Lucky Draw',      icon:'🎲', effect:'+1 Mana/Push · Steak→0',        cls:'sigil-lucky-draw',       w:1,h:1, group:'test' },
+  'deep-reservoir':  { id:'deep-reservoir',  name:'Deep Reservoir',  icon:'💧', effect:'+5 Max Mana (stackable)',        cls:'sigil-deep-reservoir',   w:2,h:1, group:'test' },
+
+  // ── Steak Snowball ──
+  'crimson-streak':  { id:'crimson-streak',  name:'Crimson Streak',  icon:'🩸', effect:'+4 BD per Steak!',              cls:'sigil-steak',  w:1,h:1, group:'steak' },
+  'devils-hand':     { id:'devils-hand',     name:"Devil's Hand",    icon:'🎲', effect:'Break: keep 50% Flux',          cls:'sigil-steak',  w:1,h:1, group:'steak' },
+  'pressure-cooker': { id:'pressure-cooker', name:'Pressure Cooker', icon:'🔥', effect:'+2 AD per Steak chain (max+10)',cls:'sigil-steak',  w:1,h:1, group:'steak' },
+  'steak-echo':      { id:'steak-echo',      name:'Steak Echo',      icon:'✨', effect:'On Steak!: 1 ⭐→Quad auto',    cls:'sigil-steak',  w:1,h:2, group:'steak' },
+  'bloodlust':       { id:'bloodlust',       name:'Bloodlust',       icon:'💀', effect:'Flux scale skips 1 step',       cls:'sigil-steak-epic', w:2,h:1, group:'steak' },
+
+  // ── Sextep Flux ──
+  'silver-lining':   { id:'silver-lining',   name:'Silver Lining',   icon:'🌟', effect:'Any Sextep: +1 Mana',           cls:'sigil-sextep', w:1,h:1, group:'sextep' },
+  'quantum-dice':    { id:'quantum-dice',     name:'Quantum Dice',    icon:'🎯', effect:'1st Reroll/combat: free (no Steak)', cls:'sigil-sextep', w:1,h:1, group:'sextep' },
+  'star-chaser':     { id:'star-chaser',      name:'Star Chaser',     icon:'🌙', effect:'After Sextep⭐: Flux persists 1 turn', cls:'sigil-sextep', w:1,h:1, group:'sextep' },
+  'stellar-cascade': { id:'stellar-cascade',  name:'Stellar Cascade', icon:'💫', effect:'Sextep⭐: +40 BD (combat)',     cls:'sigil-sextep', w:1,h:2, group:'sextep' },
+  'event-horizon':   { id:'event-horizon',    name:'Event Horizon',   icon:'🌌', effect:'After Strike w/ Sextep⭐: Flux→50% (cap ×6)', cls:'sigil-sextep-epic', w:2,h:1, group:'sextep' },
+
+  // ── Shield Tank ──
+  'iron-hull':       { id:'iron-hull',        name:'Iron Hull',       icon:'⚓', effect:'Shield carry-over 60% / turn', cls:'sigil-shield', w:1,h:1, group:'shield' },
+  'reactive-armor':  { id:'reactive-armor',   name:'Reactive Armor',  icon:'⚡', effect:'≥25 Shield: reflect 12% dmg',  cls:'sigil-shield', w:1,h:1, group:'shield' },
+  'bulwark':         { id:'bulwark',          name:'Bulwark',         icon:'🏰', effect:'All 🛡️ combos: +5 Shield',     cls:'sigil-shield', w:1,h:1, group:'shield' },
+  'storm-wall':      { id:'storm-wall',       name:'Storm Wall',      icon:'⛈️', effect:'Triple🛡️+: +1 Mana (max+2/turn)', cls:'sigil-shield', w:1,h:2, group:'shield' },
+  'living-aegis':    { id:'living-aegis',     name:'Living Aegis',    icon:'🌊', effect:'Strike w/>60 Shield: +Shield dmg', cls:'sigil-shield-epic', w:2,h:1, group:'shield' },
+
+  // ── BD Ramp ──
+  'smoldering-fuse': { id:'smoldering-fuse',  name:'Smoldering Fuse', icon:'🕯️', effect:'+2 BD per 💥 single icon',     cls:'sigil-bd',     w:1,h:1, group:'bd' },
+  'incendiary':      { id:'incendiary',       name:'Incendiary',      icon:'🔥', effect:'Stack w/ 💥 combo: BD×2',       cls:'sigil-bd',     w:1,h:1, group:'bd' },
+  'powder-keg':      { id:'powder-keg',       name:'Powder Keg',      icon:'🧨', effect:'BD→50% between enemies (cap 80)', cls:'sigil-bd',   w:1,h:1, group:'bd' },
+  'chain-reaction':  { id:'chain-reaction',   name:'Chain Reaction',  icon:'⛓️', effect:'per 50 peak BD: +3 AD (max+12)', cls:'sigil-bd',   w:1,h:2, group:'bd' },
+  'detonator':       { id:'detonator',        name:'Detonator',       icon:'💣', effect:'BD>100 on Strike: +BD×0.5 hit (cap+150)', cls:'sigil-bd-epic', w:2,h:1, group:'bd' },
+
+  // ── Hybrid / Neutral ──
+  'navigators-eye':  { id:'navigators-eye',   name:"Navigator's Eye", icon:'⚡', effect:'Reroll costs -1 MP (min 0)',    cls:'sigil-hybrid', w:1,h:1, group:'hybrid' },
+  'desperate-measure':{ id:'desperate-measure',name:'Desperate Measure',icon:'🩹',effect:'HP≤30: combos +1 tier',       cls:'sigil-hybrid', w:1,h:1, group:'hybrid' },
+  'blood-debt':      { id:'blood-debt',       name:'Blood Debt',      icon:'🩸', effect:'Per hit taken: +6 BD',          cls:'sigil-hybrid', w:1,h:1, group:'hybrid' },
+  'black-flag':      { id:'black-flag',       name:'Black Flag',      icon:'🏴‍☠️',effect:'Steak! + BD>50: Flux+1 step',  cls:'sigil-hybrid', w:1,h:1, group:'hybrid' },
+};
+
+// CSS themes for sigil groups (injected once)
+const SIGIL_CSS = `
+.sigil-steak{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:1.5px solid #e67e22;color:#7d3c00;}
+.sigil-steak-epic{background:linear-gradient(135deg,#ffeaea,#ffb0b0);border:1.5px solid #e74c3c;color:#7d0000;}
+.sigil-sextep{background:linear-gradient(135deg,#f5f0ff,#e0d0ff);border:1.5px solid #8e44ad;color:#4a0080;}
+.sigil-sextep-epic{background:linear-gradient(135deg,#e8e0ff,#c8b8ff);border:1.5px solid #6c3483;color:#2d0060;}
+.sigil-shield{background:linear-gradient(135deg,#e8f8f5,#c8eee5);border:1.5px solid #1abc9c;color:#0a4a3a;}
+.sigil-shield-epic{background:linear-gradient(135deg,#d0f0e8,#a8e0d0);border:1.5px solid #16a085;color:#063028;}
+.sigil-bd{background:linear-gradient(135deg,#fff8e0,#ffe8a0);border:1.5px solid #f39c12;color:#5a3000;}
+.sigil-bd-epic{background:linear-gradient(135deg,#fff0c0,#ffd060);border:1.5px solid #d68910;color:#3a1800;}
+.sigil-hybrid{background:linear-gradient(135deg,#f0f0f0,#dcdcdc);border:1.5px solid #7f8c8d;color:#2c3e50;}
+`;
+(()=>{ const s=document.createElement('style');s.textContent=SIGIL_CSS;document.head.appendChild(s); })();
+
+// ── INVENTORY: sigils not in backpack ─────────────────────────
+// Each entry: { id, gridId, col, row }
+let inventorySigils = Object.keys(SIGIL_DEFS).map((id,i)=>{
+  const g = SIGIL_DEFS[id].group;
+  return { id, gridId:'invGrid-'+g, col:0, row:0 }; // positions set by layoutInventory
+});
+
+// Auto-layout inventory sigils per group grid (20 cols × N rows)
+function layoutInventory(){
+  const byGroup = {};
+  inventorySigils.forEach(is=>{
+    if(!byGroup[is.gridId]) byGroup[is.gridId]=[];
+    byGroup[is.gridId].push(is);
+  });
+  Object.entries(byGroup).forEach(([gridId, list])=>{
+    let col=0, row=0;
+    list.forEach(is=>{
+      const def = SIGIL_DEFS[is.id];
+      // wrap if needed
+      if(col + def.w > 10){ col=0; row++; }
+      is.col = col; is.row = row;
+      col += def.w + 1; // 1-slot gap between items
+    });
+  });
+}
+
+// ── BACKPACK: active sigils ────────────────────────────────────
+let placedSigils = []; // starts empty — player drags from inventory
+
+// ── SIGIL EFFECT HELPERS ──────────────────────────────────────
+function hasSigil(id){ return placedSigils.some(s=>s.id===id); }
+function countSigil(id){ return placedSigils.filter(s=>s.id===id).length; }
+
+function getSigilMaxManaBonus(){
+  return countSigil('deep-reservoir') * 5;
+}
+function applyMaxManaFromSigils(){
+  G.maxMana = 10 + getSigilMaxManaBonus();
+  G.mana = Math.min(G.mana, G.maxMana);
+  updateUI();
+}
+
+// ── GAME PHASE: prep / combat ─────────────────────────────────
+let gamePhase = 'prep'; // 'prep' | 'combat'
+
+function enterCombat(){
+  gamePhase = 'combat';
+  $('prepBar').classList.remove('active');
+  $('combatBar').classList.add('active');
+  applyMaxManaFromSigils();
+  doRestart();
+}
+function enterPrep(){
+  gamePhase = 'prep';
+  $('combatBar').classList.remove('active');
+  $('prepBar').classList.add('active');
+}
+
+$('btnReady').onclick = ()=> enterCombat();
+
+// ── RENDER GRID (backpack or inventory) ───────────────────────
+function makeSigilEl(def, slotPx){
+  const el = document.createElement('div');
+  el.className = 'bp-sigil ' + def.cls;
+  el.dataset.sigilId = def.id;
+  el.style.width  = (def.w * slotPx - 3) + 'px';
+  el.style.height = (def.h * slotPx - 3) + 'px';
+  el.innerHTML = `<div class="bp-sigil-icon">${def.icon}</div><div class="bp-sigil-name">${def.name}</div><div class="bp-sigil-effect">${def.effect}</div>`;
+  return el;
+}
+
+function renderBackpack(){
+  const grid = $('backpackGrid');
+  if(!grid) return;
+  grid.querySelectorAll('.bp-sigil').forEach(e=>e.remove());
+  placedSigils.forEach(ps=>{
+    const def = SIGIL_DEFS[ps.id]; if(!def) return;
+    const el = makeSigilEl(def, BP_SLOT);
+    el.style.left = (ps.col * BP_SLOT) + 'px';
+    el.style.top  = (ps.row * BP_SLOT) + 'px';
+    initDrag(el, ps, 'backpack');
+    grid.appendChild(el);
+  });
+}
+
+function renderInventoryGrid(gridId){
+  const grid = $(gridId); if(!grid) return;
+  grid.querySelectorAll('.bp-sigil').forEach(e=>e.remove());
+  inventorySigils.filter(is=>is.gridId===gridId).forEach(is=>{
+    const def = SIGIL_DEFS[is.id]; if(!def) return;
+    const el = makeSigilEl(def, INV_SLOT);
+    el.style.left = (is.col * INV_SLOT) + 'px';
+    el.style.top  = (is.row * INV_SLOT) + 'px';
+    initDrag(el, is, 'inventory');
+    grid.appendChild(el);
+  });
+}
+
+function renderAllInventory(){
+  const groups = ['steak','sextep','shield','bd','hybrid','test'];
+  groups.forEach(g=>renderInventoryGrid('invGrid-'+g));
+}
+
+// ── DRAG ENGINE (unified: backpack ↔ inventory) ──────────────
+function initDrag(el, item, source){
+  // source: 'backpack' | 'inventory'
+  let sx, sy, sl, st, dragging=false;
+  const getP = e => e.touches ? e.touches[0] : e;
+  const slotPx = source==='backpack' ? BP_SLOT : INV_SLOT;
+  const def = SIGIL_DEFS[item.id];
+
+  function onStart(e){
+    e.preventDefault();
+    const p=getP(e);
+    sx=p.clientX; sy=p.clientY;
+    sl=parseFloat(el.style.left); st=parseFloat(el.style.top);
+    dragging=true; el.classList.add('dragging');
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('touchmove',onMove,{passive:false});
+    document.addEventListener('mouseup',onEnd);
+    document.addEventListener('touchend',onEnd);
+  }
+  function onMove(e){
+    if(!dragging)return; e.preventDefault();
+    const p=getP(e);
+    el.style.left=(sl+(p.clientX-sx))+'px';
+    el.style.top =(st+(p.clientY-sy))+'px';
+    highlightAny(el, item, source);
+  }
+  function onEnd(e){
+    if(!dragging)return;
+    dragging=false; el.classList.remove('dragging');
+    clearAllHighlights();
+    resolveDropAny(el, item, source);
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('mouseup',onEnd);
+    document.removeEventListener('touchend',onEnd);
+  }
+  el.addEventListener('mousedown',onStart);
+  el.addEventListener('touchstart',onStart,{passive:false});
+}
+
+function getGridSnap(el, gridEl, slotPx, cols, rows, def){
+  const gr = gridEl.getBoundingClientRect();
+  const er = el.getBoundingClientRect();
+  const cx = er.left+er.width/2-gr.left;
+  const cy = er.top+er.height/2-gr.top;
+  const col = Math.max(0,Math.min(cols-def.w, Math.round((cx - def.w*slotPx/2)/slotPx)));
+  const row = Math.max(0,Math.min(rows-def.h, Math.round((cy - def.h*slotPx/2)/slotPx)));
+  return {col,row};
+}
+
+function overGrid(el, gridEl){
+  const gr = gridEl.getBoundingClientRect();
+  const er = el.getBoundingClientRect();
+  return !(er.right<gr.left||er.left>gr.right||er.bottom<gr.top||er.top>gr.bottom);
+}
+
+function isBPFree(sigilId, col, row, def){
+  if(col<0||row<0||col+def.w>BP_COLS||row+def.h>BP_ROWS) return false;
+  for(const ps of placedSigils){
+    if(ps.id===sigilId) continue;
+    const od=SIGIL_DEFS[ps.id];
+    if(col<ps.col+od.w&&col+def.w>ps.col&&row<ps.row+od.h&&row+def.h>ps.row) return false;
+  }
+  return true;
+}
+
+function isInvFree(sigilId, gridId, col, row, def){
+  if(col<0||row<0||col+def.w>10) return false;
+  for(const is of inventorySigils){
+    if(is.id===sigilId) continue;
+    if(is.gridId!==gridId) continue;
+    const od=SIGIL_DEFS[is.id];
+    if(col<is.col+od.w&&col+def.w>is.col&&row<is.row+od.h&&row+def.h>is.row) return false;
+  }
+  return true;
+}
+
+function highlightAny(el, item, source){
+  clearAllHighlights();
+  const def = SIGIL_DEFS[item.id];
+  const bpGrid = $('backpackGrid');
+  if(overGrid(el, bpGrid)){
+    const {col,row}=getGridSnap(el,bpGrid,BP_SLOT,BP_COLS,BP_ROWS,def);
+    const bpId = source==='backpack'?item.id:null;
+    const valid=isBPFree(bpId||'__new__',col,row,def);
+    for(let r=row;r<row+def.h;r++) for(let c=col;c<col+def.w;c++){
+      const s=bpGrid.querySelector(`[data-col="${c}"][data-row="${r}"]`);
+      if(s) s.classList.add(valid?'drag-over':'drag-invalid');
+    }
+    return;
+  }
+  // Check inventory grids
+  const groups=['steak','sextep','shield','bd','hybrid','test'];
+  for(const g of groups){
+    const ig=$('invGrid-'+g); if(!ig) continue;
+    if(overGrid(el,ig)){
+      const rows=Math.ceil(ig.style.gridTemplateRows.split(' ').length||2);
+      const {col,row}=getGridSnap(el,ig,INV_SLOT,10,2,def);
+      ig.querySelectorAll('.inv-slot').forEach(s=>s.classList.remove('drag-over','drag-invalid'));
+      // just show green on target
+      for(let r=row;r<row+def.h;r++) for(let c=col;c<col+def.w;c++){
+        const s=ig.querySelector(`[data-col="${c}"][data-row="${r}"]`);
+        if(s) s.classList.add('drag-over');
+      }
+      break;
+    }
+  }
+}
+
+function clearAllHighlights(){
+  document.querySelectorAll('.drag-over,.drag-invalid')
+    .forEach(s=>s.classList.remove('drag-over','drag-invalid'));
+}
+
+function resolveDropAny(el, item, source){
+  const def = SIGIL_DEFS[item.id];
+  const bpGrid = $('backpackGrid');
+
+  if(overGrid(el, bpGrid)){
+    const {col,row}=getGridSnap(el,bpGrid,BP_SLOT,BP_COLS,BP_ROWS,def);
+    if(source==='backpack'){
+      if(isBPFree(item.id,col,row,def)){ item.col=col; item.row=row; }
+    } else {
+      // inventory → backpack
+      if(isBPFree('__new__',col,row,def)){
+        // remove from inventory
+        inventorySigils = inventorySigils.filter(is=>is.id!==item.id);
+        placedSigils.push({id:item.id,col,row});
+      }
+    }
+    renderBackpack(); renderAllInventory();
+    applyMaxManaFromSigils();
+    return;
+  }
+
+  // Drop on inventory grid
+  const groups=['steak','sextep','shield','bd','hybrid','test'];
+  for(const g of groups){
+    const ig=$('invGrid-'+g); if(!ig) continue;
+    if(overGrid(el,ig)){
+      const gridId='invGrid-'+g;
+      if(source==='backpack'){
+        // backpack → inventory: remove from placed, add to inv
+        const idx=placedSigils.findIndex(ps=>ps.id===item.id);
+        if(idx>=0) placedSigils.splice(idx,1);
+        const {col,row}=getGridSnap(el,ig,INV_SLOT,10,2,def);
+        inventorySigils.push({id:item.id,gridId,col,row});
+      } else {
+        // inventory → inventory (move within/between)
+        item.gridId=gridId;
+        const {col,row}=getGridSnap(el,ig,INV_SLOT,10,2,def);
+        item.col=col; item.row=row;
+      }
+      renderBackpack(); renderAllInventory();
+      applyMaxManaFromSigils();
+      return;
+    }
+  }
+
+  // Drop nowhere valid: snap back
+  renderBackpack(); renderAllInventory();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', ()=>{
+  // Build inventory slot HTML per grid
+  const groups=['steak','sextep','shield','bd','hybrid','test'];
+  const INV_COLS = 10;
+  const INV_ROWS = 2;
+  groups.forEach(g=>{
+    const ig=$('invGrid-'+g); if(!ig) return;
+    ig.style.gridTemplateColumns = `repeat(${INV_COLS},26px)`;
+    ig.style.gridTemplateRows    = `repeat(${INV_ROWS},26px)`;
+    for(let r=0;r<INV_ROWS;r++) for(let c=0;c<INV_COLS;c++){
+      const s=document.createElement('div');
+      s.className='inv-slot'; s.dataset.col=c; s.dataset.row=r;
+      ig.appendChild(s);
+    }
+  });
+  layoutInventory();
+  renderBackpack();
+  renderAllInventory();
+  applyMaxManaFromSigils();
+});
+
 </script>
 </body>
 </html>
