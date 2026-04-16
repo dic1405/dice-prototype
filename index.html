@@ -1763,42 +1763,11 @@ const SIGIL_DEFS = {
   'deep-reservoir':  { id:'deep-reservoir',  name:'Bar on the Sea',   icon:'💧', effect:'+5 Max Mana',                       cls:'sigil-deep-reservoir',  w:2,h:1, group:'all' },
   'corsairs-cache':  { id:'corsairs-cache',  name:"Bart the Hoarder",  icon:'🗄️', effect:'+5 BD per Stack turn',               cls:'sigil-corsairs-cache',  w:1,h:1, group:'all' },
   'chain-shot':      { id:'chain-shot',      name:'Drake the Chain',       icon:'⛓️', effect:'+10 AD with pair of 🗡️ or ⚔️',      cls:'sigil-chain-shot',      w:1,h:1, group:'all' },
-  'safe-harbor':     { id:'safe-harbor',     name:'The Anchor',      icon:'⚓', effect:'+2 Mana if Strike with Steak < 3',   cls:'sigil-safe-harbor',     w:2,h:1, group:'all' },
+  'safe-harbor':     { id:'safe-harbor',     name:'The Anchor',      icon:'⚓', effect:'+2 Mana if Strike/Stack with Steak ≤ 3',   cls:'sigil-safe-harbor',     w:2,h:1, group:'all' },
   'trident-of-poseidon':{ id:'trident-of-poseidon', name:'Trident of Poseidon', icon:'🔱', effect:'+33 AD/triple always · Steak=3: Flux+33', cls:'sigil-trident', w:3,h:1, group:'all' },
   'powder-and-alcohol': { id:'powder-and-alcohol',  name:'Powder & Alcohol',    icon:'🍾', effect:'🗡️🗡️💧 or ⚔️⚔️💧 → scores as 💧💧💧 +20 AD · conflicts with Vance', cls:'sigil-powder-alcohol', w:1,h:2, group:'all' },
-  'the-doubloon':    { id:'the-doubloon',    name:'The Doubloon',     icon:'🪙', effect:'Die #1 always ⚔️ (gold) · Rare',    cls:'sigil-doubloon',        w:2,h:1, group:'all' },
   'silver-doubloon': { id:'silver-doubloon', name:'The Grapeshot',  icon:'🥈', effect:'Die #2: 🗡️🗡️🗡️💧⭐💥 (silver)',      cls:'sigil-silver-doubloon', w:1,h:1, group:'all' },
-  'the-cutlass':     { id:'the-cutlass',     name:'The Cutlass',      icon:'🗡️', effect:'Die #3: all 6 faces = 🗡️ Normal Attack', cls:'sigil-cutlass',         w:1,h:2, group:'all' },
   'efficiency':     { id:'efficiency',     name:'Vance the Versatile',      icon:'🎯', effect:'4/5/6 all-different = valid · each die scores individually',  cls:'sigil-scattershot',     w:3,h:1, group:'all' },
-  // ── Steak Snowball ──
-  'crimson-streak':  { id:'crimson-streak',  name:'Crimson Streak',   icon:'🩸', effect:'+4 BD per Steak!',                 cls:'sigil-steak',      w:1,h:1, group:'all' },
-  'devils-hand':     { id:'devils-hand',     name:"Devil's Hand",     icon:'🎲', effect:'Break: keep 50% Flux',             cls:'sigil-steak',      w:1,h:1, group:'all' },
-  'pressure-cooker': { id:'pressure-cooker', name:'Pressure Cooker',  icon:'🔥', effect:'+2 AD per Steak chain (max+10)',   cls:'sigil-steak',      w:1,h:1, group:'all' },
-  'steak-echo':      { id:'steak-echo',      name:'Steak Echo',       icon:'✨', effect:'On Steak!: 1 ⭐→Quad auto',        cls:'sigil-steak',      w:1,h:2, group:'all' },
-  'bloodlust':       { id:'bloodlust',       name:'Bloodlust',        icon:'💀', effect:'Flux scale skips 1 step',          cls:'sigil-steak-epic', w:2,h:1, group:'all' },
-  // ── Sextep Flux ──
-  'silver-lining':   { id:'silver-lining',   name:'Silver Lining',    icon:'🌟', effect:'Any Sextep: +1 Mana',              cls:'sigil-sextep',      w:1,h:1, group:'all' },
-  'quantum-dice':    { id:'quantum-dice',    name:'Quantum Dice',     icon:'🎯', effect:'1st Reroll/combat free (no Steak)', cls:'sigil-sextep',      w:1,h:1, group:'all' },
-  'star-chaser':     { id:'star-chaser',     name:'Star Chaser',      icon:'🌙', effect:'After Sextep⭐: Flux persists 1t', cls:'sigil-sextep',      w:1,h:1, group:'all' },
-  'stellar-cascade': { id:'stellar-cascade', name:'Stellar Cascade',  icon:'💫', effect:'Sextep⭐: +40 BD (combat)',        cls:'sigil-sextep',      w:1,h:2, group:'all' },
-  'event-horizon':   { id:'event-horizon',   name:'Event Horizon',    icon:'🌌', effect:'Strike+Sextep⭐: Flux→50% (cap×6)',cls:'sigil-sextep-epic', w:2,h:1, group:'all' },
-  // ── Shield Tank ──
-  'iron-hull':       { id:'iron-hull',       name:'Iron Hull',        icon:'⚓', effect:'Shield carry-over 60%/turn',       cls:'sigil-shield',      w:1,h:1, group:'all' },
-  'reactive-armor':  { id:'reactive-armor',  name:'Reactive Armor',   icon:'⚡', effect:'≥25 Shield: reflect 12% dmg',     cls:'sigil-shield',      w:1,h:1, group:'all' },
-  'bulwark':         { id:'bulwark',         name:'Bulwark',          icon:'🏰', effect:'All 🛡️ combos: +5 Shield',        cls:'sigil-shield',      w:1,h:1, group:'all' },
-  'storm-wall':      { id:'storm-wall',      name:'Storm Wall',       icon:'⛈️', effect:'Triple🛡️+: +1 Mana (max+2/t)',    cls:'sigil-shield',      w:1,h:2, group:'all' },
-  'living-aegis':    { id:'living-aegis',    name:'Living Aegis',     icon:'🌊', effect:'Strike+>60 Shield: +Shield dmg',  cls:'sigil-shield-epic', w:2,h:1, group:'all' },
-  // ── BD Ramp ──
-  'smoldering-fuse': { id:'smoldering-fuse', name:'Smoldering Fuse',  icon:'🕯️', effect:'+2 BD per 💥 single icon',        cls:'sigil-bd',     w:1,h:1, group:'all' },
-  'incendiary':      { id:'incendiary',      name:'Incendiary',       icon:'🔥', effect:'Stack+💥 combo: BD×2',            cls:'sigil-bd',     w:1,h:1, group:'all' },
-  'powder-keg':      { id:'powder-keg',      name:'Powder Keg',       icon:'🧨', effect:'BD→50% between enemies (cap 80)', cls:'sigil-bd',     w:1,h:1, group:'all' },
-  'chain-reaction':  { id:'chain-reaction',  name:'Chain Reaction',   icon:'⛓️', effect:'per 50 peak BD: +3 AD (max+12)',  cls:'sigil-bd',     w:1,h:2, group:'all' },
-  'detonator':       { id:'detonator',       name:'Detonator',        icon:'💣', effect:'BD>100 on Strike: +BD×0.5 hit',   cls:'sigil-bd-epic', w:2,h:1, group:'all' },
-  // ── Hybrid / Neutral ──
-  'navigators-eye':  { id:'navigators-eye',  name:"Navigator's Eye",  icon:'🔭', effect:'Reroll costs -1 MP (min 0)',       cls:'sigil-hybrid', w:1,h:1, group:'all' },
-  'desperate-measure':{ id:'desperate-measure',name:'Desperate Measure',icon:'🩹',effect:'HP≤30: combos +1 tier',          cls:'sigil-hybrid', w:1,h:1, group:'all' },
-  'blood-debt':      { id:'blood-debt',      name:'Blood Debt',       icon:'🩸', effect:'Per hit taken: +6 BD',             cls:'sigil-hybrid', w:1,h:1, group:'all' },
-  'black-flag':      { id:'black-flag',      name:'Black Flag',       icon:'🏴‍☠️',effect:'Steak!+BD>50: Flux+1 step',       cls:'sigil-hybrid', w:1,h:1, group:'all' },
 };
 
 // Inject CSS themes
