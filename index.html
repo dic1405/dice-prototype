@@ -142,8 +142,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .backpack-grid{
   position:relative;
   display:grid;
-  grid-template-columns:repeat(5,32px);
-  grid-template-rows:repeat(2,32px);
+  grid-template-columns:repeat(2,32px);
+  grid-template-rows:repeat(6,32px);
   gap:0;
   border-left:1px solid #c0c0c0;
   border-top:1px solid #c0c0c0;
@@ -614,17 +614,19 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <div class="backpack" id="backpackArea">
     <div class="backpack-label">Backpack</div>
     <div class="backpack-grid" id="backpackGrid">
-      <!-- 10 slots: 5 cols x 2 rows -->
-      <div class="bp-slot slot-open"  data-col="0" data-row="0"></div>
-      <div class="bp-slot slot-open"  data-col="1" data-row="0"></div>
-      <div class="bp-slot slot-open"  data-col="2" data-row="0"></div>
-      <div class="bp-slot slot-open"  data-col="3" data-row="0"></div>
-      <div class="bp-slot slot-open"  data-col="4" data-row="0"></div>
-      <div class="bp-slot slot-open"  data-col="0" data-row="1"></div>
-      <div class="bp-slot slot-open"  data-col="1" data-row="1"></div>
-      <div class="bp-slot slot-open"  data-col="2" data-row="1"></div>
-      <div class="bp-slot slot-open"  data-col="3" data-row="1"></div>
-      <div class="bp-slot slot-open"  data-col="4" data-row="1"></div>
+      <!-- 12 slots: 2 cols x 6 rows -->
+      <div class="bp-slot slot-open" data-col="0" data-row="0"></div>
+      <div class="bp-slot slot-open" data-col="1" data-row="0"></div>
+      <div class="bp-slot slot-open" data-col="0" data-row="1"></div>
+      <div class="bp-slot slot-open" data-col="1" data-row="1"></div>
+      <div class="bp-slot slot-open" data-col="0" data-row="2"></div>
+      <div class="bp-slot slot-open" data-col="1" data-row="2"></div>
+      <div class="bp-slot slot-open" data-col="0" data-row="3"></div>
+      <div class="bp-slot slot-open" data-col="1" data-row="3"></div>
+      <div class="bp-slot slot-open" data-col="0" data-row="4"></div>
+      <div class="bp-slot slot-open" data-col="1" data-row="4"></div>
+      <div class="bp-slot slot-open" data-col="0" data-row="5"></div>
+      <div class="bp-slot slot-open" data-col="1" data-row="5"></div>
     </div>
   </div>
 
@@ -783,40 +785,147 @@ const $=id=>document.getElementById(id);
 const rnd=()=>Math.floor(Math.random()*6);
 
 // ── SCORING ────────────────────────────────────────────────────
-function scoreGroup(arr){
+
+// Base single-group scorer (no PA logic)
+function scoreGroupBase(arr){
   if(!arr.length)return{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
   const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
   let ad=0,fluxG=0,manaG=0,shieldG=0,bdmgG=0;
   if(c[0]){const n=c[0];ad+=n===1?2:n===2?8:n===3?16:n===4?40:n===5?80:150;}
   if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?34:n===4?76:n===5?140:225;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
-    if(ic===2){// 💧 Mana: 0 AD — mana only
-    manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
-    // Shield rebalanced: pair=13, triple=30, quad=55, quint=100, sextep=160
+    if(ic===2){manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
     else if(ic===3){shieldG+=n===2?13:n===3?30:n===4?55:n===5?100:160;}
-    else if(ic===4){// ⭐ Flux die: 0 AD, pure Flux multiplier only
-    if(n>=2)fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
-    else if(ic===5){// 💥 BD: 0 AD — BD slightly increased to compensate
-    bdmgG+=n===2?5:n===3?25:n===4?50:n===5?90:155;}
+    else if(ic===4){fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
+    else if(ic===5){bdmgG+=n===2?5:n===3?25:n===4?50:n===5?90:155;}
+  });
+  return{ad,fluxG,manaG,shieldG,bdmgG};
+}
+
+// Check if a dice array can be fully scored (no stranded dice) with standard rules only
+function isFullyCoveredStandard(arr){
+  const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
+  // Every die must either be attack (0 or 1) or part of a pair+
+  for(const [k,n] of Object.entries(c)){
+    const ic=+k;
+    if(ic===0||ic===1) continue; // attacks always valid (single ok)
+    if(n<2) return false; // stranded utility die
+  }
+  return true;
+}
+
+// P&A Multiset Partition Engine
+// Implements the 4 rules from the design doc
+function scoreGroupPA(arr){
+  const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
+
+  // Helper: sum two score objects
+  const addS=(a,b)=>({ad:a.ad+b.ad,fluxG:a.fluxG+b.fluxG,manaG:a.manaG+b.manaG,shieldG:a.shieldG+b.shieldG,bdmgG:a.bdmgG+b.bdmgG});
+
+  // P&A bonus for one activation: triple mana equivalent + 20 AD
+  const PA_SCORE={ad:20,fluxG:0,manaG:3,shieldG:0,bdmgG:0,paCount:1};
+
+  // Find all valid partitions (arrays of scored segments)
+  // Returns list of {score, stranded, paCount}
+  function findPartitions(counts, depth=0){
+    // counts is {0:n, 1:m, 2:k, ...}
+    const total=Object.values(counts).reduce((a,b)=>a+b,0);
+    if(total===0) return [{score:{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0},stranded:0,paCount:0}];
+    if(depth>10) return [];
+
+    const results=[];
+
+    // Option A: try PA patterns (🗡️🗡️💧 or ⚔️⚔️💧)
+    for(const atk of [0,1]){
+      if((counts[atk]||0)>=2 && (counts[2]||0)>=1){
+        const rem={...counts};
+        rem[atk]-=2; if(rem[atk]===0) delete rem[atk];
+        rem[2]-=1;   if(rem[2]===0)   delete rem[2];
+        const subs=findPartitions(rem,depth+1);
+        for(const sub of subs){
+          results.push({
+            score:addS(PA_SCORE,sub.score),
+            stranded:sub.stranded,
+            paCount:(sub.paCount||0)+1
+          });
+        }
+      }
+    }
+
+    // Option B: standard scoring — score the largest combos of each type
+    // Try consuming all of each icon as a standard combo
+    let stdScore={ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
+    let stdStranded=0;
+    const remStd={...counts};
+    for(const [k,n] of Object.entries(remStd)){
+      const ic=+k;
+      if(ic===0||ic===1){
+        // attacks: always valid, consume all
+        const s=scoreGroupBase(Array(n).fill(ic));
+        stdScore=addS(stdScore,s);
+      } else {
+        // utility: need pair+, singles are stranded
+        if(n>=2){
+          const s=scoreGroupBase(Array(n).fill(ic));
+          stdScore=addS(stdScore,s);
+        } else {
+          stdStranded+=n;
+        }
+      }
+    }
+    results.push({score:stdScore,stranded:stdStranded,paCount:0});
+
+    return results;
+  }
+
+  const partitions=findPartitions(c);
+
+  // Rule 0 + Rule 1: filter to zero-stranded first, then by AD
+  const noStranded=partitions.filter(p=>p.stranded===0);
+
+  if(noStranded.length===0){
+    return scoreGroupBase(arr);
+  }
+
+  // Rule 3: among zero-stranded partitions, highest AD wins
+  // Special k=6 rules from design doc:
+  // - ⚔️⚔️⚔️⚔️💧💧: Quad⚔️ standard (76 AD) >> P&A×2 (40 AD) → Standard wins
+  // - 🗡️🗡️🗡️⚔️💧💧 / 🗡️⚔️⚔️⚔️💧💧: Standard only (💧 stranded after P&A)
+  // - ⚔️⚔️⚔️💧💧💧: Triple⚔️+Triple💧 (34 AD+3M) > P&A (24 AD+4M) → Standard wins
+  // These are handled automatically by highest-AD selection since scoreGroupBase
+  // gives the correct standard scores
+
+  noStranded.sort((a,b)=>{
+    // Primary: highest AD
+    if(b.score.ad!==a.score.ad) return b.score.ad-a.score.ad;
+    // Secondary: highest mana (PA wins ties on mana)
+    return b.score.manaG-a.score.manaG;
+  });
+  const best=noStranded[0];
+  return{...best.score,_paCount:best.paCount||0};
+}
+
+function scoreGroup(arr){
+  if(!arr.length)return{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
+  if(hasSigil('powder-and-alcohol')){
+    return scoreGroupPA(arr);
+  }
+  const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);
+  let ad=0,fluxG=0,manaG=0,shieldG=0,bdmgG=0;
+  if(c[0]){const n=c[0];ad+=n===1?2:n===2?8:n===3?16:n===4?40:n===5?80:150;}
+  if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?34:n===4?76:n===5?140:225;}
+  [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
+    if(ic===2){manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
+    else if(ic===3){shieldG+=n===2?13:n===3?30:n===4?55:n===5?100:160;}
+    else if(ic===4){fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
+    else if(ic===5){bdmgG+=n===2?5:n===3?25:n===4?50:n===5?90:155;}
   });
   const allDiff=hasSigil('efficiency')&&!Object.values(c).some(v=>v>1);
-  // Powder & Alcohol: 🗡️🗡️💧 or ⚔️⚔️💧 → scores as 💧💧💧 +20 AD
-  if(hasSigil('powder-and-alcohol')&&!allDiff){
-    const hasPA=(c[0]>=2&&c[2]>=1)||(c[1]>=2&&c[2]>=1);
-    if(hasPA){
-      // Override: score as triple mana + 20 AD bonus, ignore attack scoring from this group
-      const manaTriple=scoreGroup([2,2,2]);
-      return{ad:20,fluxG:0,manaG:manaTriple.manaG,shieldG:0,bdmgG:0,powderAlcohol:true};
-    }
-  }
   if(allDiff){
-    // Each die contributes its individual natural value — no flat bonus
-    // Attack dice already scored above (single 🗡️=2, single ⚔️=4)
-    // Utility dice get small single-die contributions
-    if(c[2])manaG+=1;          // single 💧 → 1 mana
-    if(c[3])shieldG+=6;        // single 🛡️ → 6 shield
-    if(c[4])fluxG+=0.3;        // single ⭐ → 0.3 flux
-    if(c[5])bdmgG+=3;          // single 💥 → 3 BD
+    if(c[2])manaG+=1;
+    if(c[3])shieldG+=6;
+    if(c[4])fluxG+=0.3;
+    if(c[5])bdmgG+=3;
   }
   return{ad,fluxG,manaG,shieldG,bdmgG};
 }
@@ -852,9 +961,14 @@ function analyze(){
   }
   const vs=new Set();if(c[0])vs.add(0);if(c[1])vs.add(1);
   [2,3,4,5].forEach(ic=>{if((c[ic]||0)>=2)vs.add(ic);});
-  // Powder & Alcohol: 🗡️🗡️💧 or ⚔️⚔️💧 → 💧 is also valid
+  // Powder & Alcohol multiset: any dice that participates in a zero-stranded partition is valid
   if(hasSigil('powder-and-alcohol')){
-    if((c[0]>=2||c[1]>=2)&&c[2]>=1) vs.add(2);
+    // 💧 is valid if there's ≥2 of same attack type alongside it
+    if(c[2]>=1&&((c[0]>=2)||(c[1]>=2))) vs.add(2);
+    // Extra attacks valid if they can pair with remaining attacks after PA
+    // e.g. 🗡️🗡️🗡️💧: PA uses 🗡️🗡️💧, remaining 🗡️ is single attack → valid
+    if(c[0]>=2&&c[2]>=1) vs.add(0);
+    if(c[1]>=2&&c[2]>=1) vs.add(1);
   }
   const vi=si.filter(i=>vs.has(G.dice[i])),ii=si.filter(i=>!vs.has(G.dice[i]));
   return{vi,ii,hasCombo:vi.length>0,hasInvalid:ii.length>0};
@@ -929,7 +1043,18 @@ function makeAnim(steak=false){
   }
   return w;
 }
-function makeChip(idx){const ch=document.createElement('div');ch.className='gchip';ch.appendChild(mkIconImg(idx,'10px'));return ch;}
+function makeChip(idx){
+  const ch=document.createElement('div');ch.className='gchip';
+  if(idx===6){
+    // Special: P&A output mana — 🍾 emoji chip
+    const sp=document.createElement('span');sp.textContent='🍾';sp.style.cssText='font-size:10px;line-height:1;';
+    ch.appendChild(sp);
+    ch.style.background='#e0f7ff';ch.style.border='1px solid #60c0e0';
+  } else {
+    ch.appendChild(mkIconImg(idx,'10px'));
+  }
+  return ch;
+}
 
 // Ensure dice-zone is always visible (idempotent - safe to call anytime)
 function ensureDiceZoneVisible(){
@@ -989,8 +1114,8 @@ function renderGroups(newSteakIdx=-1){
         const isDmg=ic===0||ic===1||ic===4||ic===5;
         const isMana=ic===2;
         const isShield=ic===3;
-        // PA pushrow: show converted icon (💧) directly — no animation, live preview
-        const displayIc=(isPA&&cls==='pushrow'&&(ic===0||ic===1))?2:ic;
+        // PA pushrow: show converted icon (🍾) directly — no animation, live preview
+        const displayIc=(isPA&&cls==='pushrow'&&(ic===0||ic===1))?6:ic;
         const show=(isPA&&(isDmg||isMana))
           ||(cls==='selbox'&&(isDmg||isMana||isShield))
           ||(cls==='pushrow'&&!isPA&&(isDmg||isMana||isShield))
@@ -1009,9 +1134,11 @@ function renderGroups(newSteakIdx=-1){
       content.querySelectorAll('.gchip.pa-morphing').forEach(chip=>{
         chip.addEventListener('animationend',()=>{
           chip.innerHTML='';
-          chip.appendChild(mkIconImg(2,'10px'));
+          const sp=document.createElement('span');sp.textContent='🍾';sp.style.cssText='font-size:10px;line-height:1;';
+          chip.appendChild(sp);
+          chip.style.background='#e0f7ff';chip.style.border='1px solid #60c0e0';
           chip.classList.remove('pa-morphing');
-          chip.style.animation='none'; // hold final state
+          chip.style.animation='none';
         },{once:true});
       });
     }
@@ -1049,23 +1176,78 @@ function renderGroups(newSteakIdx=-1){
         }
       });
 
-      iconGroups.forEach((grp,gi)=>{
-        // Comma between groups (not within)
-        if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-        for(let k=0;k<grp.count;k++) content.appendChild(makeChip(grp.icon));
-      });
-      // Cannonade dice (icon 0) — merge into existing group if last group is also icon 0
-      for(let _i=0;_i<G.cannonadeDice;_i++){
-        const lastGrp=iconGroups[iconGroups.length-1];
-        if(lastGrp&&lastGrp.icon===0){
-          // No comma — extend existing Normal Attack group
-          content.appendChild(makeChip(0));
+      // PA detection for selbox: check if selected dice form a PA combo
+      const isPASel=hasSigil('powder-and-alcohol')&&!hasInvalid&&(()=>{
+        const c={};rawSelected.forEach(d=>c[d]=(c[d]||0)+1);
+        return (c[0]>=2&&c[2]>=1)||(c[1]>=2&&c[2]>=1);
+      })();
+
+      if(isPASel){
+        // Use scoreGroupPA's partition engine to get exact PA decisions
+        // Reconstruct which dice were consumed by PA vs remaining
+        const scored=scoreGroupPA(rawSelected);
+        const paCount=scored._paCount||0;
+
+        if(paCount===0){
+          // No PA triggered — render standard
+          iconGroups.forEach((grp,gi)=>{
+            if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+            for(let k=0;k<grp.count;k++) content.appendChild(makeChip(grp.icon));
+          });
         } else {
-          // New group — add comma separator
-          if(iconGroups.length>0||allSelected.length>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-          content.appendChild(makeChip(0));
+          // Simulate same greedy PA consumption as scoreGroupPA does
+          const rem={};rawSelected.forEach(d=>rem[d]=(rem[d]||0)+1);
+
+          for(let p=0;p<paCount;p++){
+            if(p>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+            // Match scoreGroupPA: try ⚔️⚔️💧 first, then 🗡️🗡️💧
+            // scoreGroupPA tries both and picks highest AD — for display match:
+            // prefer whichever type has >= 2 and exists; if both, use the one that
+            // leaves a better remaining (matches highest-AD partition)
+            let atkType=-1;
+            if((rem[1]||0)>=2&&(rem[2]||0)>=1) atkType=1;
+            if((rem[0]||0)>=2&&(rem[2]||0)>=1 && (atkType===-1||(rem[0]||0)>(rem[1]||0))) atkType=0;
+            if(atkType===-1) break;
+
+            rem[atkType]-=2;if(rem[atkType]===0)delete rem[atkType];
+            rem[2]-=1;if(rem[2]===0)delete rem[2];
+            for(let i=0;i<3;i++) content.appendChild(makeChip(6));
+          }
+
+          // Remaining dice
+          const remDice=[];
+          for(const [k,n] of Object.entries(rem)){
+            if(n>0) for(let i=0;i<n;i++) remDice.push(+k);
+          }
+          if(remDice.length>0){
+            const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);
+            const remGroups={};remDice.forEach(d=>remGroups[d]=(remGroups[d]||0)+1);
+            let first=true;
+            for(const [k,n] of Object.entries(remGroups)){
+              if(!first){const cm2=document.createElement('div');cm2.className='gcomma';cm2.textContent=',';content.appendChild(cm2);}
+              for(let i=0;i<n;i++) content.appendChild(makeChip(+k));
+              first=false;
+            }
+          }
         }
-        iconGroups.push({icon:0,count:1}); // track for subsequent cannonade dice
+        box.classList.add('pa-converted');
+      } else {
+        // Standard selbox rendering with icon groups + commas
+        iconGroups.forEach((grp,gi)=>{
+          if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+          for(let k=0;k<grp.count;k++) content.appendChild(makeChip(grp.icon));
+        });
+        // Cannonade dice
+        for(let _i=0;_i<G.cannonadeDice;_i++){
+          const lastGrp=iconGroups[iconGroups.length-1];
+          if(lastGrp&&lastGrp.icon===0){
+            content.appendChild(makeChip(0));
+          } else {
+            if(iconGroups.length>0||allSelected.length>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
+            content.appendChild(makeChip(0));
+          }
+          iconGroups.push({icon:0,count:1});
+        }
       }
       const sc=document.createElement('div');sc.className='gbox-score';
       // Score: only this selection's own dice — NOT push luck or steak contributions
@@ -1234,11 +1416,6 @@ function doBreak(){
 function getFirstRoll(){
   const isFirstRoll=G.steakBoxes.length===0&&G.currentGroups.length===0;
   if(!isFirstRoll) return Array.from({length:6},rnd);
-
-  // DEBUG: P&A test — first roll of each turn gives ⚔️⚔️💧💧💧💧
-  if(hasSigil('powder-and-alcohol')){
-    return [1,1,2,2,2,2]; // ⚔️⚔️💧💧💧💧
-  }
 
   // Rule 03: near-win tension
   const enemyHpPct=G.eHp/G.eMaxHp;
@@ -1752,8 +1929,8 @@ doRestart();
 
 const BP_SLOT  = 32;
 const INV_SLOT = 52;
-const GRID_COLS = 5;
-const GRID_ROWS = 2;
+const GRID_COLS = 2;
+const GRID_ROWS = 6;
 
 // All sigil definitions. group = which inventory section.
 // Only sigils in backpack (placedSigils) affect combat.
@@ -1767,7 +1944,7 @@ const SIGIL_DEFS = {
   'trident-of-poseidon':{ id:'trident-of-poseidon', name:'Trident of Poseidon', icon:'🔱', effect:'+33 AD/triple always · Steak=3: Flux+33', cls:'sigil-trident', w:3,h:1, group:'all' },
   'powder-and-alcohol': { id:'powder-and-alcohol',  name:'Powder & Alcohol',    icon:'🍾', effect:'🗡️🗡️💧 or ⚔️⚔️💧 → scores as 💧💧💧 +20 AD · conflicts with Vance', cls:'sigil-powder-alcohol', w:1,h:2, group:'all' },
   'silver-doubloon': { id:'silver-doubloon', name:'The Grapeshot',  icon:'🥈', effect:'Die #2: 🗡️🗡️🗡️💧⭐💥 (silver)',      cls:'sigil-silver-doubloon', w:1,h:1, group:'all' },
-  'efficiency':     { id:'efficiency',     name:'Vance the Versatile',      icon:'🎯', effect:'4/5/6 all-different = valid · each die scores individually',  cls:'sigil-scattershot',     w:3,h:1, group:'all' },
+  'efficiency':     { id:'efficiency',     name:'Vance the Versatile',      icon:'🎯', effect:'4/5/6 all-different = valid · each die scores individually',  cls:'sigil-scattershot',     w:2,h:2, group:'all' },
 };
 
 // Inject CSS themes
@@ -1860,10 +2037,18 @@ function applyPAConvert(groups){
   if(!hasSigil('powder-and-alcohol')) return groups;
   return groups.map(g=>{
     const c={};g.dice.forEach(d=>c[d]=(c[d]||0)+1);
-    const isPA=(c[0]>=2&&c[2]>=1)||(c[1]>=2&&c[2]>=1);
-    if(!isPA) return g;
-    // Replace the whole group with [💧💧💧]
-    return {dice:[2,2,2],_paConverted:true};
+    const hasPA0=(c[0]>=2&&c[2]>=1);
+    const hasPA1=(c[1]>=2&&c[2]>=1);
+    if(!hasPA0&&!hasPA1) return g;
+    // Convert: replace attack pair + 1 mana with 🍾🍾🍾 (icon 6)
+    const atkType=hasPA1&&(!hasPA0||(c[1]>=c[0]))?1:0;
+    const converted=[...g.dice];
+    let atkReplaced=0;
+    for(let i=0;i<converted.length;i++){
+      if(converted[i]===atkType&&atkReplaced<2){converted[i]=6;atkReplaced++;}
+      else if(converted[i]===2&&atkReplaced===2){converted[i]=6;break;}
+    }
+    return{dice:converted,_paConverted:true};
   });
 }
 
