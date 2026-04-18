@@ -778,7 +778,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   </div>
 
   <!-- FTUE button highlight overlay -->
-  <div id="ftueOverlay" style="display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.65);pointer-events:all;"></div>
+  <div id="ftueOverlay" style="display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.65);pointer-events:none;"></div>
   <div id="ftueHighlight" style="display:none;position:fixed;z-index:151;pointer-events:none;border-radius:12px;transition:all 0.2s ease;"></div>
 
 
@@ -3059,11 +3059,10 @@ function ftRunBeat(beat) {
 function ftOnRoll() {
   if (!FTUE.active) return;
   if (FTUE.beat === 'beat1') {
-    // First roll → set beat 2 forced dice
+    ftClearPulse('btnLeft');
     FTUE.nextForcedDice = FTUE.DICE_BEATS['beat2'];
     ftAdvance('beat2_1');
   } else if (FTUE.beat === 'beat2_4') {
-    // Second roll → set beat 3 forced dice
     FTUE.nextForcedDice = FTUE.DICE_BEATS['beat3'];
     ftClearPulse('btnLeft');ftClearPulse('btnPushLuck');
     ftAdvance('beat3_1');
