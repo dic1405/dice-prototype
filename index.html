@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1100, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Dice — Sigil v2</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
 body{height:100%;overflow:hidden;display:flex;justify-content:center;align-items:stretch;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.app-wrap{display:flex;flex-direction:row;height:100dvh;align-items:stretch;}
-.phone{background:#f8f8f8;width:430px;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.app-wrap{display:flex;flex-direction:row;height:100dvh;align-items:stretch;justify-content:center;}
+.phone{background:#f8f8f8;width:100%;max-width:430px;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;padding-top:env(safe-area-inset-top);}
 button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
@@ -319,6 +319,15 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .ftue-bubble.hidden{opacity:0;pointer-events:none;}
 .ftue-bubble .ft-b{color:#4db8ff;font-weight:800;}  /* blue = do it */
 .ftue-bubble .ft-r{color:#ff5555;font-weight:800;}  /* red = warning */
+.ftue-bubble .ft-tap{
+  display:block;margin-top:6px;font-size:10px;font-weight:500;
+  color:rgba(255,255,255,0.55);letter-spacing:0.5px;
+  animation:tap-pulse 1.4s ease-in-out infinite;
+}
+@keyframes tap-pulse{
+  0%,100%{opacity:0.45;}
+  50%{opacity:1;}
+}
 .die.ftue-dim{opacity:0.25!important;transition:opacity 0.2s ease;}
 .die.ftue-bright{opacity:1!important;transition:opacity 0.2s ease;}
 /* ─────────────────────────────────────────────────────── */
@@ -417,7 +426,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .gbox.selbox .gbox-score{color:#888}
 
 /* ── BOTTOM — action area only ── */
-.bottom{background:#fff;padding:5px 12px 20px;border-top:1px solid #eee;flex-shrink:0}
+.bottom{background:#fff;padding:5px 12px;padding-bottom:max(20px,env(safe-area-inset-bottom));border-top:1px solid #eee;flex-shrink:0}
 .bb{display:flex;flex-direction:column;gap:0}
 .hbtn{width:20px;height:20px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 /* ── PLAYER STAT ROW — bottom, HP left / MP right ── */
@@ -856,7 +865,7 @@ const FTUE = {
   _started: false,
   beat: 'init',
   DICE_BEATS: {
-    'beat2': [0, 2, 3, 3, 5, 4],
+    'beat2': [0, 2, 5, 5, 3, 4],
     'beat3': [0, 1, 2, 4, 5, 3],
     'beat3_reroll': [5, 5, 4, 4],
     'beat3_steak': [1, 1, 1, 3, 2, 4],
@@ -2233,7 +2242,7 @@ const ENEMIES_OFFICIAL=[
 ];
 
 // ── ACTIVE: FTUE enemy + official list ──
-const FTUE_ENEMY={name:'Rusty Cutlass · Act 1', icon:'⚓', hp:70, dmg:5};
+const FTUE_ENEMY={name:'Rusty Cutlass · Act 1', icon:'⚓', hp:200, dmg:5};
 const ENEMIES=[FTUE_ENEMY, ...ENEMIES_OFFICIAL.slice(1)];
 
 function setEnemy(idx){
@@ -2787,6 +2796,12 @@ function ftBubble(html) {
 function ftBubbleHide(instant=false) {
   const el = document.getElementById('ftueBubble');
   if (!el) return;
+  // Remove any pending tap-to-continue listener
+  if (FTUE._tapHandler) {
+    document.removeEventListener('click', FTUE._tapHandler, true);
+    document.removeEventListener('touchstart', FTUE._tapHandler, true);
+    FTUE._tapHandler = null;
+  }
   if (instant) {
     el.style.transition = 'none';
     el.style.opacity = '0';
@@ -2795,6 +2810,39 @@ function ftBubbleHide(instant=false) {
     el.style.opacity = '0';
   }
   setTimeout(() => { el.classList.add('hidden'); }, instant ? 0 : 250);
+}
+
+// Show bubble with "tap anywhere to continue" hint. When user taps
+// (anywhere on screen), runs the callback. Listener auto-removes.
+function ftBubbleTap(html, onTap) {
+  const el = document.getElementById('ftueBubble');
+  if (!el) return;
+  // Clean up any prior tap handler first
+  if (FTUE._tapHandler) {
+    document.removeEventListener('click', FTUE._tapHandler, true);
+    document.removeEventListener('touchstart', FTUE._tapHandler, true);
+    FTUE._tapHandler = null;
+  }
+  // Clear any button highlight — TAP TO CONTINUE means tap anywhere, no specific button
+  ftHighlightClear();
+  el.innerHTML = html + '<span class="ft-tap">tap anywhere to continue</span>';
+  el.className = 'ftue-bubble';
+  el.style.transition = 'opacity 0.25s ease';
+  el.style.opacity = '1';
+
+  // Attach one-time listener (delayed slightly so the tap that triggered
+  // the previous beat doesn't immediately fire this one)
+  setTimeout(() => {
+    const handler = (e) => {
+      document.removeEventListener('click', handler, true);
+      document.removeEventListener('touchstart', handler, true);
+      FTUE._tapHandler = null;
+      if (typeof onTap === 'function') onTap();
+    };
+    FTUE._tapHandler = handler;
+    document.addEventListener('click', handler, true);
+    document.addEventListener('touchstart', handler, true);
+  }, 350);
 }
 
 // ── Dim effect ───────────────────────────────────────────────
@@ -2899,7 +2947,7 @@ function ftRunBeat(beat) {
 
     case 'beat2_2':
       ftApplyDim([0, 2, 3]);
-      ftBubble(`Other dice need ${R('at least a pair')}. ${B('Select the Shields!')}`);
+      ftBubble(`Other dice need ${R('at least a pair')}. ${B('Select the Cannonballs!')}`);
       break;
 
     case 'beat2_3':
@@ -2911,12 +2959,14 @@ function ftRunBeat(beat) {
 
     case 'beat2_4':
       setTimeout(() => {
-        ftBubble(`You hit the enemy — and they ${R('hit back!')} Watch your ${R('HP')}.`);
-        setTimeout(() => {
-          ftBubble(`You can hit ${B('much harder')}. Tap ${B('ROLL')}.`);
-          ftAllow('roll');
-          ftPulse('btnLeft');
-        }, 2500);
+        ftBubbleTap(
+          `You hit the enemy — and they ${R('hit back!')} Watch your ${R('HP')}.`,
+          () => {
+            ftBubble(`You can hit ${B('much harder')}. Tap ${B('ROLL')}.`);
+            ftAllow('roll');
+            ftPulse('btnLeft');
+          }
+        );
       }, 500);
       break;
 
@@ -2924,7 +2974,7 @@ function ftRunBeat(beat) {
       ftBlock('roll','push','strike');
       setTimeout(() => {
         ftApplyDim([0, 1]);
-        ftBubble(`${B('Select both Cannons!')}`);
+        ftBubble(`${B('Select the Cannon and the Big Cannon!')}`);
       }, 600);
       break;
 
@@ -2949,34 +2999,42 @@ function ftRunBeat(beat) {
 
     case 'beat3_4':
       setTimeout(() => {
-        ftBubble(`${B('STEAK!')} Locking all 6 dice powers up your next Strike. ${B('More Steaks = more power.')}`);
-        setTimeout(() => { ftAdvance('beat3_5'); }, 3000);
+        ftBubbleTap(
+          `${B('STEAK!')} Locking all 6 dice powers up your next Strike. ${B('More Steaks = more power.')}`,
+          () => { ftAdvance('beat3_5'); }
+        );
       }, 500);
       break;
 
     case 'beat3_5':
       ftApplyDim([0, 1, 2]);
-      ftBubble(`Now finish with a ${B('Triple!')} Select the three swords.`);
+      ftBubble(`Now finish with a ${B('Triple Big Cannon!')} Select all three.`);
       ftBlock('push');
       ftAllow('strike');
       break;
 
     case 'beat3_6':
       setTimeout(() => {
-        ftBubble(`${B('Push Luck')} makes your Strikes ${B('much stronger!')} `);
-        setTimeout(() => ftAdvance('beat4'), 2500);
+        ftBubbleTap(
+          `${B('Push Luck')} makes your Strikes ${B('much stronger!')} `,
+          () => ftAdvance('beat4')
+        );
       }, 500);
       break;
 
     case 'beat4':
-      ftBubble(`But be careful — if you ${R("can't form any combo")} after Push Luck, you ${R('BREAK')} and lose everything that turn.`);
-      setTimeout(() => {
-        ftBubble(`${R('No Cannon, no pair = BREAK.')} The risk is yours.`);
-        setTimeout(() => {
-          ftBubbleHide();
-          setTimeout(() => ftAdvance('beat5'), 300);
-        }, 2500);
-      }, 3500);
+      ftBubbleTap(
+        `But be careful — if you ${R("can't form any combo")} after Push Luck, you ${R('BREAK')} and lose everything that turn.`,
+        () => {
+          ftBubbleTap(
+            `${R('No Cannon, no pair = BREAK.')} The risk is yours.`,
+            () => {
+              ftBubbleHide();
+              setTimeout(() => ftAdvance('beat5'), 300);
+            }
+          );
+        }
+      );
       break;
 
     case 'beat5':
@@ -3128,11 +3186,13 @@ function ftOnRerollComplete() {
 function ftOnVictory() {
   if (!FTUE.active) return;
   if (FTUE.beat !== 'done') {
-    ftBubble(`${B("Broadside won!")} You're learning fast, Captain.`);
-    setTimeout(() => {
-      ftBubbleHide();
-      ftAdvance('done');
-    }, 3000);
+    ftBubbleTap(
+      `${B("Broadside won!")} You're learning fast, Captain.`,
+      () => {
+        ftBubbleHide();
+        ftAdvance('done');
+      }
+    );
   }
 }
 
