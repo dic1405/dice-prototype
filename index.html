@@ -129,21 +129,20 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   width:100%;flex-shrink:0;
   background:#e4e4e4;
   border-bottom:1.5px solid #c8c8c8;
-  padding:3px 0 0;
-  display:flex;align-items:flex-start;justify-content:center;gap:0;
+  padding:4px 4px;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
 }
 .backpack-label{
   font-size:6px;font-weight:700;color:#bbb;
   text-transform:uppercase;letter-spacing:.6px;
-  writing-mode:vertical-rl;
-  padding:2px 3px 2px 4px;line-height:1;
-  flex-shrink:0;align-self:center;
+  padding:2px 4px;line-height:1;
+  flex-shrink:0;align-self:flex-start;
 }
 .backpack-grid{
   position:relative;
   display:grid;
-  grid-template-columns:repeat(2,32px);
-  grid-template-rows:repeat(6,32px);
+  grid-template-columns:repeat(6,32px);
+  grid-template-rows:repeat(2,32px);
   gap:0;
   border-left:1px solid #c0c0c0;
   border-top:1px solid #c0c0c0;
@@ -204,7 +203,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .bp-sigil.sigil-trident{background:linear-gradient(135deg,#e8eeff,#a0b8ff);border:2px solid #3050d0;color:#0a1880;}
 .bp-sigil.sigil-powder-alcohol{background:linear-gradient(135deg,#fff0e8,#ffb87a);border:1.5px solid #c06010;color:#5a2000;}
 .gbox.pa-converted{border-color:#c06010 !important;background:#fff8f0 !important;}
-.gbox.pa-converted .gbox-lbl::after{content:' 🍾';}
+.gbox.pa-converted:not(.selbox) .gbox-lbl::after{content:' 🍾';}
 @keyframes pa-flip{0%{opacity:1;transform:scale(1)}40%{opacity:0;transform:scale(0.5)}100%{opacity:1;transform:scale(1)}}
 .gchip.pa-morphing{animation:pa-flip 0.5s ease forwards;}
 
@@ -214,16 +213,31 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .bp-sigil.sigil-scattershot{background:linear-gradient(135deg,#e8f8ee,#b8e8cc);border:1.5px solid #27ae60;color:#0a4a20;}
 .bp-sigil.sigil-silver-doubloon{background:linear-gradient(135deg,#f0f4f8,#d0dce8);border:1.5px solid #7a9ab0;color:#2a4a60;}
 .bp-sigil.sigil-cutlass{background:linear-gradient(135deg,#f8ece8,#e8c4b8);border:1.5px solid #a04030;color:#4a1000;}
+.bp-sigil.sigil-marksman{background:linear-gradient(135deg,#eaf4ff,#b8d8f8);border:1.5px solid #1a6aaf;color:#0a2860;}
+.bp-sigil.sigil-odd-one{background:linear-gradient(135deg,#f8eeff,#d8b8f8);border:1.5px solid #8030c0;color:#3a0070;}
+.bp-sigil.sigil-flint-loader{background:linear-gradient(135deg,#fff0e0,#f8c880);border:1.5px solid #b06010;color:#502000;}
+.bp-sigil.sigil-pair-anchor{background:linear-gradient(135deg,#e8f0f8,#c0d4e8);border:1.5px solid #3060a0;color:#102040;}
+.bp-sigil.sigil-endless-horizon{background:linear-gradient(135deg,#e0f8f0,#80d8b0);border:1.5px solid #1a8a60;color:#004030;}
+.bp-sigil.sigil-abyss-contract{background:linear-gradient(135deg,#1a0a2e,#4a1a6e);border:2px solid #9040d0;color:#e0b0ff;box-shadow:0 0 8px rgba(144,64,208,.3);}
+.bp-sigil.sigil-lila-waitress{background:linear-gradient(135deg,#e0f0ff,#90c8f8);border:1.5px solid #1060c0;color:#002060;}
+.bp-sigil.sigil-mana-tide{background:linear-gradient(135deg,#e0f8ff,#60d0f0);border:1.5px solid #0088bb;color:#003a55;}
+.bp-sigil.sigil-admiral-voss{background:linear-gradient(135deg,#e8f0ff,#8090d8);border:1.5px solid #2030a0;color:#0a1060;}
 .die.cutlass{background:#fff0ee!important;}
 
 /* ── INVENTORY PANEL ── */
-.inv-panel{width:560px;flex-shrink:0;height:100dvh;background:#1e2235;border-left:2px solid #2d3455;display:flex;flex-direction:column;overflow:hidden;}
+.inv-panel{display:none!important;/*FTUE:hidden*/width:560px;flex-shrink:0;height:100dvh;background:#1e2235;border-left:2px solid #2d3455;display:flex;flex-direction:column;overflow:hidden;}
 .inv-header{padding:10px 14px 6px;flex-shrink:0;border-bottom:1px solid #2d3455;}
 .inv-title{font-size:11px;font-weight:700;color:#7b8ab8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;}
 .inv-subtitle{font-size:9px;color:#4a5580;margin-bottom:4px;}
 .inv-section-label{font-size:8px;font-weight:700;color:#5a6890;text-transform:uppercase;letter-spacing:.5px;padding:6px 0 3px;}
 .inv-scroll{flex:1;overflow-y:auto;padding:8px 14px 14px;}
-.inv-grid{position:relative;display:grid;grid-template-columns:repeat(10,52px);grid-template-rows:repeat(10,52px);gap:0;border-left:1px solid #2d3455;border-top:1px solid #2d3455;background:#181c2e;}
+.inv-grid{position:relative;display:grid;grid-template-columns:repeat(8,52px);grid-template-rows:repeat(4,52px);gap:0;border-left:1px solid #2d3455;border-top:1px solid #2d3455;background:#181c2e;}
+.inv-section{margin-bottom:10px;}
+.inv-section-label{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 6px;border-radius:4px 4px 0 0;display:inline-block;margin-bottom:0;}
+.inv-label-common{background:#3a3a3a;color:#ccc;}
+.inv-label-uncommon{background:#1a3a6a;color:#7ab8ff;}
+.inv-label-rare{background:#4a3a00;color:#ffc840;}
+.inv-label-tbd{background:#2a2a2a;color:#888;}
 .inv-slot{width:52px;height:52px;background:#1a1e30;border-right:1px solid #252a3e;border-bottom:1px solid #252a3e;position:relative;}
 .inv-slot.drag-over{background:#1e3a1e!important;outline:1.5px dashed #27ae60;}
 .inv-slot.drag-invalid{background:#3a1e1e!important;}
@@ -265,23 +279,49 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   100%{transform:scale(1);box-shadow:none}
 }
 .formula-bar.flashing{animation:fb-flash .55s cubic-bezier(.34,1.56,.64,1) forwards}
-.formula-bar{
-  width:100%;max-width:320px;
-  margin:0 auto;
-  display:flex;gap:6px;align-items:stretch;
+.formula-bar-wrap{width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.steak-indicator{
+  font-size:9px;letter-spacing:0;min-height:12px;
+  color:#e8a020;font-weight:700;text-align:center;
+  transition:all .2s ease;
 }
-.fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 10px;display:flex;align-items:center;justify-content:space-around}
+.formula-bar{
+  width:100%;max-width:360px;
+  margin:0 auto;
+  display:flex;gap:8px;align-items:stretch;
+}
+.fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:6px 12px;display:flex;align-items:center;justify-content:space-around}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
-.fdc-val{font-size:16px;font-weight:700;line-height:1}
-.fdc-lbl{font-size:8px;color:#888}
+.fdc-val{font-size:20px;font-weight:700;line-height:1}
+.fdc-lbl{font-size:9px;color:#888}
 .fdc-dmg .fdc-val{color:#e8a020}.fdc-dmg .fdc-lbl{color:#e8a020;opacity:.7}.fdc-bonus .fdc-val{color:#e05530}.fdc-bonus .fdc-lbl{color:#e05530;opacity:.7}
 .fdiv{width:1px;height:20px;background:#aed6f1}
 .fop-mid{display:flex;align-items:center;font-size:14px;color:#bbb;flex-shrink:0}
 .fbox-flux{flex:1;background:#fff;border:1.5px solid #c71585;border-radius:9px;padding:4px 3px;text-align:center}
-.fval-flux{font-size:15px;font-weight:700;color:#9b59b6;line-height:1}
-.fl{font-size:7px;color:#9b59b6;opacity:.7;margin-top:1px}
+.fval-flux{font-size:18px;font-weight:700;color:#9b59b6;line-height:1}
+.fl{font-size:8px;color:#9b59b6;opacity:.7;margin-top:2px}
 
 
+
+
+/* ── FTUE SYSTEM ──────────────────────────────────────── */
+.ftue-bubble{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  background:rgba(10,15,30,0.92);color:#fff;
+  border:1.5px solid rgba(255,255,255,0.15);
+  border-radius:14px;padding:10px 18px;
+  font-size:13px;font-weight:600;line-height:1.4;
+  max-width:88%;text-align:center;
+  z-index:200;pointer-events:none;
+  transition:opacity 0.25s ease;
+  box-shadow:0 4px 20px rgba(0,0,0,0.5);
+}
+.ftue-bubble.hidden{opacity:0;pointer-events:none;}
+.ftue-bubble .ft-b{color:#4db8ff;font-weight:800;}  /* blue = do it */
+.ftue-bubble .ft-r{color:#ff5555;font-weight:800;}  /* red = warning */
+.die.ftue-dim{opacity:0.25!important;transition:opacity 0.2s ease;}
+.die.ftue-bright{opacity:1!important;transition:opacity 0.2s ease;}
+/* ─────────────────────────────────────────────────────── */
 
 /* ── ARENA ── */
 .arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:0}
@@ -299,7 +339,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   background:#f4f4f4;
   flex:1;overflow-y:auto;
 }
-.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:320px;margin:0 auto}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:360px;margin:0 auto}
 .dw{display:flex;flex-direction:column;align-items:center;gap:2px}
 .die{width:100%;aspect-ratio:1;border-radius:14px;border:2px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;overflow:hidden;transition:border-color .12s}
 .die:active{transform:scale(.86)}
@@ -328,7 +368,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .die.steak-fire img{animation:firein .3s ease forwards}
 /* Steak big text banner — in arena, above dice */
 .steak-banner{
-  width:100%;max-width:320px;
+  width:100%;max-width:360px;
   text-align:center;padding:4px 0 2px;
   pointer-events:none;
 }
@@ -420,6 +460,44 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .mb:disabled{opacity:.25;cursor:not-allowed}
 .mb .ms{font-size:7px;display:block;margin-top:1px;opacity:.7;font-weight:400}
 .b-roll{background:#2c3e50;color:#ecf0f1}.b-push{background:#6e2f1a;color:#f0c3a1}.b-strike{background:#1e8449;color:#a9dfbf}.b-stack{background:#1a5276;color:#aed6f1}
+/* New Roll button — centered, pink-red */
+.roll-row{display:flex;justify-content:center;padding:4px 0;}
+.b-roll-new{
+  width:80%;max-width:260px;border:none;border-radius:14px;padding:12px 0;cursor:pointer;
+  font-size:16px;font-weight:900;letter-spacing:1px;
+  background:linear-gradient(135deg,#e8103a,#ff4d6d,#ff8fa3);
+  color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3);
+  box-shadow:0 3px 14px rgba(232,16,58,.4),0 2px 6px rgba(0,0,0,.2);
+  transition:opacity 0.15s;
+}
+.b-roll-new:disabled{opacity:0.5;cursor:default;}
+@keyframes roll-pulse{
+  0%,100%{box-shadow:0 0 14px rgba(232,16,58,.5),0 3px 8px rgba(0,0,0,.2);}
+  50%{box-shadow:0 0 32px rgba(255,77,109,.95),0 0 60px rgba(232,16,58,.5),0 4px 16px rgba(0,0,0,.25);}
+}
+#actionRow{flex-direction:column;gap:4px;}
+.b-super-strike{
+  width:100%;border:none;border-radius:14px;padding:14px 0;cursor:pointer;font-size:15px;font-weight:900;letter-spacing:1.5px;
+  background:linear-gradient(135deg,#ff6a00,#ff9f00,#ffcc00);
+  color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);
+  box-shadow:0 0 20px rgba(255,140,0,.5),0 4px 12px rgba(0,0,0,.2);
+  animation:super-pulse 1s ease-in-out infinite;
+}
+.b-trident-strike{
+  width:100%;border:none;border-radius:14px;padding:14px 0;cursor:pointer;font-size:15px;font-weight:900;letter-spacing:1.5px;
+  background:linear-gradient(135deg,#0077ff,#00b4ff,#00e0ff);
+  color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);
+  box-shadow:0 0 20px rgba(0,160,255,.6),0 4px 12px rgba(0,0,0,.2);
+  animation:trident-pulse 1s ease-in-out infinite;
+}
+@keyframes trident-pulse{
+  0%,100%{box-shadow:0 0 14px rgba(0,160,255,.5),0 3px 8px rgba(0,0,0,.2);}
+  50%{box-shadow:0 0 32px rgba(0,220,255,.9),0 4px 16px rgba(0,0,0,.25);}
+}
+@keyframes super-pulse{
+  0%,100%{box-shadow:0 0 14px rgba(255,140,0,.4),0 3px 8px rgba(0,0,0,.2);}
+  50%{box-shadow:0 0 32px rgba(255,200,0,.85),0 4px 16px rgba(0,0,0,.25);}
+}
 
 /* ── OVERLAYS ── */
 .ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:50}
@@ -446,7 +524,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 /* ── STRIKE REVEAL ANIMATION ── */
 .dice-area-wrap{
-  width:100%;max-width:320px;
+  width:100%;max-width:360px;
   margin:0 auto;
   overflow:hidden;
   transition:max-height .35s ease,opacity .3s ease;
@@ -570,6 +648,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       </svg>
     </div>
 
+    <div class="ftue-bubble hidden" id="ftueBubble"></div>
     <!-- Cannonball projectile -->
     <div class="cannonball" id="cannonball"></div>
 
@@ -610,23 +689,23 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     </div>
   </div>
 
-  <!-- Backpack -->
+  <!-- Deck -->
   <div class="backpack" id="backpackArea">
-    <div class="backpack-label">Backpack</div>
+    <div class="backpack-label">Deck</div>
     <div class="backpack-grid" id="backpackGrid">
-      <!-- 12 slots: 2 cols x 6 rows -->
+      <!-- 12 slots: 6 cols x 2 rows -->
       <div class="bp-slot slot-open" data-col="0" data-row="0"></div>
       <div class="bp-slot slot-open" data-col="1" data-row="0"></div>
+      <div class="bp-slot slot-open" data-col="2" data-row="0"></div>
+      <div class="bp-slot slot-open" data-col="3" data-row="0"></div>
+      <div class="bp-slot slot-open" data-col="4" data-row="0"></div>
+      <div class="bp-slot slot-open" data-col="5" data-row="0"></div>
       <div class="bp-slot slot-open" data-col="0" data-row="1"></div>
       <div class="bp-slot slot-open" data-col="1" data-row="1"></div>
-      <div class="bp-slot slot-open" data-col="0" data-row="2"></div>
-      <div class="bp-slot slot-open" data-col="1" data-row="2"></div>
-      <div class="bp-slot slot-open" data-col="0" data-row="3"></div>
-      <div class="bp-slot slot-open" data-col="1" data-row="3"></div>
-      <div class="bp-slot slot-open" data-col="0" data-row="4"></div>
-      <div class="bp-slot slot-open" data-col="1" data-row="4"></div>
-      <div class="bp-slot slot-open" data-col="0" data-row="5"></div>
-      <div class="bp-slot slot-open" data-col="1" data-row="5"></div>
+      <div class="bp-slot slot-open" data-col="2" data-row="1"></div>
+      <div class="bp-slot slot-open" data-col="3" data-row="1"></div>
+      <div class="bp-slot slot-open" data-col="4" data-row="1"></div>
+      <div class="bp-slot slot-open" data-col="5" data-row="1"></div>
     </div>
   </div>
 
@@ -639,14 +718,17 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
     <!-- Formula bar — above dice, always visible -->
     <!-- Dice zone -->
     <div class="dice-zone">
-      <div class="formula-bar">
-        <div class="fbox-db">
-          <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">0</div><div class="fdc-lbl">Damage</div></div>
-          <div class="fdiv"></div>
-          <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
+      <div class="formula-bar-wrap">
+        <div class="formula-bar">
+          <div class="fbox-db">
+            <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">10</div><div class="fdc-lbl">Damage</div></div>
+            <div class="fdiv"></div>
+            <div class="fdc fdc-bonus"><div class="fdc-val" id="fBonus">+0</div><div class="fdc-lbl" id="fBonusLbl">Bonus</div></div>
+          </div>
+          <div class="fop-mid">×</div>
+          <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
         </div>
-        <div class="fop-mid">×</div>
-        <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
+        <div class="steak-indicator" id="steakIndicator"></div>
       </div>
       <div class="dice-area-wrap" id="diceAreaWrap"><div class="dg" id="diceGrid"></div></div>
     </div>
@@ -663,19 +745,32 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   <div class="bottom">
     <div class="bb">
       <div class="btc">
-        <div class="skrow">
-          <button class="sk fire" id="btnFireball" disabled><div class="sn">Cannonade</div><div class="sc">+1 Attack die <span class="mcost">💧💧</span></div></button>
-          <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div></button>
-          <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc"><span id="rrSub">sel</span> <span class="mcost">💧💧</span></div></button>
-          <button class="hbtn" id="btnHelp" style="flex-shrink:0">?</button>
+        <!-- ROLL button: standalone centered, visible only in idle phase -->
+        <div id="rollRow" class="roll-row">
+          <button class="mb b-roll-new" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">tap to start</span></button>
         </div>
-        <div class="mr">
-          <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
-          <button class="mb b-strike" id="btnStrike" disabled><span id="btnStrikeLbl">Strike</span><span class="ms" id="sts">select combo</span></button>
+        <!-- Action row: skills + Push Luck/Strike, hidden in idle phase -->
+        <div id="actionRow" style="display:none">
+          <div class="skrow">
+            <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+block <span class="mcost">💧💧</span></div></button>
+            <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc"><span id="rrSub">sel</span> <span class="mcost">💧💧</span></div></button>
+            <button class="hbtn" id="btnHelp" style="flex-shrink:0">?</button>
+          </div>
+          <div class="mr" id="mainBtnRow">
+            <button class="mb b-push" id="btnPushLuck" disabled><span id="bll2">Push Luck</span><span class="ms" id="bls2">select combo</span></button>
+            <button class="mb b-strike" id="btnStrike" disabled><span id="btnStrikeLbl">Strike</span><span class="ms" id="sts">select combo</span></button>
+          </div>
+          <div class="mr" id="superStrikeRow" style="display:none;grid-template-columns:1fr">
+            <button class="mb b-super-strike" id="btnSuperStrike">⚡ SUPER STRIKE</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- FTUE button highlight overlay -->
+  <div id="ftueOverlay" style="display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.65);pointer-events:all;"></div>
+  <div id="ftueHighlight" style="display:none;position:fixed;z-index:151;pointer-events:none;border-radius:12px;transition:all 0.2s ease;"></div>
 
 
 
@@ -696,7 +791,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       <div class="gsec">Special</div>
       <div class="grow" style="background:#fff3e0;border:1px solid #f5cba7"><div class="ginfo"><div class="gname" style="color:#c0392b">🔥 Steak!</div><div class="gdesc" style="color:#e67e22">Push Luck all 6 → Flux ×1.5→×2→×3→×5→×8→×13... (cap ×777 at Steak 16) → roll fresh 6</div></div></div>
       <div class="grow"><div class="ginfo"><div class="gname">4-Different <span style="color:#27ae60;font-size:9px">· requires 🎯 Efficiency</span></div><div class="gdesc">4–6 icons khác nhau = combo hợp lệ · mỗi die đóng góp giá trị riêng: 🗡️+2AD ⚔️+4AD 💧+1Mana 🛡️+6Shield ⭐+0.3Flux 💥+3BD</div></div></div>
-      <div class="gnote">Total = (Damage + Bonus) × Flux · Strike cần ≥1 Attack die ⚔️/🗡️ · Không có Attack → Stack & End Turn · Steak! tăng Flux · Break mất Flux & Bonus</div>
+      <div class="gnote">Total = (Damage + Bonus) × Flux · Strike cần ≥1 Attack die ⚔️/🗡️ · Steak! tăng Flux · Break mất Flux & Bonus</div>
     </div>
   </div>
 </div><!-- end .phone -->
@@ -704,11 +799,26 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 <!-- ── INVENTORY PANEL ── -->
 <div class="inv-panel" id="invPanel">
   <div class="inv-header">
-    <div class="inv-title">📦 Inventory — All Sigils</div>
-    <div class="inv-subtitle">Drag to Backpack to equip · Only equipped sigils affect combat</div>
+    <div class="inv-title">📦 Inventory</div>
+    <div class="inv-subtitle">Drag to Deck to equip · Only equipped crew affect combat</div>
   </div>
   <div class="inv-scroll">
-    <div class="inv-grid" id="invGrid-all" style="grid-template-columns:repeat(10,52px);grid-template-rows:repeat(10,52px)"></div>
+    <div class="inv-section">
+      <div class="inv-section-label inv-label-common">⬜ Common</div>
+      <div class="inv-grid" id="invGrid-common"></div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-label inv-label-uncommon">🟦 Uncommon</div>
+      <div class="inv-grid" id="invGrid-uncommon"></div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-label inv-label-rare">🟨 Rare</div>
+      <div class="inv-grid" id="invGrid-rare"></div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-label inv-label-tbd">❓ TBD</div>
+      <div class="inv-grid" id="invGrid-tbd"></div>
+    </div>
   </div>
 </div>
 
@@ -735,9 +845,34 @@ function mkIconImg(idx,size='72%'){return mkImg(ICON_URLS[idx],size);}
 
 // ── FIBONACCI FLUX ─────────────────────────────────────────────
 
-// STEAK_FLUX lookup — cap Steak 15 = ×777
-const STEAK_FLUX=[0,1.5,2,3,5,8,13,21,34,55,100,150,200,300,450,700,777];
-function getFlux(n){if(n>=16)return 777;return STEAK_FLUX[Math.max(1,n)]||1;}
+// STEAK_FLUX — 3 tiers:
+// Tier 1 S0-4: default cap S4 · Tier 2 S5-6: Culverin · Tier 3 S7-8: Basilisk+Culverin
+// Each Steak grants AD bonus: +2 base / +3 with Culverin / +4 with Culverin+Basilisk
+const STEAK_FLUX=[1,1.25,1.5,2,4,6,8,9,10];
+
+// FTUE object declared early to avoid TDZ when doRestart() is called
+const FTUE = {
+  active: true,
+  _started: false,
+  beat: 'init',
+  DICE_BEATS: {
+    'beat2': [0, 2, 3, 3, 5, 4],
+    'beat3': [0, 1, 2, 4, 5, 3],
+    'beat3_reroll': [5, 5, 4, 4],
+    'beat3_steak': [1, 1, 1, 3, 2, 4],
+  },
+  nextForcedDice: null,
+  nextForcedReroll: null,
+  dimSlots: null,
+  blockedActions: new Set(['push','strike']),
+};
+function getFlux(n){return STEAK_FLUX[Math.min(Math.max(0,n),8)];}
+
+function getMaxSteak(){
+  if(hasSigil('endless-horizon')&&hasSigil('abyss-contract')) return 8;
+  if(hasSigil('endless-horizon')) return 6;
+  return 4;
+}
 
 // ── HIDDEN LOGIC ───────────────────────────────────────────────
 // Rule 01: No heavy cluster (4+) on first roll
@@ -769,7 +904,7 @@ const ANIM=2000; // roll animation duration
 const G={
   pHp:100,pMaxHp:100,mana:0,maxMana:10,
   eHp:60,eMaxHp:60,eDmg:20,enemyIdx:0,
-  flux:1,bonusDmg:0,shield:0,
+  flux:1,bonusDmg:0,shield:0,steakBonusAD:0,
   busy:false,phase:'idle',
   steakCount:0,
   breakStreak:0,
@@ -795,9 +930,9 @@ function scoreGroupBase(arr){
   if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?34:n===4?76:n===5?140:225;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
     if(ic===2){manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
-    else if(ic===3){shieldG+=n===2?13:n===3?30:n===4?55:n===5?100:160;}
+    else if(ic===3){shieldG+=n===2?3:n===3?6:n===4?20:n===5?40:60;}
     else if(ic===4){fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
-    else if(ic===5){bdmgG+=n===2?5:n===3?25:n===4?50:n===5?90:155;}
+    else if(ic===5){bdmgG+=n===2?5:n===3?20:n===4?35:n===5?60:80;}
   });
   return{ad,fluxG,manaG,shieldG,bdmgG};
 }
@@ -916,9 +1051,9 @@ function scoreGroup(arr){
   if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?34:n===4?76:n===5?140:225;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
     if(ic===2){manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
-    else if(ic===3){shieldG+=n===2?13:n===3?30:n===4?55:n===5?100:160;}
+    else if(ic===3){shieldG+=n===2?3:n===3?6:n===4?20:n===5?40:60;}
     else if(ic===4){fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
-    else if(ic===5){bdmgG+=n===2?5:n===3?25:n===4?50:n===5?90:155;}
+    else if(ic===5){bdmgG+=n===2?5:n===3?20:n===4?35:n===5?60:80;}
   });
   const allDiff=hasSigil('efficiency')&&!Object.values(c).some(v=>v>1);
   if(allDiff){
@@ -1081,6 +1216,10 @@ function renderDice(){
   });
   for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
   renderGroups();updateFormula();renderBtns();
+  // FTUE: reapply dim after render
+  if(typeof FTUE!=="undefined"&&FTUE.active&&FTUE.dimSlots!==null){
+    setTimeout(()=>ftApplyDim(FTUE.dimSlots),30);
+  }
 }
 function showAnimGrid(count,steak=false){
   const grid=$('diceGrid');grid.innerHTML='';
@@ -1095,42 +1234,68 @@ function showRerolling(selIdxs){
 
 function renderGroups(newSteakIdx=-1){
   const area=$('groupsArea');area.innerHTML='';
-  function makeBox(cls,label,groups,animate=false,showUtil=false,showMana=false){
+  function makeBox(cls,label,groups,animate=false,showUtil=false,showMana=false,bonusAD=0){
     const box=document.createElement('div');box.className='gbox '+cls+(animate?' new':'');
     const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent=label;
     const content=document.createElement('div');content.className='gbox-content';
 
     // Detect PA groups BEFORE display conversion
-    const isPABox=hasSigil('powder-and-alcohol')&&(cls==='steak-box'||cls==='stack-box'||cls==='selbox'||cls==='pushrow');
+    const isPAEnabled=hasSigil('powder-and-alcohol')&&(cls==='steak-box'||cls==='stack-box'||cls==='selbox'||cls==='pushrow');
 
     groups.forEach((g,gi)=>{
       if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-      // Check if this group is a PA convertible pattern
       const c={};g.dice.forEach(d=>c[d]=(c[d]||0)+1);
-      const isPA=isPABox&&((c[0]>=2&&c[2]>=1)||(c[1]>=2&&c[2]>=1));
+      // Only isPA=true if scoreGroupPA ACTUALLY chooses PA path (not just pattern exists)
+      const paResult=isPAEnabled?scoreGroupPA(g.dice):null;
+      const isPA=isPAEnabled&&(paResult&&(paResult._paCount||0)>0);
       if(isPA) box.classList.add('pa-converted');
 
-      g.dice.forEach(ic=>{
-        const isDmg=ic===0||ic===1||ic===4||ic===5;
-        const isMana=ic===2;
-        const isShield=ic===3;
-        // PA pushrow: show converted icon (🍾) directly — no animation, live preview
-        const displayIc=(isPA&&cls==='pushrow'&&(ic===0||ic===1))?6:ic;
-        const show=(isPA&&(isDmg||isMana))
-          ||(cls==='selbox'&&(isDmg||isMana||isShield))
-          ||(cls==='pushrow'&&!isPA&&(isDmg||isMana||isShield))
-          ||(cls==='stack-box'&&!isPA&&isDmg)
-          ||(isDmg&&!isPA);
-        if(!show) return;
-        const chip=makeChip(displayIc);
-        // Mark attack chips in steak/stack/selbox PA groups for animation (not pushrow)
-        if(isPA&&cls!=='pushrow'&&(ic===0||ic===1)) chip.classList.add('pa-morphing');
-        content.appendChild(chip);
-      });
+      if(isPA){
+        // Find which attack type forms the PA pattern
+        let atkType=(c[1]||0)>=2&&(c[2]||0)>=1?1:0;
+
+        // PA part: show 3 🍾 chips (pushrow=immediate, others=animated)
+        for(let p=0;p<3;p++){
+          const chip=makeChip(cls==='pushrow'?6:atkType===1?1:0);
+          if(cls!=='pushrow') chip.classList.add('pa-morphing');
+          else{chip.innerHTML='';const sp=document.createElement('span');sp.textContent='🍾';sp.style.cssText='font-size:10px;line-height:1;';chip.appendChild(sp);chip.style.background='#e0f7ff';chip.style.border='1px solid #60c0e0';}
+          content.appendChild(chip);
+        }
+
+        // Remaining dice after PA consumption — show normally with comma
+        const rem={...c};
+        rem[atkType]-=2;if(!rem[atkType])delete rem[atkType];
+        rem[2]-=1;if(!rem[2])delete rem[2];
+        const remDice=Object.entries(rem).flatMap(([k,n])=>Array(+k===+k?1:1).fill(+k).slice(0,n).concat(Array(n-1).fill(+k))).flatMap(()=>[]);
+        // simpler: rebuild remDice properly
+        const remArr=[];
+        for(const[k,n] of Object.entries(rem)) for(let i=0;i<n;i++) remArr.push(+k);
+        if(remArr.length>0){
+          const cm2=document.createElement('div');cm2.className='gcomma';cm2.textContent=',';content.appendChild(cm2);
+          remArr.forEach(ic2=>{
+            const isDmg2=ic2===0||ic2===1||ic2===4||ic2===5;
+            const isMana2=ic2===2;
+            const isShield2=ic2===3;
+            if(isDmg2||isMana2||isShield2) content.appendChild(makeChip(ic2));
+          });
+        }
+      } else {
+        g.dice.forEach(ic=>{
+          const isDmg=ic===0||ic===1||ic===4||ic===5;
+          const isMana=ic===2;
+          const isShield=ic===3;
+          const show=(cls==='selbox'&&(isDmg||isMana||isShield))
+            ||(cls==='pushrow'&&(isDmg||isMana||isShield))
+            ||(cls==='steak-box'&&(isDmg||isMana||isShield))
+            ||(cls==='stack-box'&&isDmg);
+          if(!show) return;
+          content.appendChild(makeChip(ic));
+        });
+      }
     });
 
-    // After render, animate PA chips: swap icon to 💧 at animation midpoint
-    if(isPABox){
+    // After render, animate PA chips: swap icon to 🍾 at animation midpoint
+    if(isPAEnabled){
       content.querySelectorAll('.gchip.pa-morphing').forEach(chip=>{
         chip.addEventListener('animationend',()=>{
           chip.innerHTML='';
@@ -1143,12 +1308,22 @@ function renderGroups(newSteakIdx=-1){
       });
     }
 
-    const displayGroups=isPABox?applyPAConvert(groups):groups;
-    const sc=document.createElement('div');sc.className='gbox-score';sc.innerHTML=scoreHTML(displayGroups,showUtil,showMana);
+    const displayGroups=isPAEnabled?applyPAConvert(groups):groups;
+    const baseScore=scoreHTML(groups,showUtil,showMana); // original groups for correct PA scoring
+    // For steak-box: add bonusAD to the score display
+    let scoreInner=baseScore;
+    if(bonusAD>0&&cls==='steak-box'){
+      const dmgMatch=baseScore.match(/(\d+) Damage/);
+      if(dmgMatch){
+        scoreInner=baseScore.replace(/(\d+) Damage/,`${parseInt(dmgMatch[1])+bonusAD} Damage`);
+      } else {
+        scoreInner=(baseScore==='—'?'':baseScore+' ')+`<span style="color:#e8a020">+${bonusAD} Damage</span>`;
+      }
+    }
+    const sc=document.createElement('div');sc.className='gbox-score';sc.innerHTML=scoreInner;
     box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);return box;
   }
-  G.stackBoxes.forEach((sb,i)=>area.appendChild(makeBox('stack-box','📦 Stack',sb.groups,false,false,false)));
-  G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak-box','🔥 Steak!',sb.groups,i===newSteakIdx)));
+  G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak-box','🔥 Steak!',sb.groups,i===newSteakIdx,false,false,sb.bonusAD||0)));
   if(G.currentGroups.length>0)area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups,false,true));
   if(G.phase==='rolled'){
     const{vi,ii,hasInvalid}=analyze();
@@ -1177,15 +1352,11 @@ function renderGroups(newSteakIdx=-1){
       });
 
       // PA detection for selbox: check if selected dice form a PA combo
-      const isPASel=hasSigil('powder-and-alcohol')&&!hasInvalid&&(()=>{
-        const c={};rawSelected.forEach(d=>c[d]=(c[d]||0)+1);
-        return (c[0]>=2&&c[2]>=1)||(c[1]>=2&&c[2]>=1);
-      })();
+      const paSelResult=hasSigil('powder-and-alcohol')&&!hasInvalid?scoreGroupPA(rawSelected):null;
+      const isPASel=!!(paSelResult&&(paSelResult._paCount||0)>0);
 
       if(isPASel){
-        // Use scoreGroupPA's partition engine to get exact PA decisions
-        // Reconstruct which dice were consumed by PA vs remaining
-        const scored=scoreGroupPA(rawSelected);
+        const scored=paSelResult;
         const paCount=scored._paCount||0;
 
         if(paCount===0){
@@ -1271,47 +1442,93 @@ function renderGroups(newSteakIdx=-1){
   }
 }
 
+const BASE_AD=10; // Base AD mỗi lượt, trước khi tính combo
+
 function updateFormula(){
-  // Damage: always 0 — only updates during Strike rollup animation
-  $('fDmg').textContent='0';
-  // Bonus: shows current accumulated bonus (updates only after Strike)
+  // Formula bar luôn chỉ hiện BASE_AD trong lượt — combo AD chạy trong strike animation
+  $('fDmg').textContent=''+BASE_AD;
   $('fBonus').textContent='+'+G.bonusDmg;
   $('fBonusLbl').textContent='Bonus';
-  // Flux: G.flux (Steak) + G.stackFlux (carry-over from Stack turns)
-  const fx=G.flux+G.stackFlux;
+  const fx=G.flux;
   $('fFlux').textContent='×'+(Number.isInteger(fx)?fx:fx.toFixed(1));
-  $('fFluxLbl').textContent=G.stackFlux>0?'Flux ⬆':'Flux';
+  $('fFluxLbl').textContent='Flux';
+  const si=$('steakIndicator');
+  if(si) si.textContent=G.steakCount>0?'🔥'.repeat(Math.min(G.steakCount,8))+(G.steakCount>8?'…':''):'';
 }
 
 function renderBtns(){
   const ph=G.phase,anim=G.busy,combo=calcCombo(),_can=!anim&&ph==='rolled'&&canPush(),mp=G.mana>=2;
   const{hasInvalid,hasCombo:hc}=analyze(),hasSel=G.ds.some(s=>s===DS.S);
-  const bl=$('btnLeft'),bll=$('bll'),bls=$('bls');
-  if(anim){bl.className='mb b-roll';bl.disabled=true;bll.textContent='Roll';bls.textContent='rolling...';}
-  else if(ph==='idle'){bl.className='mb b-roll';bl.disabled=false;bll.textContent='Roll';bls.textContent='start turn';}
-  else{bl.className='mb b-push';bl.disabled=!_can;bll.textContent='Push Luck';bls.textContent=hasInvalid?'remove invalid':!hc?'select combo':'lock & roll rest';}
-  const hasAtk=ph==='rolled'?hasAttackInTurn():false;
-  const canStrike=!!combo&&!anim&&ph==='rolled'&&hasAtk;
-  const canStack=!!combo&&!anim&&ph==='rolled'&&!hasAtk;
-  const sb=$('btnStrike'),sts2=$('sts');
-  if(canStack){
-    sb.disabled=false;sb.className='mb b-stack';
-    const lbl2=$('btnStrikeLbl');if(lbl2)lbl2.textContent='Stack & End Turn';
-    sts2.textContent='Store resources · no attack';
-  } else {
-    sb.disabled=!canStrike||anim||ph!=='rolled';sb.className='mb b-strike';
-    const lbl3=$('btnStrikeLbl');if(lbl3)lbl3.textContent='Strike';
-    sts2.textContent=canStrike?'→ '+(combo?combo.totalDmg:'')+' Damage':'need attack die';
+
+  // ── Show/hide Roll row vs Action row ──────────────────────
+  const rollRow=$('rollRow'), actionRow=$('actionRow');
+  const isIdle=ph==='idle'||anim;
+  if(rollRow) rollRow.style.display=isIdle?'flex':'none';
+  if(actionRow) actionRow.style.display=isIdle?'none':'flex';
+
+  // ── ROLL button ────────────────────────────────────────────
+  const bl=$('btnLeft');
+  if(bl){
+    bl.disabled=anim||ph!=='idle';
+    bl.className='mb b-roll-new';
+    const bll=$('bll'),bls=$('bls');
+    if(bll) bll.textContent=anim?'Rolling…':'Roll';
+    if(bls) bls.textContent=anim?'wait…':'tap to start';
   }
-  $('btnFireball').disabled=!mp||anim||ph!=='rolled';
+
+  // ── PUSH LUCK button ───────────────────────────────────────
+  const pb=$('btnPushLuck');
+  if(pb){
+    pb.disabled=!_can;
+    pb.className='mb b-push';
+    const bll2=$('bll2'),bls2=$('bls2');
+    if(bll2) bll2.textContent='Push Luck';
+    if(bls2) bls2.textContent=hasInvalid?'remove invalid':!hc?'select combo':'lock & roll rest';
+  }
+
+  // ── STRIKE button ──────────────────────────────────────────
+  const canStrike=!!combo&&!anim&&ph==='rolled';
+  const sb=$('btnStrike'),sts2=$('sts');
+  if(sb){sb.disabled=!canStrike||anim||ph!=='rolled';sb.className='mb b-strike';}
+  const lbl3=$('btnStrikeLbl');if(lbl3)lbl3.textContent='Strike';
+  if(sts2) sts2.textContent=canStrike?'→ '+(combo?combo.totalDmg+BASE_AD+G.steakBonusAD:'')+' Damage':'select a combo';
+
+  // ── SUPER STRIKE / TRIDENT STRIKE ─────────────────────────
+  const freeDice=G.ds.filter(s=>s===DS.F).length;
+  const tridentEquipped=hasSigil('trident-of-poseidon');
+  const atTridentLimit=tridentEquipped&&G.steakCount===2&&ph==='rolled'&&!anim&&hasSel&&!hasInvalid&&hc&&freeDice===0;
+  const atSteakLimit=!tridentEquipped&&G.steakCount===(getMaxSteak()-1)&&ph==='rolled'&&!anim&&hasSel&&!hasInvalid&&hc&&freeDice===0;
+  const showSpecial=atSteakLimit||atTridentLimit;
+  const mainRow=$('mainBtnRow'),superRow=$('superStrikeRow');
+  if(mainRow&&superRow){
+    if(showSpecial&&!anim){
+      mainRow.style.display='none';
+      superRow.style.display='grid';
+      superRow.style.gridTemplateColumns='1fr';
+      const btn=$('btnSuperStrike');
+      if(btn){
+        if(atTridentLimit){btn.className='mb b-trident-strike';btn.textContent='🔱 TRIDENT STRIKE';}
+        else{btn.className='mb b-super-strike';btn.textContent='⚡ SUPER STRIKE';}
+      }
+    }else{
+      mainRow.style.display='grid';
+      superRow.style.display='none';
+    }
+  }
+
+  // ── SKILL buttons ──────────────────────────────────────────
   const shBtn=$('btnShield');
-  if(G.shield>0){shBtn.classList.add('has-shield');}
-  else{shBtn.classList.remove('has-shield');}
-  shBtn.disabled=!mp||anim;$('btnReroll').disabled=!mp||anim||ph!=='rolled'||!hasSel;
-  const rrBtn=document.getElementById('btnReroll');
-  const rrMcost=rrBtn?rrBtn.querySelector('.mcost'):null;
-  $('rrSub').textContent=mp?(hasSel?'sel':'select'):'no';
-  if(rrMcost)rrMcost.style.display=mp?'':'none';
+  if(shBtn){
+    if(G.shield>0)shBtn.classList.add('has-shield');else shBtn.classList.remove('has-shield');
+    shBtn.disabled=!mp||anim;
+  }
+  const rrBtn=$('btnReroll');
+  if(rrBtn){
+    rrBtn.disabled=!mp||anim||ph!=='rolled'||!hasSel;
+    const rrMcost=rrBtn.querySelector('.mcost');
+    $('rrSub').textContent=mp?(hasSel?'sel':'select'):'no';
+    if(rrMcost)rrMcost.style.display=mp?'':'none';
+  }
 }
 
 function updateUI(){
@@ -1395,14 +1612,38 @@ function applyEnemyHit(){
 function triggerVictory(){
   G.busy=false;G.phase='idle';G.breakStreak=0;
   ensureDiceZoneVisible();
+  // FTUE: intercept first victory
+  if(FTUE&&FTUE.active){
+    ftOnVictory();
+    setTimeout(()=>{
+      showOverlay('<div class="ot">Broadside Won! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');
+    }, 3500);
+    return;
+  }
   showOverlay('<div class="ot">Victory! 🏆</div><div class="os">'+$('ename').textContent+' defeated!</div><button class="ob ok" onclick="window.nextEnemy()">Next →</button>');
 }
 
-function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
+function tapDie(i){
+  if(G.busy||G.phase!=='rolled')return;
+  hideBanners();
+  // FTUE: route through die click handler
+  if(FTUE&&FTUE.active){
+    const currentlySelected=G.ds[i]===DS.S;
+    const allowed=ftOnDieClick(i, currentlySelected);
+    if(!allowed) return;
+    if(currentlySelected) return; // block deselect in FTUE
+  }
+  G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;
+  renderDice();
+  // FTUE: re-apply dim after selection changes
+  if(FTUE&&FTUE.active&&FTUE.dimSlots!==null){
+    setTimeout(()=>ftApplyDim(FTUE.dimSlots),50);
+  }
+}
 
 function doBreak(){
   G.busy=true;G.phase='break'; // Lock interaction during break animation
-  G.steakCount=0;G.flux=1;G.bonusDmg=0;G.stackFlux=0;G.stackBoxes=[];G.breakStreak++; // Break loses stack
+  G.steakCount=0;G.flux=1;G.bonusDmg=0;G.steakBonusAD=0;G.stackFlux=0;G.stackBoxes=[];G.breakStreak++; // Break loses stack
   G.steakBoxes=[];G.currentGroups=[];renderGroups();
   $('bustBanner').classList.add('on');renderBtns();renderDice();updateUI();
   setTimeout(()=>{
@@ -1429,22 +1670,33 @@ function getFirstRoll(){
 }
 
 function doRoll(){
+  if(FTUE&&FTUE.active){if(ftIsBlocked("roll"))return;ftOnRoll();}
   ensureDiceZoneVisible();
   G.busy=true;G.phase='rolling';showAnimGrid(6);renderBtns();hideFeedback();
-  G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;G.cannonadeDice=0;
+  G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;G.steakBonusAD=0;G.cannonadeDice=0;
   // G.stackFlux and G.stackBoxes intentionally preserved — carry over across turns
   // Reset formula: Damage→0, Flux→×1 (Bonus stays — reflects accumulated value)
-  $('fDmg').textContent='0';$('fFlux').textContent='×1';
+  $('fDmg').textContent=''+BASE_AD;$('fFlux').textContent='×1';
   G.dice=getFirstRoll();G.ds=Array(6).fill(DS.F);
   applySpecialDice(G.dice);
   setTimeout(()=>{G.phase='rolled';G.busy=false;$('bustBanner').classList.remove('on');if(!hasCombo(G.dice))doBreak();else{renderDice();updateUI();}},ANIM);
 }
 
 function doPushLuck(){
+  if(FTUE&&FTUE.active){if(ftIsBlocked("push"))return;ftOnPushLuck();}
   if(G.busy||G.phase!=='rolled')return;if(!canPush()){feedback('⚠️ Fix invalid dice first','warn');return;}
   // ── SIGIL: Lucky Draw — +1 Mana per Push Luck, reset to 0 on Steak ──
   if(hasSigil('lucky-draw')){
     G.mana=Math.min(G.maxMana,G.mana+1);
+  }
+  // ── SIGIL: Marksman — +BD per Push based on locked count ──
+  if(hasSigil('marksman')){
+    const{vi}=analyze();
+    if(vi.length>=3){
+      const bonus=Math.random()<0.67?5:21;
+      G.bonusDmg+=bonus;
+      flashSigil('marksman');
+    }
   }
   // ─────────────────────────────────────────────────────────────
   const{vi}=analyze();G.currentGroups.push({dice:vi.map(i=>G.dice[i])});
@@ -1457,37 +1709,108 @@ function doPushLuck(){
   vi.forEach(i=>G.ds[i]=DS.ST);G.ds.forEach((s,i)=>{if(s===DS.S)G.ds[i]=DS.F;});
   const pushed=G.ds.filter(s=>s===DS.ST).length;
   if(pushed===6){
-    // STEAK — increment steakCount, apply Fibonacci flux
+    // STEAK — increment steakCount, apply flux
+    // +2 AD base · +3 AD with Culverin · +4 AD with Culverin+Basilisk
     G.steakCount++;
+    const steakADGain=
+      (hasSigil('endless-horizon')&&hasSigil('abyss-contract'))?4:
+      hasSigil('endless-horizon')?3:2;
+    G.steakBonusAD+=steakADGain;
     const newFlux=getFlux(G.steakCount);
     const prevFlux=G.steakCount>1?getFlux(G.steakCount-1):1;
-    const fluxGain=newFlux-prevFlux;
+    const fluxGain=+(newFlux-prevFlux).toFixed(1);
     const newSteakIdx=G.steakBoxes.length;
-    G.steakBoxes.push({groups:[...G.currentGroups]});G.currentGroups=[];
+    G.steakBoxes.push({groups:[...G.currentGroups], bonusAD:steakADGain});G.currentGroups=[];
     G.flux=newFlux;
     // ── SIGIL: Lucky Draw — Mana về 0 khi Steak thành công ──────
     if(hasSigil('lucky-draw')){ G.mana=0; }
-    // ─────────────────────────────────────────────────────────────
-    // Update Flux display on Steak success
+    // Update Flux and formula bar — updateFormula() will compute full AD via calcCombo()
     const fxStr='×'+(Number.isInteger(newFlux)?newFlux:newFlux.toFixed(1));
     $('fFlux').textContent=fxStr;flashPop('fFlux',fxStr);
+    flashFormulaBar();
+    flashFormulaBar();
     G.busy=true;G.phase='pushing';
     showSteakBanner(fluxGain);showAnimGrid(6,true);renderGroups(newSteakIdx);renderBtns();
     setTimeout(()=>{
+      // Auto-strike if steak cap reached
+      if(G.steakCount>=getMaxSteak()){
+        G.phase='rolled';G.busy=false;
+        hideSteakBanner();
+        G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.ST);
+        feedback('🔱 Steak '+G.steakCount+' — Cap reached! Auto-striking…','info',2000);
+        renderDice();updateUI();
+        setTimeout(()=>doStrike(),1200);
+        return;
+      }
+      // Trident Strike: auto-strike when Trident equipped and steak=3
+      if(hasSigil('trident-of-poseidon')&&G.steakCount===3){
+        G.phase='rolled';G.busy=false;
+        hideSteakBanner();
+        G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.ST);
+        feedback('🔱 TRIDENT STRIKE! Steak 3 — striking…','info',2000);
+        renderDice();updateUI();
+        setTimeout(()=>doStrike(),1200);
+        return;
+      }
       G.dice=Array.from({length:6},rnd);G.ds=Array(6).fill(DS.F);
       applySpecialDice(G.dice);
       G.phase='rolled';G.busy=false;
       hideSteakBanner();
       if(!hasCombo(G.dice))doBreak();
       else{renderDice();updateUI();feedback('🔥 Steak! Flux +'+fluxGain,'info',2400);}
+      // FTUE: notify steak complete (new dice rolled)
+      if(FTUE&&FTUE.active) setTimeout(ftOnSteakComplete, 150);
     },ANIM);return;
   }
   const fi=G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
   if(!fi.length){hideBanners();renderDice();updateUI();return;}
   G.busy=true;G.phase='pushing';
-  const grid=$('diceGrid');grid.innerHTML='';G.ds.forEach(s=>{if(s===DS.ST)return;grid.appendChild(makeAnim(false));});
+
+  // Pre-compute which dice will be kept (not rerolled)
+  const keepSet=new Set();
+  if(hasSigil('gunners-mate')){
+    // Flint (nerfed): keep only 1 🗡️ in free pool
+    const first0=fi.find(i=>G.dice[i]===0);
+    if(first0!==undefined) keepSet.add(first0);
+  }
+  if(hasSigil('mana-keeper'))  fi.forEach(i=>{if(G.dice[i]===2)keepSet.add(i);});
+
+  // ── Flash Lila IMMEDIATELY if any 💧 in free pool ──
+  if(hasSigil('mana-keeper')&&fi.some(i=>G.dice[i]===2)) flashSigil('mana-keeper');
+  // ── Flash Flint IMMEDIATELY if any 🗡️ in free pool ──
+  if(hasSigil('gunners-mate')&&fi.some(i=>G.dice[i]===0)) flashSigil('gunners-mate');
+
+  // Animate: rolling for rerolled dice, static icon for kept dice
+  const grid=$('diceGrid');grid.innerHTML='';
+  G.ds.forEach((s,i)=>{
+    if(s===DS.ST) return;
+    if(keepSet.has(i)){
+      // Kept die: static icon, no rolling animation
+      grid.appendChild(makeDie(G.dice[i],'free','kept',null));
+    } else {
+      grid.appendChild(makeAnim(false));
+    }
+  });
+
   renderGroups();renderBtns();
-  setTimeout(()=>{fi.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});applySpecialDice(G.dice,fi);G.phase='rolled';G.busy=false;$('bustBanner').classList.remove('on');if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();else{renderDice();updateUI();}},ANIM);
+  setTimeout(()=>{
+    // Reroll only non-kept dice
+    const rerollFi=fi.filter(i=>!keepSet.has(i));
+    // FTUE: inject forced reroll dice
+    if(FTUE&&FTUE.active&&FTUE.nextForcedReroll&&rerollFi.length>0){
+      const fr=FTUE.nextForcedReroll;
+      rerollFi.forEach((slotIdx,j)=>{ if(j<fr.length) G.dice[slotIdx]=fr[j]; });
+      FTUE.nextForcedReroll=null;
+    } else {
+      rerollFi.forEach(i=>{G.dice[i]=rnd();});
+    }
+    applySpecialDice(G.dice,rerollFi);
+    G.phase='rolled';G.busy=false;$('bustBanner').classList.remove('on');
+    if(!hasCombo(fi.map(i=>G.dice[i])))doBreak();
+    else{renderDice();updateUI();}
+    // FTUE: notify reroll complete
+    if(FTUE&&FTUE.active) setTimeout(ftOnRerollComplete, 100);
+  },ANIM);
 }
 
 // ── STRIKE ANIMATION HELPERS ──────────────────────────────────
@@ -1625,8 +1948,8 @@ function runStrikeAnimation(combo, events, onDone){
   if(wrap)wrap.classList.add('strike-hidden');
   if(ga)ga.classList.add('strike-zoom');
 
-  // Score Rollup: show formula bar and reset to starting values
-  let rDmg=0, rBonus=G.bonusDmg, rFlux=G.flux+G.stackFlux, rMana=G.mana, rShield=G.shield;
+  // Score Rollup: start from BASE_AD + steakBonusAD, then cộng dần từng combo event
+  let rDmg=BASE_AD+(G.steakBonusAD||0), rBonus=G.bonusDmg, rFlux=G.flux, rMana=G.mana, rShield=G.shield;
   let globalDelay=300; // small pause to let reveal animation settle
 
   events.forEach((ev,i)=>{
@@ -1700,53 +2023,8 @@ function runStrikeAnimation(combo, events, onDone){
   setTimeout(onDone, globalDelay+STAT_ANIM+400);
 }
 
-function doStack(){
-  if(G.busy||G.phase!=='rolled')return;
-  const combo=calcCombo();if(!combo)return;
-  G.busy=true;G.phase='striking';hideBanners();renderBtns();
-  const steakCountSnap=G.steakCount; // Safe Harbor: capture before reset
-  // Apply shield + mana immediately
-  G.shield+=combo.shieldG;
-  G.mana=Math.min(G.maxMana,G.mana+combo.manaG);
-  G.bonusDmg+=combo.bdmgG;
-  G.stackFlux+=combo.fluxG; // carry over flux
-  G.cannonadeDice=0; // cannonade consumed on Stack
-  const parts=[];
-  if(combo.shieldG>0)parts.push('🛡️+'+combo.shieldG);
-  if(combo.manaG>0)parts.push('💧+'+combo.manaG);
-  if(combo.bdmgG>0)parts.push('+'+combo.bdmgG+'BD');
-  if(combo.fluxG>0)parts.push('⭐+'+combo.fluxG.toFixed(1)+' Flux (carry-over)');
-  feedback('📦 Stack & End Turn! '+parts.join(' ')+(G.stackFlux>0?' [Flux carry: +'+G.stackFlux.toFixed(1)+']':''),'info',2800);
-  updateUI();
-  setTimeout(()=>{
-    applyEnemyHit();
-    if(G.pHp<=0){
-      G.busy=false;G.phase='idle';
-      setTimeout(()=>showOverlay('<div class="ot">Run over</div><div class="os">You were defeated!</div><button class="ob danger" onclick="window.restart()">Try again</button>'),500);
-      return;
-    }
-    setTimeout(()=>{
-      const selGroup=combo.board&&combo.board.length>0?[{dice:combo.board}]:[];
-      const allGroups=[...G.steakBoxes.flatMap(sb=>sb.groups),...G.currentGroups,...selGroup];
-      const dmgOnlyGroups=allGroups
-        .map(g=>({dice:g.dice.filter(d=>d===0||d===1||d===4||d===5)}))
-        .filter(g=>g.dice.length>0);
-      if(dmgOnlyGroups.length>0) G.stackBoxes.push({groups:dmgOnlyGroups,flux:combo.fluxG});
-      G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
-      G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
-      // Safe Harbor: +2 Mana if Stack & End Turn with Steak < 3
-      if(hasSigil('safe-harbor')&&steakCountSnap<=3){
-        G.mana=Math.min(G.maxMana,G.mana+2);
-        flashSigil('safe-harbor');
-        feedback('⚓ Safe Harbor! +2 Mana','info',1800);
-        updateUI();
-      }
-      hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
-    },1100);
-  },1200);
-}
-
 function doStrike(){
+  if(FTUE&&FTUE.active){if(ftIsBlocked("strike"))return;ftOnStrikeStart();}
   if(G.busy||G.phase!=='rolled')return;const combo=calcCombo();if(!combo)return;
   G.busy=true;G.phase='striking';hideBanners();renderBtns();
 
@@ -1766,11 +2044,23 @@ function doStrike(){
     G.stackBoxes=[];G.stackFlux=0;G.cannonadeDice=0;
 
     // Compute all sigil bonuses
-    const corsairBonus=hasSigil('corsairs-cache')?stackCountSnap*5:0;
+    const corsairBonus=0; // Bart: +10 BD after strike (next turn), not during
     const chainBonus=chainHit*10;
-    const tridentFlux=(hasSigil('trident-of-poseidon')&&steakCountSnap===3)?33:0;
+    // Trident: +33 AD per triple (always) + ×3 Flux at Steak=3 exactly
     const tridentAD=tridentTriples*33;
+    const baseEffectiveFlux=combo.effectiveFlux;
+    // Trident: ×3 total flux at Steak=3 — (base_steak_flux + all_bonus_flux) × 3
+    const tridentFlux=(hasSigil('trident-of-poseidon')&&steakCountSnap===3)
+      ? combo.effectiveFlux*2  // ×3 total = existing×1 + existing×2 extra (effectiveFlux already includes star bonus etc)
+      : 0;
     if(corsairBonus>0) G.bonusDmg+=corsairBonus;
+
+    // ── SIGIL: Zim The Odd One — odd Steak: 67% +11AD · 33% +23AD ──
+    let zimBonus=0;
+    if(hasSigil('odd-one')&&steakCountSnap%2===1&&steakCountSnap>0){
+      zimBonus=Math.random()<0.67?11:23;
+      flashSigil('odd-one');
+    }
 
     // Powder & Alcohol: detect if any group triggered PA conversion
     const paTriggered=hasSigil('powder-and-alcohol')&&(()=>{
@@ -1786,8 +2076,43 @@ function doStrike(){
     })();
 
     // Unified damage: all bonuses in one formula
-    const finalAD=combo.ad+chainBonus+tridentAD;
-    const finalFlux=combo.effectiveFlux+tridentFlux;
+    const steakAD=G.steakBonusAD||0;
+
+    // Admiral Voss: +0.25 Flux mỗi cặp attack được lock trong turn
+    let vossFlux=0;
+    if(hasSigil('admiral-voss')){
+      const allDice=[
+        ...G.steakBoxes.flatMap(sb=>sb.groups).flatMap(g=>g.dice),
+        ...G.currentGroups.flatMap(g=>g.dice),
+        ...(combo.board||[]),
+      ];
+      const c={};allDice.forEach(d=>c[d]=(c[d]||0)+1);
+      // Strict pair: count types where exactly 2 dice exist (not triple/quad)
+      const pairs=((c[0]||0)===2?1:0)+((c[1]||0)===2?1:0);
+      if(pairs>0){
+        vossFlux=pairs*0.25;
+        flashSigil('admiral-voss');
+        feedback('⚓ Voss: +'+vossFlux.toFixed(2)+' Flux ('+pairs+' pair'+(pairs>1?'s':'')+')', 'info', 1800);
+      }
+    }
+
+    // The Booze: +0.5 Flux nếu có combo 💧 bất kỳ trong turn
+    let tideFlux=0;
+    if(hasSigil('mana-tide')){
+      // Check tất cả groups: steak boxes + current groups + board dice (selbox)
+      const checkDice=arr=>{const c={};arr.forEach(d=>c[d]=(c[d]||0)+1);return(c[2]||0)>=2;};
+      const allGroupDice=[
+        ...G.steakBoxes.flatMap(sb=>sb.groups).flatMap(g=>g.dice),
+        ...G.currentGroups.flatMap(g=>g.dice),
+        ...(combo.board||[]),
+      ];
+      // Check cả allGroupDice tổng cộng
+      const hasManaCombo=allGroupDice.filter(d=>d===2).length>=2;
+      if(hasManaCombo){tideFlux=0.5;}
+    }
+
+    const finalAD=BASE_AD+combo.ad+chainBonus+tridentAD+zimBonus+steakAD;
+    const finalFlux=combo.effectiveFlux+tridentFlux+tideFlux+vossFlux;
     const td=Math.round((finalAD+G.bonusDmg)*finalFlux);
     const eHpBefore=G.eHp;
     G.eHp=Math.max(0,G.eHp-td);
@@ -1798,7 +2123,7 @@ function doStrike(){
     $('valMana').textContent=G.mana+'/'+G.maxMana;
 
     // Sigil anims → THEN fire attack
-    runSigilStrikeAnims(corsairBonus, chainBonus, tridentFlux, tridentAD, combo.effectiveFlux, combo.ad, td, paTriggered, ()=>{
+    runSigilStrikeAnims(corsairBonus, chainBonus, tridentFlux, tridentAD, combo.effectiveFlux, combo.ad, td, paTriggered, tideFlux, vossFlux, ()=>{
       // Attack fires here — after all formula bar updates have settled
       flashEnemy(td);
       const extras=[];if(combo.bdmgG>0)extras.push('+'+combo.bdmgG+'BD');if(combo.shieldG>0)extras.push('🛡️+'+combo.shieldG);
@@ -1817,14 +2142,24 @@ function doStrike(){
             return;
           }
           setTimeout(()=>{
-            G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;
+            G.steakBoxes=[];G.currentGroups=[];G.steakCount=0;G.flux=1;G.steakBonusAD=0;
             G.busy=false;G.phase='idle';G.dice=[];G.ds=[];
             ensureDiceZoneVisible();
-            // Safe Harbor: +2 Mana if Strike with Steak < 3
-            if(hasSigil('safe-harbor')&&steakCountSnap<=3){
-              G.mana=Math.min(G.maxMana,G.mana+2);
+            // FTUE: notify strike complete (after animations)
+            if(typeof FTUE!=="undefined"&&FTUE.active) setTimeout(ftOnStrikeComplete, 200);
+            // Bart the Hoarder: +10 BD carries into NEXT turn's bonusDmg
+            if(hasSigil('corsairs-cache')){
+              G.bonusDmg+=10;
+              flashSigil('corsairs-cache');
+              feedback('🗄️ Bart: +10 BD carried to next turn','info',1800);
+              updateUI();
+            }
+            // The Anchor: 50% +2 Mana, 50% +3 Mana when Strike with Steak < 2
+            if(hasSigil('safe-harbor')&&steakCountSnap<2){
+              const anchorBonus=Math.random()<0.5?2:3;
+              G.mana=Math.min(G.maxMana,G.mana+anchorBonus);
               flashSigil('safe-harbor');
-              feedback('⚓ Safe Harbor! +2 Mana','info',1800);
+              feedback('⚓ Anchor: +'+anchorBonus+' Mana','info',1800);
               updateUI();
             }
             hideBanners();renderGroups();renderDice();updateFormula();updateUI();renderBtns();
@@ -1835,14 +2170,14 @@ function doStrike(){
   });
 }
 
-$('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();else if(G.phase==='rolled')doPushLuck();};
-$('btnStrike').onclick=()=>{if(G.phase!=='rolled'||G.busy)return;if(hasAttackInTurn())doStrike();else doStack();};
-
-$('btnFireball').onclick=()=>{
-  if(G.mana<2||G.phase!=='rolled'||G.busy)return;
-  G.mana-=2;G.cannonadeDice+=1;
-  feedback('💥 Cannonade! +'+G.cannonadeDice+' Attack die'+(G.cannonadeDice>1?'s':''),'info',1800);
-  updateUI();renderDice();renderBtns();
+$('btnLeft').onclick=()=>{if(G.phase==='idle'&&!G.busy)doRoll();};
+$('btnPushLuck').onclick=()=>{if(G.phase!=='rolled'||G.busy)return;doPushLuck();};
+$('btnStrike').onclick=()=>{if(G.phase!=='rolled'||G.busy)return;doStrike();};
+$('btnSuperStrike').onclick=()=>{if(G.phase!=='rolled'||G.busy)return;doPushLuck();};
+$('btnSuperStrike').onclick=()=>{
+  if(G.phase!=='rolled'||G.busy)return;
+  G.ds.forEach((s,i)=>{if(s===DS.F)G.ds[i]=DS.S;});
+  doPushLuck();
 };
 
 $('btnShield').onclick=()=>{
@@ -1897,10 +2232,9 @@ const ENEMIES_OFFICIAL=[
   {name:'THE ETERNAL TIDE · Boss',    icon:'♾️',  hp:415, dmg:20},
 ];
 
-// ── ACTIVE: Ceiling Test Dummy ──
-const ENEMIES=[
-  {name:'🧪 CEILING DUMMY — Steak Test', icon:'🎯', hp:100000, dmg:20},
-];
+// ── ACTIVE: FTUE enemy + official list ──
+const FTUE_ENEMY={name:'Rusty Cutlass · Act 1', icon:'⚓', hp:70, dmg:5};
+const ENEMIES=[FTUE_ENEMY, ...ENEMIES_OFFICIAL.slice(1)];
 
 function setEnemy(idx){
   const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];
@@ -1912,16 +2246,18 @@ function setEnemy(idx){
 
 function doRestart(){
   window.hideOverlay();
-  Object.assign(G,{pHp:100,mana:0,flux:1,bonusDmg:0,shield:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0,goldenDieSlot:-1,silverDieSlot:-1,cutlassDieSlot:-1});
+  Object.assign(G,{pHp:100,mana:0,flux:1,bonusDmg:0,shield:0,steakBonusAD:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0,goldenDieSlot:-1,silverDieSlot:-1,cutlassDieSlot:-1});
   setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
+  // Start FTUE on first load only
+  if(typeof ftueStart!=="undefined"&&typeof FTUE!=="undefined"&&!FTUE._started){FTUE._started=true;setTimeout(ftueStart,100);}
 }
 window.restart=doRestart;
 window.nextEnemy=()=>{
   hideOverlay();
-  Object.assign(G,{bonusDmg:0,shield:0,flux:1,stackFlux:0,stackBoxes:[],busy:false,phase:'idle',steakCount:0,dice:[],ds:[],steakBoxes:[],currentGroups:[],cannonadeDice:0});
+  FTUE.active=false; // FTUE complete after first broadside
+  Object.assign(G,{bonusDmg:0,shield:0,flux:1,steakBonusAD:0,stackFlux:0,stackBoxes:[],busy:false,phase:'idle',steakCount:0,dice:[],ds:[],steakBoxes:[],currentGroups:[],cannonadeDice:0});
   setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 };
-doRestart();
 
 // ══════════════════════════════════════════════════════════════
 // ── SIGIL SYSTEM ─────────────────────────────────────────────
@@ -1929,8 +2265,8 @@ doRestart();
 
 const BP_SLOT  = 32;
 const INV_SLOT = 52;
-const GRID_COLS = 2;
-const GRID_ROWS = 6;
+const GRID_COLS = 6;
+const GRID_ROWS = 2;
 
 // All sigil definitions. group = which inventory section.
 // Only sigils in backpack (placedSigils) affect combat.
@@ -1938,17 +2274,30 @@ const SIGIL_DEFS = {
   // ── Test Sigils (active effects implemented) ──
   'lucky-draw':      { id:'lucky-draw',      name:'Shaun the Lucky',       icon:'🎲', effect:'+1 Mana/Push · Steak→0 · Rare',     cls:'sigil-lucky-draw',      w:2,h:1, group:'all' },
   'deep-reservoir':  { id:'deep-reservoir',  name:'Bar on the Sea',   icon:'💧', effect:'+5 Max Mana',                       cls:'sigil-deep-reservoir',  w:2,h:1, group:'all' },
-  'corsairs-cache':  { id:'corsairs-cache',  name:"Bart the Hoarder",  icon:'🗄️', effect:'+5 BD per Stack turn',               cls:'sigil-corsairs-cache',  w:1,h:1, group:'all' },
-  'chain-shot':      { id:'chain-shot',      name:'Drake the Chain',       icon:'⛓️', effect:'+10 AD with pair of 🗡️ or ⚔️',      cls:'sigil-chain-shot',      w:1,h:1, group:'all' },
-  'safe-harbor':     { id:'safe-harbor',     name:'The Anchor',      icon:'⚓', effect:'+2 Mana if Strike/Stack with Steak ≤ 3',   cls:'sigil-safe-harbor',     w:2,h:1, group:'all' },
-  'trident-of-poseidon':{ id:'trident-of-poseidon', name:'Trident of Poseidon', icon:'🔱', effect:'+33 AD/triple always · Steak=3: Flux+33', cls:'sigil-trident', w:3,h:1, group:'all' },
+  'corsairs-cache':  { id:'corsairs-cache',  name:"Bart the Hoarder",  icon:'🗄️', effect:'+10 BD sau mỗi Strike (carry next turn)',   cls:'sigil-corsairs-cache',  w:1,h:1, group:'all' },
+  'chain-shot':      { id:'chain-shot',      name:'Drake the Chain',       icon:'⛓️', effect:'+10 AD với exactly pair 🗡️🗡️ hoặc ⚔️⚔️ (không triple)',  cls:'sigil-chain-shot',      w:1,h:1, group:'all' },
+  'safe-harbor':     { id:'safe-harbor',     name:'The Anchor',      icon:'⚓', effect:'50% +2 / 50% +3 Mana khi Strike với Steak < 2',       cls:'sigil-safe-harbor',     w:5,h:1, group:'all' },
+  'trident-of-poseidon':{ id:'trident-of-poseidon', name:'Trident of Poseidon', icon:'🔱', effect:'+33 AD/triple · Steak=3: ×3 total Flux · TRIDENT STRIKE UX · ⛔ Culverin', cls:'sigil-trident', w:3,h:1, group:'all' },
   'powder-and-alcohol': { id:'powder-and-alcohol',  name:'Powder & Alcohol',    icon:'🍾', effect:'🗡️🗡️💧 or ⚔️⚔️💧 → scores as 💧💧💧 +20 AD · conflicts with Vance', cls:'sigil-powder-alcohol', w:1,h:2, group:'all' },
   'silver-doubloon': { id:'silver-doubloon', name:'The Grapeshot',  icon:'🥈', effect:'Die #2: 🗡️🗡️🗡️💧⭐💥 (silver)',      cls:'sigil-silver-doubloon', w:1,h:1, group:'all' },
   'efficiency':     { id:'efficiency',     name:'Vance the Versatile',      icon:'🎯', effect:'4/5/6 all-different = valid · each die scores individually',  cls:'sigil-scattershot',     w:2,h:2, group:'all' },
+  'marksman':       { id:'marksman',       name:'Zoppshu The Marksman',      icon:'🎯', effect:'Push 3+ locked: 67% +5BD · 33% +21BD · Common',               cls:'sigil-marksman',        w:1,h:1, group:'all' },
+  'odd-one':        { id:'odd-one',        name:'Zim The Odd One',           icon:'🎲', effect:'Strike odd Steak: 67% +11AD · 33% +23AD · Common',             cls:'sigil-odd-one',         w:1,h:1, group:'all' },
+  'gunners-mate':   { id:'gunners-mate',   name:"Flint The Loader",          icon:'🔫', effect:'Push Luck: giữ 1 🗡️ trong free pool · Rare',                  cls:'sigil-flint-loader',    w:2,h:1, group:'all' },
+  'pair-anchor':    { id:'pair-anchor',    name:'Pair Anchor',               icon:'🔒', effect:'Free pool has pair → keep pair, reroll singles only · Common',  cls:'sigil-pair-anchor',     w:1,h:1, group:'all' },
+  'endless-horizon':  { id:'endless-horizon',  name:'The Culverin',        icon:'🔫', effect:'Steak! tiếp tục đến S6 · Cannonade tier 2 · Uncommon',              cls:'sigil-endless-horizon', w:1,h:2, group:'all' },
+  'abyss-contract':   { id:'abyss-contract',   name:'The Basilisk',        icon:'💣', effect:'Yêu cầu Culverin: Steak! đến S8 (cap) · Cannonade tier 3 · Rare',   cls:'sigil-abyss-contract',  w:1,h:2, group:'all' },
+  'the-parrot':     { id:'the-parrot',     name:'The Parrot',                icon:'🦜', effect:'Retrigger crew below · Needs 2 empty slots L&R · Rare',         cls:'sigil-parrot',          w:1,h:1, group:'all' },
+  'mana-keeper':    { id:'mana-keeper',    name:'Lila The Waitress',         icon:'💧', effect:'Push Luck: remaining 💧 dice not rerolled · Common',              cls:'sigil-lila-waitress',   w:1,h:1, group:'all' },
+  'admiral-voss':   { id:'admiral-voss',   name:'Admiral Voss',      icon:'⚓', effect:'+0.25 Flux mỗi exactly pair 🗡️🗡️ hoặc ⚔️⚔️ · Uncommon',  cls:'sigil-admiral-voss',    w:1,h:1, group:'all' },
+  'mana-tide':      { id:'mana-tide',      name:'The Booze',          icon:'🍾', effect:'+0.5 Flux nếu có combo 💧 (rum) bất kỳ trong turn · Common',   cls:'sigil-mana-tide',       w:1,h:1, group:'all' },
+  // ── DEBUG ONLY — not in GDD ──────────────────────────────────
+  'steak-test':     { id:'steak-test',     name:'STEAK TEST',                icon:'🔧', effect:'[DEBUG] Always rolls 🗡️🗡️🗡️💧💧💧',   cls:'sigil-steak-test',      w:2,h:1, group:'all' },
 };
 
 // Inject CSS themes
 const SIGIL_CSS=`
+.sigil-steak-test{background:repeating-linear-gradient(45deg,#ff0,#ff0 4px,#f80 4px,#f80 8px);border:2px solid #e00;color:#600;font-weight:900;}
 .sigil-steak{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:1.5px solid #e67e22;color:#7d3c00;}
 .sigil-steak-epic{background:linear-gradient(135deg,#ffeaea,#ffb0b0);border:1.5px solid #e74c3c;color:#7d0000;}
 .sigil-sextep{background:linear-gradient(135deg,#f5f0ff,#e0d0ff);border:1.5px solid #8e44ad;color:#4a0080;}
@@ -1961,13 +2310,33 @@ const SIGIL_CSS=`
 `;
 (()=>{const s=document.createElement('style');s.textContent=SIGIL_CSS;document.head.appendChild(s);})();
 
-// Inventory: all sigils start here, player drags to backpack
+// Rarity → gridId mapping
+const SIGIL_RARITY={
+  // Common
+  'chain-shot':'common','corsairs-cache':'common','silver-doubloon':'common',
+  'efficiency':'common','mana-tide':'common','marksman':'common',
+  'odd-one':'common','pair-anchor':'common','mana-keeper':'common',
+  // Uncommon
+  'lucky-draw':'uncommon','deep-reservoir':'uncommon','safe-harbor':'uncommon',
+  'powder-and-alcohol':'uncommon','endless-horizon':'uncommon','admiral-voss':'uncommon',
+  // Rare
+  'trident-of-poseidon':'rare','abyss-contract':'rare','the-parrot':'rare',
+  'gunners-mate':'rare',
+  // TBD / Debug
+  'steak-test':'tbd',
+};
+function rarityGridId(id){ return 'invGrid-'+(SIGIL_RARITY[id]||'tbd'); }
+
+// Inventory: sigils grouped by rarity
 let inventorySigils = Object.keys(SIGIL_DEFS).map(id=>({
-  id, gridId:'invGrid-all', col:0, row:0
+  id, gridId: rarityGridId(id), col:0, row:0
 }));
 
 // Backpack: active sigils (start empty)
 let placedSigils = [];
+
+// ── doRestart() called HERE — after placedSigils declared, no TDZ ──
+doRestart();
 
 // ── HELPERS ───────────────────────────────────────────────────
 function hasSigil(id){ return placedSigils.some(s=>s.id===id); }
@@ -2009,9 +2378,21 @@ function applyCutlass(arr, rolledSlots=null){
 
 // Apply all special dice. rolledSlots=null means all 6 were rolled.
 function applySpecialDice(arr, rolledSlots=null){
+  // FTUE forced dice injection
+  if(FTUE&&FTUE.active&&FTUE.nextForcedDice){
+    const fd=FTUE.nextForcedDice;
+    for(let i=0;i<arr.length&&i<fd.length;i++) arr[i]=fd[i];
+    FTUE.nextForcedDice=null;
+  }
   applyDoubloon(arr);
   applySilverDoubloon(arr, rolledSlots);
   applyCutlass(arr, rolledSlots);
+  // ── [DEBUG] Steak Test: force 🗡️🗡️🗡️💧💧💧 on every roll ──
+  if(hasSigil('steak-test')){
+    const pattern=[0,0,0,2,2,2];
+    const slots=rolledSlots||arr.map((_,i)=>i);
+    slots.forEach((slot,idx)=>{ arr[slot]=pattern[slot%6]; });
+  }
 }
 
 // Chain Shot: +10 flat if ANY pair of 🗡️(icon 0) or ⚔️(icon 1) exists across all stacks this turn
@@ -2026,7 +2407,8 @@ function countCannonadePairs(combo){
   ];
   for(const g of allGroups){
     const c={};g.dice.forEach(d=>c[d]=(c[d]||0)+1);
-    if((c[0]||0)>=2||(c[1]||0)>=2) return 1; // any pair of attack → flat +10
+    // Strict pair: exactly 2 of same attack type (not triple/quad)
+    if((c[0]||0)===2||(c[1]||0)===2) return 1;
   }
   return 0;
 }
@@ -2078,7 +2460,7 @@ function flashSigil(id){
   el.classList.add('flashing');setTimeout(()=>el.classList.remove('flashing'),500);
 }
 
-function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effectiveFlux,tAD,td,paTriggered,onDone){
+function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effectiveFlux,tAD,td,paTriggered,tideFlux,vossFlux,onDone){
   let delay=0;
   const FLASH_DUR=300;
   const BAR_DUR=600;
@@ -2104,7 +2486,7 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
     setTimeout(()=>{ flashSigil('chain-shot'); },delay);
     delay+=FLASH_DUR;
     setTimeout(()=>{
-      const finalAD=tAD+chainBonus+(tridentAD||0);
+      const finalAD=BASE_AD+tAD+chainBonus+(tridentAD||0);
       $('fDmg').textContent=''+finalAD;
       flashPop('fDmg',''+finalAD);flashFormulaBar();
     },delay);
@@ -2115,13 +2497,43 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
     setTimeout(()=>{ flashSigil('trident-of-poseidon'); },delay);
     delay+=FLASH_DUR;
     setTimeout(()=>{
-      // Update fDmg with trident AD and fFlux with trident bonus
-      const finalAD=tAD+(chainBonus||0)+tridentAD;
+      const finalAD=BASE_AD+tAD+(chainBonus||0)+tridentAD;
       $('fDmg').textContent=''+finalAD;
-      const finalFlux=effectiveFlux+tridentFlux;
-      $('fFlux').textContent='×'+(Number.isInteger(finalFlux)?finalFlux:finalFlux.toFixed(1));
-      $('fFluxLbl').textContent='Flux ⚡';
-      flashPop('fDmg',''+finalAD);flashFormulaBar();
+      flashPop('fDmg',''+finalAD);
+      if(tridentFlux>0){
+        const finalFlux=effectiveFlux+tridentFlux;
+        $('fFlux').textContent='×'+(Number.isInteger(finalFlux)?finalFlux:finalFlux.toFixed(1));
+        $('fFluxLbl').textContent='Flux 🔱×3';
+        flashPop('fFlux','×'+(Number.isInteger(finalFlux)?finalFlux:finalFlux.toFixed(1)));
+      }
+      flashFormulaBar();
+    },delay);
+    delay+=BAR_DUR+BETWEEN;
+  }
+
+  if(tideFlux>0){
+    setTimeout(()=>{ flashSigil('mana-tide');feedback('🍾 The Booze: +0.5 Flux','info',1600); },delay);
+    delay+=FLASH_DUR;
+    setTimeout(()=>{
+      const newFlux=effectiveFlux+(tridentFlux||0)+tideFlux;
+      $('fFlux').textContent='×'+(Number.isInteger(newFlux)?newFlux:newFlux.toFixed(1));
+      $('fFluxLbl').textContent='Flux 🍾+.5';
+      flashPop('fFlux','×'+(Number.isInteger(newFlux)?newFlux:newFlux.toFixed(1)));
+      flashFormulaBar();
+    },delay);
+    delay+=BAR_DUR+BETWEEN;
+  }
+
+  if(vossFlux>0){
+    setTimeout(()=>{ flashSigil('admiral-voss'); },delay);
+    delay+=FLASH_DUR;
+    setTimeout(()=>{
+      const newFlux=effectiveFlux+(tridentFlux||0)+tideFlux+vossFlux;
+      const fxStr='×'+(Number.isInteger(newFlux)?newFlux:newFlux.toFixed(2));
+      $('fFlux').textContent=fxStr;
+      $('fFluxLbl').textContent='Flux ⚓+';
+      flashPop('fFlux',fxStr);
+      flashFormulaBar();
     },delay);
     delay+=BAR_DUR+BETWEEN;
   }
@@ -2141,12 +2553,18 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
 
 // ── AUTO-LAYOUT INVENTORY ─────────────────────────────────────
 function layoutInventory(){
-  let col=0,row=0;
-  inventorySigils.forEach(is=>{
-    const def=SIGIL_DEFS[is.id];if(!def)return;
-    if(col+def.w>10){col=0;row++;}
-    is.col=col;is.row=row;
-    col+=def.w+1;
+  const COLS=8;
+  // Layout each rarity group independently
+  ['common','uncommon','rare','tbd'].forEach(rar=>{
+    const gridId='invGrid-'+rar;
+    let col=0,row=0;
+    inventorySigils.filter(is=>is.gridId===gridId).forEach(is=>{
+      const def=SIGIL_DEFS[is.id];if(!def)return;
+      if(col+def.w>COLS){col=0;row++;}
+      is.col=col;is.row=row;
+      col+=def.w+1;
+      if(col>=COLS){col=0;row++;}
+    });
   });
 }
 
@@ -2183,7 +2601,7 @@ function renderInventoryGrid(gridId){
   });
 }
 function renderAllInventory(){
-  renderInventoryGrid('invGrid-all');
+  ['common','uncommon','rare','tbd'].forEach(rar=>renderInventoryGrid('invGrid-'+rar));
 }
 
 // ── DRAG ENGINE (backpack ↔ inventory) ───────────────────────
@@ -2270,10 +2688,28 @@ function clearAllHighlights(){
 }
 function resolveDropAny(el,item,source,def){
   // Conflict check: Powder & Alcohol cannot coexist with Vance (efficiency) in Deck
-  const CONFLICTS={'powder-and-alcohol':'efficiency','efficiency':'powder-and-alcohol'};
+  // Trident cannot coexist with Culverin (endless-horizon) or Basilisk (abyss-contract)
+  const CONFLICTS={
+    'powder-and-alcohol':'efficiency',
+    'efficiency':'powder-and-alcohol',
+    'trident-of-poseidon':'endless-horizon',
+    'endless-horizon':'trident-of-poseidon',
+    'abyss-contract':'trident-of-poseidon',
+  };
+  // Multi-conflict: trident blocks both culverin and basilisk
   function hasConflict(id){
+    if(id==='trident-of-poseidon'){
+      return placedSigils.some(s=>s.id==='endless-horizon'||s.id==='abyss-contract');
+    }
     const foe=CONFLICTS[id];
     return foe && placedSigils.some(s=>s.id===foe);
+  }
+  function conflictName(id){
+    if(id==='trident-of-poseidon'){
+      const c=placedSigils.find(s=>s.id==='endless-horizon'||s.id==='abyss-contract');
+      return c?SIGIL_DEFS[c.id].name:'';
+    }
+    return CONFLICTS[id]?SIGIL_DEFS[CONFLICTS[id]].name:'';
   }
   const bpGrid=$('backpackGrid');
   if(overGrid(el,bpGrid)){
@@ -2282,7 +2718,7 @@ function resolveDropAny(el,item,source,def){
       if(isBPFree(item.id,col,row,def)){item.col=col;item.row=row;}
     } else {
       if(hasConflict(item.id)){
-        feedback('⚠️ Cannot equip: conflicts with '+SIGIL_DEFS[CONFLICTS[item.id]].name,'warn',2200);
+        feedback('⚠️ Cannot equip: conflicts with '+conflictName(item.id),'warn',2200);
       } else if(isBPFree('__new__',col,row,def)){
         inventorySigils=inventorySigils.filter(is=>is.id!==item.id);
         placedSigils.push({id:item.id,col,row});
@@ -2291,18 +2727,23 @@ function resolveDropAny(el,item,source,def){
     renderBackpack();renderAllInventory();applyMaxManaFromSigils();
     return;
   }
-  const ig=$('invGrid-all');
-  if(ig&&overGrid(el,ig)){
-    const gridId='invGrid-all';
-    const{col,row}=getGridSnap(el,ig,INV_SLOT,10,10,def);
-    if(source==='backpack'){
-      placedSigils=placedSigils.filter(ps=>ps.id!==item.id);
-      inventorySigils.push({id:item.id,gridId,col,row});
-    } else {
-      item.gridId=gridId;item.col=col;item.row=row;
+  // Check each rarity grid for drop target
+  const rarGrids=['common','uncommon','rare','tbd'];
+  for(const rar of rarGrids){
+    const ig=$('invGrid-'+rar);
+    if(ig&&overGrid(el,ig)){
+      const gridId='invGrid-'+rar;
+      const{col,row}=getGridSnap(el,ig,INV_SLOT,8,4,def);
+      if(source==='backpack'){
+        // Return to correct rarity grid
+        placedSigils=placedSigils.filter(ps=>ps.id!==item.id);
+        inventorySigils.push({id:item.id,gridId:rarityGridId(item.id),col,row});
+      } else {
+        item.gridId=gridId;item.col=col;item.row=row;
+      }
+      renderBackpack();renderAllInventory();applyMaxManaFromSigils();
+      return;
     }
-    renderBackpack();renderAllInventory();applyMaxManaFromSigils();
-    return;
   }
   // snap back
   renderBackpack();renderAllInventory();
@@ -2310,21 +2751,399 @@ function resolveDropAny(el,item,source,def){
 
 // ── INIT ──────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
-  const ig=$('invGrid-all');
-  if(ig){
-    ig.style.gridTemplateColumns='repeat(10,52px)';
-    ig.style.gridTemplateRows='repeat(10,52px)';
-    for(let r=0;r<10;r++) for(let c=0;c<10;c++){
+  ['common','uncommon','rare','tbd'].forEach(rar=>{
+    const ig=$('invGrid-'+rar);if(!ig)return;
+    ig.style.gridTemplateColumns='repeat(8,52px)';
+    ig.style.gridTemplateRows='repeat(4,52px)';
+    for(let r=0;r<4;r++) for(let c=0;c<8;c++){
       const s=document.createElement('div');
       s.className='inv-slot';s.dataset.col=c;s.dataset.row=r;ig.appendChild(s);
     }
-  }
+  });
   layoutInventory();
   renderBackpack();
   renderAllInventory();
   applyMaxManaFromSigils();
 });
 
+
+// ═══════════════════════════════════════════════════════════════
+// FTUE STATE MACHINE — First Broadside
+// ═══════════════════════════════════════════════════════════════
+
+// ── Bubble helpers ───────────────────────────────────────────
+// B(text) = blue (do it), R(text) = red (warning)
+const B = t => `<span class="ft-b">${t}</span>`;
+const R = t => `<span class="ft-r">${t}</span>`;
+
+function ftBubble(html) {
+  const el = document.getElementById('ftueBubble');
+  if (!el) return;
+  el.innerHTML = html;
+  el.className = 'ftue-bubble';
+  el.style.transition = 'opacity 0.25s ease';
+  el.style.opacity = '1';
+}
+function ftBubbleHide(instant=false) {
+  const el = document.getElementById('ftueBubble');
+  if (!el) return;
+  if (instant) {
+    el.style.transition = 'none';
+    el.style.opacity = '0';
+  } else {
+    el.style.transition = 'opacity 0.25s ease';
+    el.style.opacity = '0';
+  }
+  setTimeout(() => { el.classList.add('hidden'); }, instant ? 0 : 250);
+}
+
+// ── Dim effect ───────────────────────────────────────────────
+function ftApplyDim(brightSlots) {
+  FTUE.dimSlots = brightSlots;
+  const grid = document.getElementById('diceGrid');
+  if (!grid) return;
+  grid.querySelectorAll('.dw').forEach((dw, i) => {
+    const die = dw.querySelector('.die');
+    if (!die) return;
+    if (brightSlots === null) {
+      die.classList.remove('ftue-dim', 'ftue-bright');
+    } else if (brightSlots.includes(i)) {
+      die.classList.remove('ftue-dim'); die.classList.add('ftue-bright');
+    } else {
+      die.classList.remove('ftue-bright'); die.classList.add('ftue-dim');
+    }
+  });
+}
+function ftClearDim() { ftApplyDim(null); }
+
+// ── Block/allow helpers ──────────────────────────────────────
+function ftBlock(...actions) {
+  actions.forEach(a => FTUE.blockedActions.add(a));
+  // Show overlay when blocking buttons, but only target specific ones
+  // Overlay is shown by ftHighlight (spotlight), not globally
+}
+function ftAllow(...actions) {
+  actions.forEach(a => FTUE.blockedActions.delete(a));
+}
+function ftIsBlocked(action) { return FTUE.active && FTUE.blockedActions.has(action); }
+
+// ── Button highlight overlay ─────────────────────────────────
+function ftHighlight(btnId) {
+  const btn = document.getElementById(btnId);
+  const overlay = document.getElementById('ftueOverlay');
+  const hl = document.getElementById('ftueHighlight');
+  if (!btn || !overlay || !hl) return;
+  const r = btn.getBoundingClientRect();
+  const pad = 5;
+  hl.style.cssText = `
+    display:block;position:fixed;
+    top:${r.top-pad}px;left:${r.left-pad}px;
+    width:${r.width+pad*2}px;height:${r.height+pad*2}px;
+    border-radius:12px;
+    box-shadow:0 0 0 9999px rgba(0,0,0,0.65),
+               0 0 0 2px #4db8ff,
+               0 0 16px 4px rgba(77,184,255,0.5);
+    pointer-events:none;z-index:151;
+  `;
+  overlay.style.display = 'block';
+}
+function ftHighlightClear() {
+  const overlay = document.getElementById('ftueOverlay');
+  const hl = document.getElementById('ftueHighlight');
+  if (overlay) overlay.style.display = 'none';
+  if (hl) hl.style.display = 'none';
+}
+
+// ── Pulse helper ─────────────────────────────────────────────
+function ftPulse(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  const anim = (btnId === 'btnLeft') ? 'roll-pulse' : 'super-pulse';
+  btn.style.animation = `${anim} 1s ease-in-out infinite`;
+  setTimeout(() => ftHighlight(btnId), 50);
+  setTimeout(() => { if (btn) btn.style.animation = ''; }, 5000);
+}
+function ftClearPulse(btnId) {
+  const el = document.getElementById(btnId);
+  if (el) el.style.animation = '';
+  ftHighlightClear();
+}
+
+// ── Beat sequencer ───────────────────────────────────────────
+function ftAdvance(beat) {
+  FTUE.beat = beat;
+  console.log('[FTUE] Beat:', beat);
+  ftRunBeat(beat);
+}
+
+function ftRunBeat(beat) {
+  switch(beat) {
+
+    // ── BEAT 1 ──────────────────────────────────────────────
+    case 'beat1':
+      ftBlock('push', 'strike');
+      ftAllow('roll');
+      setTimeout(() => {
+        ftBubble(`An enemy ship ahead. Tap ${B('ROLL')} to begin.`);
+        ftPulse('btnLeft');
+      }, 800);
+      break;
+
+    case 'beat2_1':
+      ftBlock('roll','push','strike');
+      setTimeout(() => {
+        ftApplyDim([0]);
+        ftBubble(`To attack, you need a ${B('Cannon')}. ${B('Select it!')}`)
+      }, 600);
+      break;
+
+    case 'beat2_2':
+      ftApplyDim([0, 2, 3]);
+      ftBubble(`Other dice need ${R('at least a pair')}. ${B('Select the Shields!')}`);
+      break;
+
+    case 'beat2_3':
+      ftClearDim();
+      ftBubble(`${B('Strike!')} Hit the enemy!`);
+      ftAllow('strike');
+      ftPulse('btnStrike');
+      break;
+
+    case 'beat2_4':
+      setTimeout(() => {
+        ftBubble(`You hit the enemy — and they ${R('hit back!')} Watch your ${R('HP')}.`);
+        setTimeout(() => {
+          ftBubble(`You can hit ${B('much harder')}. Tap ${B('ROLL')}.`);
+          ftAllow('roll');
+          ftPulse('btnLeft');
+        }, 2500);
+      }, 500);
+      break;
+
+    case 'beat3_1':
+      ftBlock('roll','push','strike');
+      setTimeout(() => {
+        ftApplyDim([0, 1]);
+        ftBubble(`${B('Select both Cannons!')}`);
+      }, 600);
+      break;
+
+    case 'beat3_2':
+      ftClearDim();
+      ftBubble(`Don't ${R('Strike')} yet — tap ${B('Push Luck')} to lock these and roll the rest!`);
+      ftAllow('push');
+      ftBlock('strike');
+      ftPulse('btnPushLuck');
+      break;
+
+    case 'beat3_3':
+      setTimeout(() => {
+        const freeSlotsArr = G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
+        ftApplyDim(freeSlotsArr);
+        ftBubble(`${B('Select the Cannonballs and Stars')} — then ${B('Push Luck')} again!`);
+        ftBlock('strike');
+        ftAllow('push');
+        ftPulse('btnPushLuck');
+      }, 600);
+      break;
+
+    case 'beat3_4':
+      setTimeout(() => {
+        ftBubble(`${B('STEAK!')} Locking all 6 dice powers up your next Strike. ${B('More Steaks = more power.')}`);
+        setTimeout(() => { ftAdvance('beat3_5'); }, 3000);
+      }, 500);
+      break;
+
+    case 'beat3_5':
+      ftApplyDim([0, 1, 2]);
+      ftBubble(`Now finish with a ${B('Triple!')} Select the three swords.`);
+      ftBlock('push');
+      ftAllow('strike');
+      break;
+
+    case 'beat3_6':
+      setTimeout(() => {
+        ftBubble(`${B('Push Luck')} makes your Strikes ${B('much stronger!')} `);
+        setTimeout(() => ftAdvance('beat4'), 2500);
+      }, 500);
+      break;
+
+    case 'beat4':
+      ftBubble(`But be careful — if you ${R("can't form any combo")} after Push Luck, you ${R('BREAK')} and lose everything that turn.`);
+      setTimeout(() => {
+        ftBubble(`${R('No Cannon, no pair = BREAK.')} The risk is yours.`);
+        setTimeout(() => {
+          ftBubbleHide();
+          setTimeout(() => ftAdvance('beat5'), 300);
+        }, 2500);
+      }, 3500);
+      break;
+
+    case 'beat5':
+      ftAllow('roll','push','strike');
+      FTUE.nextForcedDice = null;
+      FTUE.nextForcedReroll = null;
+      setTimeout(() => {
+        ftBubble(`${B('Finish the Broadside, Captain!')}`);
+        ftPulse('btnLeft');
+      }, 500);
+      break;
+
+    case 'done':
+      FTUE.active = false;
+      ftBubbleHide();
+      break;
+  }
+}
+
+// ── Intercept Roll ───────────────────────────────────────────
+// Called BEFORE doRoll() actually rolls, injects forced dice
+function ftOnRoll() {
+  if (!FTUE.active) return;
+  if (FTUE.beat === 'beat1') {
+    // First roll → set beat 2 forced dice
+    FTUE.nextForcedDice = FTUE.DICE_BEATS['beat2'];
+    ftAdvance('beat2_1');
+  } else if (FTUE.beat === 'beat2_4') {
+    // Second roll → set beat 3 forced dice
+    FTUE.nextForcedDice = FTUE.DICE_BEATS['beat3'];
+    ftClearPulse('btnLeft');ftClearPulse('btnPushLuck');
+    ftAdvance('beat3_1');
+  } else if (FTUE.beat === 'beat5') {
+    ftBubbleHide(true);
+    ftClearPulse('btnLeft');ftClearPulse('btnPushLuck');
+  }
+}
+
+// ── Intercept Die Click ──────────────────────────────────────
+// Called when player clicks a die — returns false to block deselect
+function ftOnDieClick(slotIdx, currentlySelected) {
+  if (!FTUE.active) return true; // allow normal behavior
+
+  // Block deselect entirely in FTUE
+  if (currentlySelected) return false;
+
+  // Beat 2.1: only allow slot 0
+  if (FTUE.beat === 'beat2_1') {
+    if (slotIdx !== 0) return false;
+    ftAdvance('beat2_2');
+    return true;
+  }
+
+  // Beat 2.2: only allow slots 2 and 3 (shields)
+  if (FTUE.beat === 'beat2_2') {
+    if (slotIdx !== 2 && slotIdx !== 3) return false;
+    // Check if both shields selected after this click
+    const willBothSelected = G.ds.filter((s,i) => s===DS.S || i===slotIdx).length >= 3;
+    // Count: slot 0 already selected + checking if both shields get selected
+    const selectedAfter = G.ds.map((s,i)=> s===DS.S || i===slotIdx ? 1:0).reduce((a,b)=>a+b,0);
+    if (selectedAfter >= 3) { // 🗡️ + 🛡️ + 🛡️
+      setTimeout(() => ftAdvance('beat2_3'), 50);
+    }
+    return true;
+  }
+
+  // Beat 3.1: only allow slots 0 (🗡️) and 1 (⚔️)
+  if (FTUE.beat === 'beat3_1') {
+    if (slotIdx !== 0 && slotIdx !== 1) return false;
+    const selectedCount = G.ds.filter(s=>s===DS.S).length + 1;
+    if (selectedCount >= 2) {
+      setTimeout(() => ftAdvance('beat3_2'), 50);
+    }
+    return true;
+  }
+
+  // Beat 3.3: only allow free dice (💥💥⭐⭐)
+  if (FTUE.beat === 'beat3_3') {
+    if (G.ds[slotIdx] !== DS.F) return false;
+    // Check if all free dice selected
+    const freeDice = G.ds.filter(s=>s===DS.F).length;
+    const selectedFree = G.ds.filter(s=>s===DS.S).length + 1; // approximate
+    // Will advance to push luck again — just allow
+    return true;
+  }
+
+  // Beat 3.5: only allow slots 0,1,2 (⚔️⚔️⚔️)
+  if (FTUE.beat === 'beat3_5') {
+    if (slotIdx > 2) return false;
+    return true;
+  }
+
+  return true;
+}
+
+// ── Intercept Push Luck ──────────────────────────────────────
+function ftOnPushLuck() {
+  if (!FTUE.active) return;
+  ftBubbleHide(true); // immediate hide
+
+  if (FTUE.beat === 'beat3_2') {
+    // First push: set forced reroll for 4 free dice
+    FTUE.nextForcedReroll = FTUE.DICE_BEATS['beat3_reroll'];
+    ftClearPulse('btnLeft');ftClearPulse('btnPushLuck');
+    // Beat advances after reroll in ftOnRerollComplete()
+  } else if (FTUE.beat === 'beat3_3') {
+    // Second push — all 6 locked → Steak! will fire
+    FTUE.nextForcedDice = FTUE.DICE_BEATS['beat3_steak'];
+    ftClearDim();
+    // Beat advances in ftOnSteakComplete()
+  }
+}
+
+// ── Intercept Strike ─────────────────────────────────────────
+function ftOnStrikeStart() {
+  if (!FTUE.active) return;
+  ftBubbleHide(true); // immediate hide
+  ftClearDim();
+  ftClearPulse('btnStrike');
+}
+
+function ftOnStrikeComplete() {
+  if (!FTUE.active) return;
+  // Enemy counterattack handled automatically by game
+  if (FTUE.beat === 'beat2_3' || FTUE.beat === 'beat2_4') {
+    ftAdvance('beat2_4');
+  } else if (FTUE.beat === 'beat3_5') {
+    ftAdvance('beat3_6');
+  }
+}
+
+// ── Intercept Steak! complete ────────────────────────────────
+function ftOnSteakComplete() {
+  if (!FTUE.active) return;
+  if (FTUE.beat === 'beat3_3') {
+    ftAdvance('beat3_4');
+  }
+}
+
+// ── Intercept after reroll in Push Luck ──────────────────────
+function ftOnRerollComplete() {
+  if (!FTUE.active) return;
+  if (FTUE.beat === 'beat3_2') {
+    ftAdvance('beat3_3');
+  }
+}
+
+// ── Intercept Victory (broadside won) ───────────────────────
+function ftOnVictory() {
+  if (!FTUE.active) return;
+  if (FTUE.beat !== 'done') {
+    ftBubble(`${B("Broadside won!")} You're learning fast, Captain.`);
+    setTimeout(() => {
+      ftBubbleHide();
+      ftAdvance('done');
+    }, 3000);
+  }
+}
+
+// ── Start FTUE ───────────────────────────────────────────────
+function ftueStart() {
+  FTUE.active = true;
+  FTUE.beat = 'beat1';
+  ftBlock('push','strike');
+  ftAllow('roll');
+  ftRunBeat('beat1');
+}
 
 </script>
 </body>
