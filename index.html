@@ -330,6 +330,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 .die.ftue-dim{opacity:0.25!important;transition:opacity 0.2s ease;}
 .die.ftue-bright{opacity:1!important;transition:opacity 0.2s ease;}
+.ftue-dim-bottom{opacity:0.25!important;pointer-events:none!important;transition:opacity 0.2s ease;}
 /* ─────────────────────────────────────────────────────── */
 
 /* ── ARENA ── */
@@ -1471,18 +1472,20 @@ function renderBtns(){
 
   // ── Show/hide Roll row vs Action row ──────────────────────
   const rollRow=$('rollRow'), actionRow=$('actionRow');
-  const isIdle=ph==='idle'||anim;
-  if(rollRow) rollRow.style.display=isIdle?'flex':'none';
-  if(actionRow) actionRow.style.display=isIdle?'none':'flex';
+  const showRoll = ph==='idle' && !anim;
+  const showAction = ph==='rolled' && !anim;
+  if(rollRow) rollRow.style.display=showRoll?'flex':'none';
+  if(actionRow) actionRow.style.display=showAction?'flex':'none';
 
   // ── ROLL button ────────────────────────────────────────────
   const bl=$('btnLeft');
   if(bl){
-    bl.disabled=anim||ph!=='idle';
+    const ftueBlocksRoll = typeof FTUE!=='undefined' && FTUE.active && FTUE.blockedActions && FTUE.blockedActions.has('roll');
+    bl.disabled = anim || ph!=='idle' || ftueBlocksRoll;
     bl.className='mb b-roll-new';
     const bll=$('bll'),bls=$('bls');
-    if(bll) bll.textContent=anim?'Rolling…':'Roll';
-    if(bls) bls.textContent=anim?'wait…':'tap to start';
+    if(bll) bll.textContent='Roll';
+    if(bls) bls.textContent='tap to start';
   }
 
   // ── PUSH LUCK button ───────────────────────────────────────
@@ -2817,21 +2820,19 @@ function ftBubbleHide(instant=false) {
 function ftBubbleTap(html, onTap) {
   const el = document.getElementById('ftueBubble');
   if (!el) return;
-  // Clean up any prior tap handler first
   if (FTUE._tapHandler) {
     document.removeEventListener('click', FTUE._tapHandler, true);
     document.removeEventListener('touchstart', FTUE._tapHandler, true);
     FTUE._tapHandler = null;
   }
-  // Clear any button highlight — TAP TO CONTINUE means tap anywhere, no specific button
-  ftHighlightClear();
+  // Only clear the spotlight highlight div — do NOT touch ftueOverlay here.
+  // Caller (e.g. beat2_4) may have explicitly shown the overlay for full-dim.
+  const hl = document.getElementById('ftueHighlight');
+  if (hl) hl.style.display = 'none';
   el.innerHTML = html + '<span class="ft-tap">tap anywhere to continue</span>';
   el.className = 'ftue-bubble';
   el.style.transition = 'opacity 0.25s ease';
   el.style.opacity = '1';
-
-  // Attach one-time listener (delayed slightly so the tap that triggered
-  // the previous beat doesn't immediately fire this one)
   setTimeout(() => {
     const handler = (e) => {
       document.removeEventListener('click', handler, true);
@@ -2867,20 +2868,37 @@ function ftClearDim() { ftApplyDim(null); }
 // ── Block/allow helpers ──────────────────────────────────────
 function ftBlock(...actions) {
   actions.forEach(a => FTUE.blockedActions.add(a));
-  // Show overlay when blocking buttons, but only target specific ones
-  // Overlay is shown by ftHighlight (spotlight), not globally
+  if(typeof renderBtns==='function') renderBtns();
 }
 function ftAllow(...actions) {
   actions.forEach(a => FTUE.blockedActions.delete(a));
+  if(typeof renderBtns==='function') renderBtns();
 }
 function ftIsBlocked(action) { return FTUE.active && FTUE.blockedActions.has(action); }
 
 // ── Button highlight overlay ─────────────────────────────────
+// Add ftOverlayShow/Clear for full-screen dim (beat 2.4 etc)
+function ftOverlayShow() {
+  const overlay = document.getElementById('ftueOverlay');
+  if (overlay) overlay.style.display = 'block';
+}
+function ftOverlayClear() {
+  const overlay = document.getElementById('ftueOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+// Dim just the bottom button area — dice stay bright
+function ftDimBottom() {
+  const bottom = document.querySelector('.bottom');
+  if (bottom) bottom.classList.add('ftue-dim-bottom');
+}
+function ftUndimBottom() {
+  const bottom = document.querySelector('.bottom');
+  if (bottom) bottom.classList.remove('ftue-dim-bottom');
+}
 function ftHighlight(btnId) {
   const btn = document.getElementById(btnId);
-  const overlay = document.getElementById('ftueOverlay');
   const hl = document.getElementById('ftueHighlight');
-  if (!btn || !overlay || !hl) return;
+  if (!btn || !hl) return;
   const r = btn.getBoundingClientRect();
   const pad = 5;
   hl.style.cssText = `
@@ -2893,12 +2911,12 @@ function ftHighlight(btnId) {
                0 0 16px 4px rgba(77,184,255,0.5);
     pointer-events:none;z-index:151;
   `;
-  overlay.style.display = 'block';
+  // Do NOT show ftueOverlay here — box-shadow handles the dimming.
+  // Showing both causes double-darkening on the target button.
 }
 function ftHighlightClear() {
-  const overlay = document.getElementById('ftueOverlay');
+  ftOverlayClear(); // clear full-dim if active
   const hl = document.getElementById('ftueHighlight');
-  if (overlay) overlay.style.display = 'none';
   if (hl) hl.style.display = 'none';
 }
 
@@ -2908,12 +2926,20 @@ function ftPulse(btnId) {
   if (!btn) return;
   const anim = (btnId === 'btnLeft') ? 'roll-pulse' : 'super-pulse';
   btn.style.animation = `${anim} 1s ease-in-out infinite`;
-  setTimeout(() => ftHighlight(btnId), 50);
-  setTimeout(() => { if (btn) btn.style.animation = ''; }, 5000);
+  // Store timer ID so ftClearPulse can cancel it before it fires
+  FTUE._highlightTimer = setTimeout(() => {
+    FTUE._highlightTimer = null;
+    ftHighlight(btnId);
+  }, 50);
 }
 function ftClearPulse(btnId) {
   const el = document.getElementById(btnId);
   if (el) el.style.animation = '';
+  // Cancel pending highlight timer to avoid stale spotlight re-appearing
+  if (FTUE._highlightTimer) {
+    clearTimeout(FTUE._highlightTimer);
+    FTUE._highlightTimer = null;
+  }
   ftHighlightClear();
 }
 
@@ -2942,7 +2968,7 @@ function ftRunBeat(beat) {
       setTimeout(() => {
         ftApplyDim([0]);
         ftBubble(`To attack, you need a ${B('Cannon')}. ${B('Select it!')}`)
-      }, 600);
+      }, ANIM + 100);
       break;
 
     case 'beat2_2':
@@ -2952,17 +2978,20 @@ function ftRunBeat(beat) {
 
     case 'beat2_3':
       ftClearDim();
-      ftBubble(`${B('Strike!')} Hit the enemy!`);
+      ftBubble(`${B('Strike!')} Deal damage to the enemy!`);
       ftAllow('strike');
       ftPulse('btnStrike');
       break;
 
     case 'beat2_4':
+      ftBlock('roll');
       setTimeout(() => {
+        ftOverlayShow();
         ftBubbleTap(
-          `You hit the enemy — and they ${R('hit back!')} Watch your ${R('HP')}.`,
+          `You struck the enemy — and they ${R('struck back!')} Watch your ${R('HP')}.`,
           () => {
-            ftBubble(`You can hit ${B('much harder')}. Tap ${B('ROLL')}.`);
+            ftOverlayClear();
+            ftBubble(`Let's try ${R('Push Luck')} to combine dice into chain combos. Tap ${B('ROLL')} to start a new turn.`);
             ftAllow('roll');
             ftPulse('btnLeft');
           }
@@ -2975,7 +3004,7 @@ function ftRunBeat(beat) {
       setTimeout(() => {
         ftApplyDim([0, 1]);
         ftBubble(`${B('Select the Cannon and the Big Cannon!')}`);
-      }, 600);
+      }, ANIM + 100);
       break;
 
     case 'beat3_2':
@@ -2988,12 +3017,12 @@ function ftRunBeat(beat) {
 
     case 'beat3_3':
       setTimeout(() => {
-        const freeSlotsArr = G.ds.map((s,i)=>s===DS.F?i:-1).filter(i=>i>=0);
-        ftApplyDim(freeSlotsArr);
-        ftBubble(`${B('Select the Cannonballs and Stars')} — then ${B('Push Luck')} again!`);
+        ftClearDim();   // all visible dice are free → all bright
+        ftDimBottom();  // dim buttons — focus is on dice
+        ftBubble(`${B('Select the Cannonballs and Hats')} — then Push Luck again!`);
         ftBlock('strike');
         ftAllow('push');
-        ftPulse('btnPushLuck');
+        // Push Luck pulse fires only after all 4 dice selected (see ftOnDieClick)
       }, 600);
       break;
 
@@ -3008,13 +3037,14 @@ function ftRunBeat(beat) {
 
     case 'beat3_5':
       ftApplyDim([0, 1, 2]);
-      ftBubble(`Now finish with a ${B('Triple Big Cannon!')} Select all three.`);
+      ftBubble(`Now finish with a ${B('Triple Big Cannon!')} Select all three and strike!`);
       ftBlock('push');
       ftAllow('strike');
       break;
 
     case 'beat3_6':
       setTimeout(() => {
+        ftOverlayShow(); // dim for readability — stays through beat4, clears at beat5
         ftBubbleTap(
           `${B('Push Luck')} makes your Strikes ${B('much stronger!')} `,
           () => ftAdvance('beat4')
@@ -3041,6 +3071,7 @@ function ftRunBeat(beat) {
       ftAllow('roll','push','strike');
       FTUE.nextForcedDice = null;
       FTUE.nextForcedReroll = null;
+      ftOverlayClear(); // dim was on since beat3_6 — clear now
       setTimeout(() => {
         ftBubble(`${B('Finish the Broadside, Captain!')}`);
         ftPulse('btnLeft');
@@ -3064,6 +3095,7 @@ function ftOnRoll() {
     ftAdvance('beat2_1');
   } else if (FTUE.beat === 'beat2_4') {
     FTUE.nextForcedDice = FTUE.DICE_BEATS['beat3'];
+    ftBubbleHide(true);
     ftClearPulse('btnLeft');ftClearPulse('btnPushLuck');
     ftAdvance('beat3_1');
   } else if (FTUE.beat === 'beat5') {
@@ -3113,16 +3145,28 @@ function ftOnDieClick(slotIdx, currentlySelected) {
   // Beat 3.3: only allow free dice (💥💥⭐⭐)
   if (FTUE.beat === 'beat3_3') {
     if (G.ds[slotIdx] !== DS.F) return false;
-    // Check if all free dice selected
-    const freeDice = G.ds.filter(s=>s===DS.F).length;
-    const selectedFree = G.ds.filter(s=>s===DS.S).length + 1; // approximate
-    // Will advance to push luck again — just allow
+    // If this is the last free die, transition focus to Push Luck button
+    const totalFree = G.ds.filter(s => s === DS.F).length;
+    if (totalFree === 1) {
+      setTimeout(() => {
+        ftUndimBottom();
+        ftClearDim();
+        ftPulse('btnPushLuck');
+      }, 120);
+    }
     return true;
   }
 
   // Beat 3.5: only allow slots 0,1,2 (⚔️⚔️⚔️)
   if (FTUE.beat === 'beat3_5') {
     if (slotIdx > 2) return false;
+    const selectedAfter = G.ds.filter(s=>s===DS.S).length + 1;
+    if (selectedAfter >= 3) {
+      setTimeout(() => {
+        ftClearDim();
+        ftPulse('btnStrike'); // spotlight via box-shadow only — no ftDimBottom (would block clicks)
+      }, 120);
+    }
     return true;
   }
 
@@ -3132,7 +3176,8 @@ function ftOnDieClick(slotIdx, currentlySelected) {
 // ── Intercept Push Luck ──────────────────────────────────────
 function ftOnPushLuck() {
   if (!FTUE.active) return;
-  ftBubbleHide(true); // immediate hide
+  ftBubbleHide(true);
+  ftUndimBottom(); // cleanup in case bottom was dimmed
 
   if (FTUE.beat === 'beat3_2') {
     // First push: set forced reroll for 4 free dice
@@ -3142,6 +3187,7 @@ function ftOnPushLuck() {
   } else if (FTUE.beat === 'beat3_3') {
     // Second push — all 6 locked → Steak! will fire
     FTUE.nextForcedDice = FTUE.DICE_BEATS['beat3_steak'];
+    ftClearPulse('btnPushLuck');
     ftClearDim();
     // Beat advances in ftOnSteakComplete()
   }
@@ -3151,6 +3197,7 @@ function ftOnPushLuck() {
 function ftOnStrikeStart() {
   if (!FTUE.active) return;
   ftBubbleHide(true); // immediate hide
+  ftUndimBottom();    // cleanup in case bottom was dimmed
   ftClearDim();
   ftClearPulse('btnStrike');
 }
