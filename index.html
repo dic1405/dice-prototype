@@ -1,16 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1100, initial-scale=1.0">
-<title>Dice — Sigil v2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pirate Dice</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overflow:hidden}
 body{height:100%;overflow:hidden;display:flex;justify-content:center;align-items:stretch;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.app-wrap{display:flex;flex-direction:row;height:100dvh;align-items:stretch;}
-.phone{background:#f8f8f8;width:430px;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.app-wrap{display:flex;flex-direction:column;height:100dvh;align-items:center;}
+.phone{background:#f8f8f8;width:100%;max-width:430px;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
@@ -126,7 +125,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 
 /* ── BACKPACK ── */
-.backpack{
+.backpack{display:none!important;
   width:100%;flex-shrink:0;
   background:#e4e4e4;
   border-bottom:1.5px solid #c8c8c8;
@@ -199,15 +198,11 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 .bp-sigil.flashing{animation:sigil-flash .25s cubic-bezier(.34,1.56,.64,1) forwards;}
 
-/* Sigil themes */
-.bp-sigil.sigil-shaun-the-lucky{background:linear-gradient(135deg,#fff8ee,#ffe9cc);border:1.5px solid #e8a020;color:#8a5200;}
-.bp-sigil.sigil-bar-on-the-sea{background:linear-gradient(135deg,#eef4ff,#cce0ff);border:1.5px solid #2980b9;color:#1a4a7a;}
-.bp-sigil.sigil-bart-the-hoarder{background:linear-gradient(135deg,#fdf3e0,#f5c87a);border:1.5px solid #c07c10;color:#5a3000;}
-.bp-sigil.sigil-drake-the-chain{background:linear-gradient(135deg,#e8f4ff,#a8d8ff);border:1.5px solid #1a6aaf;color:#0a3060;}
-.bp-sigil.sigil-doubloon{background:linear-gradient(135deg,#fffde0,#ffd700);border:2px solid #b8900a;color:#4a2d00;}
-.bp-sigil.sigil-the-anchor{background:linear-gradient(135deg,#e8f4f0,#a8dcc8);border:1.5px solid #1a8060;color:#0a3020;}
-.bp-sigil.sigil-trident-of-poseidon{background:linear-gradient(135deg,#e8eeff,#a0b8ff);border:2px solid #3050d0;color:#0a1880;}
-.bp-sigil.sigil-powder-and-alcohol{background:linear-gradient(135deg,#fff0e8,#ffb87a);border:1.5px solid #c06010;color:#5a2000;}
+/* Sigil themes — unified gray bg, rarity outline */
+.bp-sigil{background:#e8e8e8;color:#333;}
+.bp-sigil.rarity-common{border:1.5px solid #999;}
+.bp-sigil.rarity-uncommon{border:2px solid #2980b9;}
+.bp-sigil.rarity-rare{border:2px solid #d4a017;box-shadow:0 0 6px rgba(212,160,23,.3);}
 .gbox.pa-converted{border-color:#c06010 !important;background:#fff8f0 !important;}
 .gbox.pa-converted:not(.selbox) .gbox-lbl::after{content:' 🍾';}
 @keyframes pa-flip{0%{opacity:1;transform:scale(1)}40%{opacity:0;transform:scale(0.5)}100%{opacity:1;transform:scale(1)}}
@@ -216,22 +211,10 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 /* Golden die & Silver die */
 .die.golden{background:#fffce0!important;}
 .die.silver{background:#f0f4f8!important;}
-.bp-sigil.sigil-vance-the-versatile{background:linear-gradient(135deg,#e8f8ee,#b8e8cc);border:1.5px solid #27ae60;color:#0a4a20;}
-.bp-sigil.sigil-the-grapeshot{background:linear-gradient(135deg,#f0f4f8,#d0dce8);border:1.5px solid #7a9ab0;color:#2a4a60;}
-.bp-sigil.sigil-cutlass{background:linear-gradient(135deg,#f8ece8,#e8c4b8);border:1.5px solid #a04030;color:#4a1000;}
-.bp-sigil.sigil-zoppshu-the-marksman{background:linear-gradient(135deg,#eaf4ff,#b8d8f8);border:1.5px solid #1a6aaf;color:#0a2860;}
-.bp-sigil.sigil-zim-the-odd-one{background:linear-gradient(135deg,#f8eeff,#d8b8f8);border:1.5px solid #8030c0;color:#3a0070;}
-.bp-sigil.sigil-flint-the-loader{background:linear-gradient(135deg,#fff0e0,#f8c880);border:1.5px solid #b06010;color:#502000;}
-.bp-sigil.sigil-pair-anchor{background:linear-gradient(135deg,#e8f0f8,#c0d4e8);border:1.5px solid #3060a0;color:#102040;}
-.bp-sigil.sigil-the-culverin{background:linear-gradient(135deg,#e0f8f0,#80d8b0);border:1.5px solid #1a8a60;color:#004030;}
-.bp-sigil.sigil-the-basilisk{background:linear-gradient(135deg,#1a0a2e,#4a1a6e);border:2px solid #9040d0;color:#e0b0ff;box-shadow:0 0 8px rgba(144,64,208,.3);}
-.bp-sigil.sigil-lila-the-waitress{background:linear-gradient(135deg,#e0f0ff,#90c8f8);border:1.5px solid #1060c0;color:#002060;}
-.bp-sigil.sigil-the-booze{background:linear-gradient(135deg,#e0f8ff,#60d0f0);border:1.5px solid #0088bb;color:#003a55;}
-.bp-sigil.sigil-admiral-voss{background:linear-gradient(135deg,#e8f0ff,#8090d8);border:1.5px solid #2030a0;color:#0a1060;}
 .die.cutlass{background:#fff0ee!important;}
 
 /* ── INVENTORY PANEL ── */
-.inv-panel{width:560px;flex-shrink:0;height:100dvh;background:#f5f5f5;border-left:2px solid #ddd;display:flex;flex-direction:column;overflow:hidden;}
+.inv-panel{display:none!important;width:560px;flex-shrink:0;height:100dvh;background:#f5f5f5;border-left:2px solid #ddd;display:flex;flex-direction:column;overflow:hidden;}
 .inv-header{padding:10px 14px 6px;flex-shrink:0;border-bottom:1px solid #ddd;}
 .inv-title{font-size:11px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;}
 .inv-subtitle{font-size:9px;color:#888;margin-bottom:4px;}
@@ -267,7 +250,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .rbtn{background:#f0f0f0;border:1px solid #ddd;color:#888;border-radius:5px;padding:2px 6px;font-size:8px}
 
 /* ── FEEDBACK BANNER ── */
-.ban{display:none;text-align:center;padding:4px 14px;font-size:12px;font-weight:500;flex-shrink:0}
+.ban{display:none;text-align:center;padding:6px 14px;font-size:12px;font-weight:600;
+  position:absolute;left:12px;right:12px;z-index:20;border-radius:8px;
+  top:auto;bottom:70px; /* above the Strike/Roll button */
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.ban.on{display:block}
 .ban.bust{background:#ffeaea;color:#c0392b;border-bottom:1px solid #e74c3c}
 .ban.feedback{background:#e8f8f0;color:#1e8449;border-bottom:1px solid #27ae60}
 .ban.feedback.dmg{background:#fff0f0;color:#c0392b;border-bottom:1px solid #e74c3c}
@@ -310,29 +298,118 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 
 /* ── ARENA ── */
-.arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:0}
-/* Dice zone — upper half */
-.dice-zone{
-  width:100%;display:flex;flex-direction:column;align-items:center;gap:5px;
-  padding:6px 16px 8px;
+/* ── NEW LAYOUT: game-mid (skills left + dice right) ── */
+.game-mid{
+  display:flex;gap:6px;width:100%;max-width:380px;
+  padding:4px 12px 4px;align-items:stretch;flex-shrink:0;
+  box-sizing:border-box;
+}
+.skill-panel{
+  display:flex;flex-direction:column;gap:4px;width:44px;flex-shrink:0;
+}
+.skill-slot{
+  width:44px;height:44px;border-radius:8px;border:1.5px solid #ddd;
+  background:#f9f9f9;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1px;
+  font-size:7px;font-weight:600;color:#555;cursor:pointer;
+  transition:all .15s;position:relative;
+}
+.skill-slot:disabled{opacity:.25;cursor:not-allowed;border-color:#ddd!important;background:#f8f8f8!important}
+.skill-slot.locked{background:#eee;cursor:default;border-style:dashed}
+.skill-slot.locked::after{content:'🔒';font-size:12px;opacity:.3}
+.skill-slot.rr{border-color:#8e44ad;background:#f9f0ff}
+.skill-slot.rr .sl-icon{color:#6c3483}
+.skill-slot.magnus-active{border-color:#8e44ad;background:#f5eeff}
+.sl-icon{font-size:14px;line-height:1}
+.sl-label{font-size:6px;color:#999;text-transform:uppercase;letter-spacing:.3px}
+.sl-cost{font-size:6px;color:#bbb}
+.dice-box{
+  flex:1;border:2px solid #d0d0d0;border-radius:10px;
+  background:#fafafa;padding:6px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;min-height:100px;
+  min-width:0; /* allow flex shrink calculation */
+}
+.dice-box .dg{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  width:100%;max-width:280px;
+}
+/* ── DRAG-TO-PUSH ── */
+.drag-ghost{
+  position:fixed;pointer-events:none;z-index:100;
+  display:flex;gap:4px;opacity:.85;
+  transition:none;
+}
+.drag-ghost .die{width:40px;height:40px;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.push-luck-zone.drop-active .pl-slot{border-color:#f39c12;background:#fff8ee}
+.push-luck-zone.drop-hover .pl-slot{border-color:#27ae60;background:#efffef}
+.pl-slot.snap-preview{border-color:#27ae60;border-style:solid;background:#efffef;animation:preview-pulse .6s ease infinite alternate}
+@keyframes preview-pulse{0%{opacity:.7;transform:scale(.95)}100%{opacity:1;transform:scale(1)}}
+.pl-slot.snap-in{animation:snap-land .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes snap-land{0%{transform:scale(.4) translateY(-15px);opacity:0}50%{transform:scale(1.15) translateY(0);opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
+.push-luck-zone.snap-flash{animation:zone-flash .35s ease}
+@keyframes zone-flash{0%{background:transparent}30%{background:rgba(39,174,96,.08)}100%{background:transparent}}
+.pl-slot.invalid-flash{border-color:#e74c3c!important;background:#ffe0e0!important;animation:invalid-shake .5s ease}
+@keyframes invalid-shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-3px)}30%{transform:translateX(3px)}45%{transform:translateX(-2px)}60%{transform:translateX(2px)}}
+.dice-box.dragging{opacity:.6}
+
+/* ── PUSH LUCK ZONE ── */
+.push-luck-zone{
+  width:100%;max-width:380px;padding:4px 12px 2px;flex-shrink:0;
+  min-height:62px; /* stable height: label + 1 row of slots + stats */
+}
+.push-luck-header{
+  display:flex;align-items:center;gap:6px;margin-bottom:3px;
+}
+.push-luck-label{
+  font-size:8px;font-weight:800;color:#8b4513;letter-spacing:1px;
+  text-transform:uppercase;line-height:1;
+}
+.push-luck-grid{
+  display:flex;flex-wrap:wrap;gap:3px;align-items:center;
+}
+.pl-slot{
+  width:38px;height:38px;border:1.5px dashed #ccc;border-radius:4px;
+  background:#f8f8f8;display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
 }
-/* Groups zone — lower section, separated with border-top */
+.pl-sep{
+  font-size:16px;font-weight:300;color:#bbb;
+  padding:0 1px;user-select:none;flex-shrink:0;
+}
+.pl-slot.filled{border-style:solid;border-color:#aaa;background:#fff}
+.pl-slot img{width:60%;height:60%;object-fit:contain}
+.push-luck-stats{
+  display:flex;justify-content:center;gap:8px;
+  padding:2px 0;margin-top:2px;
+  font-size:8px;font-weight:600;color:#888;
+}
+.push-luck-stats span{color:#555}
+
+.arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:0;width:100%}
+/* Dice zone — formula bar, fixed height */
+.dice-zone{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:6px 16px 0;
+  flex-shrink:0;
+}
+/* Groups zone — steak rows, scrollable remainder */
 .groups-zone{
   width:100%;display:flex;flex-direction:column;align-items:center;gap:0;
-  padding:8px 16px 6px;
+  padding:4px 16px 4px;
   border-top:1.5px solid #e8e8e8;
   background:#f4f4f4;
-  flex:1;overflow-y:auto;
+  flex:1;min-height:0;overflow-y:auto;
+  scrollbar-gutter:stable;
 }
 .dg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:360px;margin:0 auto}
 .dw{display:flex;flex-direction:column;align-items:center;gap:2px}
-.die{width:100%;aspect-ratio:1;border-radius:14px;border:2px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;overflow:hidden;transition:border-color .12s}
-.die:active{transform:scale(.86)}
-.die img{width:72%;height:72%;object-fit:contain;pointer-events:none;display:block}
+.die{width:100%;aspect-ratio:1;border-radius:4px;border:2px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;overflow:hidden;transition:border-color .12s;padding:0}
+.die:active{transform:scale(.94)}
+.die img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
 .die.sel{border-color:#f39c12;background:#fff}
 .die.slot{border:2px dashed #e8e8e8;background:#fafafa;cursor:default}
-.die.slot img{opacity:.1}
+.die.slot img{opacity:.1;width:40%;height:40%;object-fit:contain}
 @keyframes spin{0%{transform:rotate(-25deg) scale(.72)}20%{transform:rotate(22deg) scale(1.14)}45%{transform:rotate(-14deg) scale(.92)}65%{transform:rotate(10deg) scale(1.04)}82%{transform:rotate(-5deg) scale(.98)}100%{transform:rotate(0) scale(1)}}
 @keyframes hotpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 @keyframes flash{0%,100%{background:#f5eeff}30%{background:#ffe8e8}70%{background:#f5eeff}}
@@ -354,8 +431,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .die.steak-fire img{animation:firein .3s ease forwards}
 /* Steak big text banner — in arena, above dice */
 .steak-banner{
-  width:100%;max-width:360px;
-  text-align:center;padding:4px 0 2px;
+  position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+  z-index:15;text-align:center;padding:4px 0 2px;
   pointer-events:none;
 }
 .steak-banner-txt{
@@ -403,7 +480,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .gbox.selbox .gbox-score{color:#888}
 
 /* ── BOTTOM — action area only ── */
-.bottom{background:#fff;padding:5px 12px 20px;border-top:1px solid #eee;flex-shrink:0}
+.bottom{background:#fff;padding:5px 12px 12px;border-top:1px solid #eee;flex-shrink:0}
 .bb{display:flex;flex-direction:column;gap:0}
 .hbtn{width:20px;height:20px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 /* ── PLAYER STAT ROW — bottom, HP left / MP right ── */
@@ -486,12 +563,14 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .sbadge.on{display:block}
 .sk.sh.has-shield{opacity:1!important;border-color:#27ae60!important;background:#f0fff4!important}
 .sk.sh.has-shield:disabled{cursor:not-allowed}
-.mr{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.mr{display:grid;grid-template-columns:1fr;gap:5px}
 .mb{border:none;border-radius:10px;padding:8px 6px;font-size:13px;font-weight:700;line-height:1.2}
 .mb:active:not(:disabled){transform:scale(.94)}
 .mb:disabled{opacity:.25;cursor:not-allowed}
 .mb .ms{font-size:7px;display:block;margin-top:1px;opacity:.7;font-weight:400}
-.b-roll{background:#2c3e50;color:#ecf0f1}.b-push{background:#6e2f1a;color:#f0c3a1}.b-strike{background:#1e8449;color:#a9dfbf}.b-stack{background:#1a5276;color:#aed6f1}
+.b-roll{background:#2c3e50;color:#ecf0f1;font-size:15px;padding:12px 6px;border-radius:12px}
+.b-strike{background:#1e8449;color:#a9dfbf;font-size:15px;padding:12px 6px;border-radius:12px;transition:all .2s}
+.b-strike:not(:disabled){background:linear-gradient(135deg,#1e8449,#27ae60);color:#fff;box-shadow:0 2px 8px rgba(39,174,96,.4)}
 .b-super-strike{
   width:100%;border:none;border-radius:14px;padding:14px 0;cursor:pointer;font-size:15px;font-weight:900;letter-spacing:1.5px;
   background:linear-gradient(135deg,#ff6a00,#ff9f00,#ffcc00);
@@ -540,15 +619,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 /* ── STRIKE REVEAL ANIMATION ── */
 .dice-area-wrap{
-  width:100%;max-width:360px;
+  width:100%;
   margin:0 auto;
   overflow:hidden;
-  transition:max-height .35s ease,opacity .3s ease;
-  max-height:400px;
-  opacity:1;
 }
-.dice-area-wrap.strike-hidden{display:none;}
-.dice-zone.strike-hidden{display:none;}
+.dice-area-wrap.strike-hidden{visibility:hidden;pointer-events:none}
+.dice-zone.strike-hidden{visibility:hidden;pointer-events:none}
 /* Strike zoom: enlarge chips + box padding in document flow (no overflow) */
 .groups-area.strike-zoom{
   transition:gap .3s ease;
@@ -577,7 +653,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   font-size:10px;
   transition:font-size .3s ease;
 }
-.shop-ov{display:none;position:absolute;inset:0;background:rgba(235,228,215,.97);z-index:60;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(3px);overflow-y:auto;padding:12px 0}.shop-ov.on{display:flex}.shop-t{color:#8B4513;font-size:18px;font-weight:700;margin-bottom:4px}.shop-st{color:#888;font-size:10px;margin-bottom:10px}.shop-cs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;width:90%;max-width:360px}.shop-c{background:#f0ebe0;border:2px solid #ccc;border-radius:12px;padding:10px 80px 10px 14px;cursor:default;transition:all .2s;text-align:left;position:relative;display:flex;gap:10px;align-items:center;min-height:60px}.shop-c:active{border-color:#ccc}.shop-c.sel{border-color:#27ae60;background:#e8f5e0}.shop-c .si{font-size:28px;flex-shrink:0;width:48px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}.shop-c .sn{color:#333;font-size:12px;font-weight:700;margin-bottom:2px}.shop-c .se{color:#666;font-size:9px;line-height:1.3}.shop-c .sr{display:inline-block;font-size:7px;padding:1px 6px;border-radius:4px;font-weight:600;margin-top:2px}.sr.rc{background:#ddd;color:#777}.sr.ru{background:#d0e8f5;color:#2a7ab5}.sr.rr{background:#f5e0c0;color:#c47a00}.shop-c .ss{color:#777;font-size:8px;margin-top:2px}.shop-c .sp{color:#b8860b;font-size:10px;font-weight:700;margin-top:2px}.shop-c-info{flex:1}
+.shop-ov{display:none!important;position:absolute;inset:0;background:rgba(235,228,215,.97);z-index:60;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(3px);overflow-y:auto;padding:12px 0}.shop-ov.on{display:flex}.shop-t{color:#8B4513;font-size:18px;font-weight:700;margin-bottom:4px}.shop-st{color:#888;font-size:10px;margin-bottom:10px}.shop-cs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;width:90%;max-width:360px}.shop-c{background:#f0ebe0;border:2px solid #ccc;border-radius:12px;padding:10px 80px 10px 14px;cursor:default;transition:all .2s;text-align:left;position:relative;display:flex;gap:10px;align-items:center;min-height:60px}.shop-c:active{border-color:#ccc}.shop-c.sel{border-color:#27ae60;background:#e8f5e0}.shop-c .si{font-size:28px;flex-shrink:0;width:48px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}.shop-c .sn{color:#333;font-size:12px;font-weight:700;margin-bottom:2px}.shop-c .se{color:#666;font-size:9px;line-height:1.3}.shop-c .sr{display:inline-block;font-size:7px;padding:1px 6px;border-radius:4px;font-weight:600;margin-top:2px}.sr.rc{background:#ddd;color:#777}.sr.ru{background:#d0e8f5;color:#2a7ab5}.sr.rr{background:#f5e0c0;color:#c47a00}.shop-c .ss{color:#777;font-size:8px;margin-top:2px}.shop-c .sp{color:#b8860b;font-size:10px;font-weight:700;margin-top:2px}.shop-c-info{flex:1}
 .shop-msg{color:#e74c3c;font-size:10px;min-height:16px;margin-bottom:6px;text-align:center}
 .shop-msg.ok{color:#27ae60}
 .shop-deck-wrap{margin-bottom:10px;text-align:center}
@@ -711,8 +787,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
       </div>
       <div class="sbar-row">
         <div class="sbar-icon">💧</div>
-        <div class="sbar-track"><div class="sbar-fill sbar-fill-mp" id="barMana" style="width:0%"></div></div>
-        <div class="sbar-val mp" id="valMana">0/10</div>
+        <div class="sbar-track"><div class="sbar-fill sbar-fill-mp" id="barMana" style="width:20%"></div></div>
+        <div class="sbar-val mp" id="valMana">4/20</div>
       </div>
       <div class="sbar-row" id="shieldRow" style="display:none">
         <div class="sbar-icon">🛡️</div>
@@ -755,13 +831,12 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
   <!-- Arena -->
   <div class="arena">
-    <!-- Formula bar — above dice, always visible -->
-    <!-- Dice zone -->
-    <div class="dice-zone">
+    <!-- Formula bar -->
+    <div class="dice-zone" style="padding-bottom:0">
       <div class="formula-bar-wrap">
         <div class="formula-bar">
           <div class="fbox-db">
-            <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">10</div><div class="fdc-lbl">AD</div></div>
+            <div class="fdc fdc-dmg"><div class="fdc-val" id="fDmg">40</div><div class="fdc-lbl">AD</div></div>
           </div>
           <div class="fop-mid">×</div>
           <div class="fbox-flux"><div class="fval-flux" id="fFlux">×1</div><div class="fl" id="fFluxLbl">Flux</div></div>
@@ -772,9 +847,32 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
         </div>
         <div class="steak-indicator" id="steakIndicator"></div>
       </div>
-      <div class="dice-area-wrap" id="diceAreaWrap"><div class="dg" id="diceGrid"></div></div>
     </div>
-    <!-- Groups zone -->
+    <!-- Game mid: skills left + dice right -->
+    <div class="game-mid">
+      <div class="skill-panel">
+        <button class="skill-slot rr" id="btnReroll" disabled>
+          <div class="sl-icon">🎲</div><div class="sl-label">Reroll</div><div class="sl-cost">💧×2</div>
+        </button>
+        <button class="skill-slot" id="btnMagnus" disabled style="display:none" onclick="window._magnus()">
+          <div class="sl-icon">⚗️</div><div class="sl-label">Magnus</div><div class="sl-cost">💧×3</div>
+        </button>
+        <button class="skill-slot locked" id="skillSlot2" disabled></button>
+        <button class="skill-slot locked" id="skillSlot3" disabled></button>
+      </div>
+      <div class="dice-box">
+        <div class="dice-area-wrap" id="diceAreaWrap"><div class="dg" id="diceGrid"></div></div>
+      </div>
+    </div>
+    <!-- Push luck zone -->
+    <div class="push-luck-zone">
+      <div class="push-luck-header">
+        <div class="push-luck-label">Push Luck</div>
+      </div>
+      <div class="push-luck-grid" id="pushLuckGrid"></div>
+      <div class="push-luck-stats" id="pushLuckStats"></div>
+    </div>
+    <!-- Groups zone (steak rows) -->
     <div class="groups-zone">
       <div class="groups-area" id="groupsArea"></div>
     </div>
@@ -785,14 +883,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
   <!-- Bottom action area -->
   <div class="bottom">
-    <div class="bb"><button id="btnRum" class="mb" style="display:none;background:#8b4513;color:#fff;font-size:10px;padding:4px 8px;position:absolute;top:-52px;right:8px;border:none;border-radius:6px;z-index:10" onclick="window._rum()">🛢️ Rum (2mp)</button><button id="btnJolly" class="mb" style="display:none;background:#2c3e50;color:#fff;font-size:10px;padding:4px 8px;position:absolute;top:-28px;left:8px;border:none;border-radius:6px;z-index:10" onclick="window._jolly()">🏴 Jolly (3mp)</button><button id="btnMagnus" class="mb" style="display:none;background:#8e44ad;color:#fff;font-size:10px;padding:4px 8px;position:absolute;top:-28px;right:8px;border:none;border-radius:6px;z-index:10" onclick="window._magnus()">⚗️ Magnus (4mp)</button>
+    <div class="bb"><button id="btnRum" class="mb" style="display:none;background:#8b4513;color:#fff;font-size:10px;padding:4px 8px;position:absolute;top:-28px;right:8px;border:none;border-radius:6px;z-index:10" onclick="window._rum()">🛢️ Rum (2mp)</button><button id="btnJolly" class="mb" style="display:none;background:#2c3e50;color:#fff;font-size:10px;padding:4px 8px;position:absolute;top:-28px;left:8px;border:none;border-radius:6px;z-index:10" onclick="window._jolly()">🏴 Jolly (3mp)</button>
       <div class="btc">
-        <div class="skrow">
-          
-          <button class="sk sh" id="btnShield" disabled><div class="sn">Shield</div><div class="sc">+13blk <span class="mcost">💧💧</span></div></button>
-          <button class="sk rr" id="btnReroll" disabled><div class="sn">Reroll</div><div class="sc"><span id="rrSub">sel</span> <span class="mcost">💧💧</span></div></button>
-          <button class="hbtn" id="btnHelp" style="flex-shrink:0">?</button>
-        </div>
         <div class="mr" id="mainBtnRow">
           <button class="mb b-roll" id="btnLeft" disabled><span id="bll">Roll</span><span class="ms" id="bls">start turn</span></button>
           <button class="mb b-strike" id="btnStrike" disabled><span id="btnStrikeLbl">Strike</span><span class="ms" id="sts">select combo</span></button>
@@ -904,8 +996,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   for(let i=0;i<6;i++){const el=document.getElementById('gi'+i);if(el){const img=document.createElement('img');img.src=ICON_URLS[i];img.style.cssText='width:18px;height:18px;object-fit:contain';el.appendChild(img);}}
 });
 
-function mkImg(url,size='72%'){const img=document.createElement('img');img.src=url;img.style.cssText=`width:${size};height:${size};object-fit:contain;pointer-events:none;display:block`;img.draggable=false;return img;}
-function mkIconImg(idx,size='72%'){return mkImg(ICON_URLS[idx],size);}
+function mkImg(url,size='100%'){const img=document.createElement('img');img.src=url;img.style.cssText=`width:${size};height:${size};object-fit:cover;pointer-events:none;display:block`;img.draggable=false;return img;}
+function mkIconImg(idx,size='100%'){return mkImg(ICON_URLS[idx],size);}
 
 // ── FIBONACCI FLUX ─────────────────────────────────────────────
 
@@ -952,8 +1044,8 @@ function rollWithPairGuarantee(){
 const DS={F:'free',S:'sel',ST:'stacked'};
 const ANIM=1000; // roll animation duration
 const G={
-  pHp:100,pMaxHp:100,mana:0,maxMana:10,
-  eHp:60,eMaxHp:60,eDmg:20,enemyIdx:0,
+  pHp:250,pMaxHp:250,mana:4,maxMana:20,
+  eHp:3500,eMaxHp:3500,eDmg:40,enemyIdx:0,
   flux:1,bonusDmg:0,shield:0,steakBonusAD:0,
   busy:false,phase:'idle',
   steakCount:0,
@@ -987,9 +1079,9 @@ function scoreGroupBase(arr){
   if(c[0]){const n=c[0];ad+=n===1?2:n===2?8:n===3?16:n===4?40:n===5?80:150;}
   if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?24:n===4?76:n===5?140:225;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
-    if(ic===2){manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
-    else if(ic===3){shieldG+=n===2?3:n===3?6:n===4?20:n===5?40:60;}
-    else if(ic===4){fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
+    if(ic===2){manaG+=n===2?2:n===3?4:n===4?8:n===5?12:20;}
+    else if(ic===3){shieldG+=n===2?5:n===3?15:n===4?30:n===5?40:80;}
+    else if(ic===4){fluxG+=n===2?0.5:n===3?1.0:n===4?2.0:n===5?5.0:7.0;}
     else if(ic===5){bdmgG+=n===2?5:n===3?15:n===4?30:n===5?50:70;}
   });
   return{ad,fluxG,manaG,shieldG,bdmgG};
@@ -1108,9 +1200,9 @@ function scoreGroup(arr){
   if(c[0]){const n=c[0];ad+=n===1?2:n===2?8:n===3?16:n===4?40:n===5?80:150;}
   if(c[1]){const n=c[1];ad+=n===1?4:n===2?12:n===3?24:n===4?76:n===5?140:225;}
   [2,3,4,5].forEach(ic=>{const n=c[ic]||0;if(n<2)return;
-    if(ic===2){manaG+=n===2?1:n===3?3:n===4?5:n===5?8:10;}
-    else if(ic===3){shieldG+=n===2?3:n===3?6:n===4?20:n===5?40:60;}
-    else if(ic===4){fluxG+=n===2?0.5:n===3?1.5:n===4?2.5:n===5?5.0:7.0;}
+    if(ic===2){manaG+=n===2?2:n===3?4:n===4?8:n===5?12:20;}
+    else if(ic===3){shieldG+=n===2?5:n===3?15:n===4?30:n===5?40:80;}
+    else if(ic===4){fluxG+=n===2?0.5:n===3?1.0:n===4?2.0:n===5?5.0:7.0;}
     else if(ic===5){bdmgG+=n===2?5:n===3?15:n===4?30:n===5?50:70;}
   });
   const allDiff=hasSigil('vance-the-versatile')&&!Object.values(c).some(v=>v>1);
@@ -1289,6 +1381,7 @@ function renderDice(){
     if(G.ds[i]===DS.ST)return;vis++;
     const isInv=G.ds[i]===DS.S&&inv.has(i);
     const dw=makeDie(d,G.ds[i]===DS.S?'sel':'free',G.ds[i]===DS.S?(isInv?'no pair':'keep?'):(_getDieCrewName(i)||''),()=>tapDie(i),isInv,_getDieCrewName(i)?'⚓':null);
+    dw.dataset.idx=i;
     if(i===G.goldenDieSlot){dw.querySelector('.die').classList.add('golden');}
     if(i===G.silverDieSlot){dw.querySelector('.die').classList.add('silver');}
     if(i===G.cutlassDieSlot){dw.querySelector('.die').classList.add('cutlass');}
@@ -1308,6 +1401,54 @@ function showRerolling(selIdxs){
   for(let i=vis;i<6;i++)grid.appendChild(makeSlot());
 }
 
+function _renderPushLuckGrid(){
+  const grid=$('pushLuckGrid');
+  const stats=$('pushLuckStats');
+  if(!grid)return;
+  grid.innerHTML='';
+  // Build slots with group separators
+  let totalFilled=0;
+  G.currentGroups.forEach((g,gi)=>{
+    // Add separator before each group (except first)
+    if(gi>0){
+      const sep=document.createElement('div');
+      sep.className='pl-sep';
+      sep.textContent='|';
+      grid.appendChild(sep);
+    }
+    g.dice.forEach(face=>{
+      const slot=document.createElement('div');
+      slot.className='pl-slot filled';
+      slot.appendChild(mkIconImg(face,'70%'));
+      grid.appendChild(slot);
+      totalFilled++;
+    });
+  });
+  // Fill remaining empty slots (up to 6 total dice capacity)
+  for(let i=totalFilled;i<6;i++){
+    const slot=document.createElement('div');
+    slot.className='pl-slot';
+    grid.appendChild(slot);
+  }
+  // Stats
+  if(stats){
+    if(totalFilled>0){
+      let tAD=0,tFx=0,tBD=0,tSh=0,tMn=0;
+      G.currentGroups.forEach(g=>{
+        const s=scoreGroup(g.dice);
+        tAD+=s.ad;tFx+=s.fluxG;tBD+=s.bdmgG;tSh+=s.shieldG;tMn+=s.manaG;
+      });
+      stats.innerHTML=
+        '<span>'+tAD+' AD</span>'+
+        '<span>'+fmtFlux(tFx)+' Fx</span>'+
+        '<span>'+tBD+' BD</span>'+
+        '<span>'+tSh+' S</span>'+
+        '<span>'+tMn+' R</span>';
+    } else {
+      stats.innerHTML='';
+    }
+  }
+}
 function renderGroups(newSteakIdx=-1){
   const area=$('groupsArea');area.innerHTML='';
   function makeBox(cls,label,groups,animate=false,showUtil=false,showMana=false,bonusAD=0){
@@ -1320,7 +1461,8 @@ function renderGroups(newSteakIdx=-1){
 
     groups.forEach((g,gi)=>{
       if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-      const c={};g.dice.forEach(d=>c[d]=(c[d]||0)+1);
+      const sortedDice=[...g.dice].sort((a,b)=>a-b);
+      const c={};sortedDice.forEach(d=>c[d]=(c[d]||0)+1);
       // Only isPA=true if scoreGroupPA ACTUALLY chooses PA path (not just pattern exists)
       const paResult=isPAEnabled?scoreGroupPA(g.dice):null;
       const isPA=isPAEnabled&&(paResult&&(paResult._paCount||0)>0);
@@ -1356,7 +1498,7 @@ function renderGroups(newSteakIdx=-1){
           });
         }
       } else {
-        g.dice.forEach(ic=>{
+        sortedDice.forEach(ic=>{
           const isDmg=ic===0||ic===1||ic===4||ic===5;
           const isMana=ic===2;
           const isShield=ic===3;
@@ -1400,123 +1542,42 @@ function renderGroups(newSteakIdx=-1){
     box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);return box;
   }
   G.steakBoxes.forEach((sb,i)=>area.appendChild(makeBox('steak-box','🔥 Steak!',sb.groups,i===newSteakIdx,false,false,sb.bonusAD||0)));
-  if(G.currentGroups.length>0)area.appendChild(makeBox('pushrow','Push Luck',G.currentGroups,false,true));
+  // Push luck now displayed in push-luck-grid above, not here
   if(G.phase==='rolled'){
-    const{vi,ii,hasInvalid}=analyze();
-    const si=G.ds.map((s,i2)=>s===DS.S?i2:-1).filter(i2=>i2>=0);
-    const hasAnySel=si.length>0;
-    // Show selbox when any die selected
-    if(hasAnySel){
-      const box=document.createElement('div');box.className='gbox selbox';
-      if(hasInvalid)box.style.opacity='0.45';
-      const lbl=document.createElement('div');lbl.className='gbox-lbl';lbl.textContent='Selection';
-      const content=document.createElement('div');content.className='gbox-content';
-      // Group by icon value — no comma within a group, comma only between groups
-      const rawSelected=si.map(i2=>G.dice[i2]);
-      const allSelected=!hasInvalid
-        ? [...rawSelected].sort((a,b)=>a-b)
-        : rawSelected;
-
-      // Build groups of consecutive same-icon values
-      const iconGroups=[];
-      allSelected.forEach(ic=>{
-        if(iconGroups.length>0&&iconGroups[iconGroups.length-1].icon===ic){
-          iconGroups[iconGroups.length-1].count++;
-        } else {
-          iconGroups.push({icon:ic,count:1});
-        }
-      });
-
-      // PA detection for selbox: check if selected dice form a PA combo
-      const paSelResult=hasSigil('powder-and-alcohol')&&!hasInvalid?scoreGroupPA(rawSelected):null;
-      const isPASel=!!(paSelResult&&(paSelResult._paCount||0)>0);
-
-      if(isPASel){
-        const scored=paSelResult;
-        const paCount=scored._paCount||0;
-
-        if(paCount===0){
-          // No PA triggered — render standard
-          iconGroups.forEach((grp,gi)=>{
-            if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-            for(let k=0;k<grp.count;k++) content.appendChild(makeChip(grp.icon));
-          });
-        } else {
-          // Simulate same greedy PA consumption as scoreGroupPA does
-          const rem={};rawSelected.forEach(d=>rem[d]=(rem[d]||0)+1);
-
-          for(let p=0;p<paCount;p++){
-            if(p>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-            // Match scoreGroupPA: try ⚔️⚔️💧 first, then 🗡️🗡️💧
-            // scoreGroupPA tries both and picks highest AD — for display match:
-            // prefer whichever type has >= 2 and exists; if both, use the one that
-            // leaves a better remaining (matches highest-AD partition)
-            let atkType=-1;
-            if((rem[1]||0)>=2&&(rem[2]||0)>=1) atkType=1;
-            if((rem[0]||0)>=2&&(rem[2]||0)>=1 && (atkType===-1||(rem[0]||0)>(rem[1]||0))) atkType=0;
-            if(atkType===-1) break;
-
-            rem[atkType]-=2;if(rem[atkType]===0)delete rem[atkType];
-            rem[2]-=1;if(rem[2]===0)delete rem[2];
-            for(let i=0;i<3;i++) content.appendChild(makeChip(6));
-          }
-
-          // Remaining dice
-          const remDice=[];
-          for(const [k,n] of Object.entries(rem)){
-            if(n>0) for(let i=0;i<n;i++) remDice.push(+k);
-          }
-          if(remDice.length>0){
-            const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);
-            const remGroups={};remDice.forEach(d=>remGroups[d]=(remGroups[d]||0)+1);
-            let first=true;
-            for(const [k,n] of Object.entries(remGroups)){
-              if(!first){const cm2=document.createElement('div');cm2.className='gcomma';cm2.textContent=',';content.appendChild(cm2);}
-              for(let i=0;i<n;i++) content.appendChild(makeChip(+k));
-              first=false;
-            }
-          }
-        }
-        box.classList.add('pa-converted');
-      } else {
-        // Standard selbox rendering with icon groups + commas
-        iconGroups.forEach((grp,gi)=>{
-          if(gi>0){const cm=document.createElement('div');cm.className='gcomma';cm.textContent=',';content.appendChild(cm);}
-          for(let k=0;k<grp.count;k++) content.appendChild(makeChip(grp.icon));
-        });
-        // (cannonade removed)
-      }
-      const sc=document.createElement('div');sc.className='gbox-score';
-      // Score: only this selection's own dice — NOT push luck or steak contributions
-      if(!hasInvalid&&vi.length>0){
-        const selDice=vi.map(i2=>G.dice[i2]);
-        const s=selDice.length>0?scoreGroup(selDice):{ad:0,fluxG:0,manaG:0,shieldG:0,bdmgG:0};
-        
-        const totalAD=s.ad;
-        const parts=[];
-        if(totalAD>0)    parts.push('<span style="color:#e8a020;font-weight:700">'+totalAD+' AD</span>');
-        if(s.bdmgG>0)    parts.push('<span style="color:#e05530;font-weight:700">+'+s.bdmgG+' BD</span>');
-        if(s.fluxG>0)    parts.push('<span style="color:#9b59b6">+'+( s.fluxG%1?s.fluxG.toFixed(1):s.fluxG)+'fx</span>');
-        if(s.manaG>0)    parts.push('<span style="color:#5dade2">+'+s.manaG+'💧</span>');
-        if(s.shieldG>0)  parts.push('<span style="color:#58d68d">+'+s.shieldG+'🛡️</span>');
-        sc.innerHTML=parts.join('  ')||'—';
-      } else if(hasInvalid){
-        sc.textContent='Invalid combo';sc.style.cssText='color:#e74c3c;font-size:7px;font-weight:600;font-style:italic;';
-      }
-      box.appendChild(lbl);box.appendChild(content);box.appendChild(sc);area.appendChild(box);
-    }
   }
 }
 
-const BASE_AD=10; // Base AD mỗi lượt, trước khi tính combo
+const BASE_AD=40; // Base AD mỗi lượt, trước khi tính combo
 
 function updateFormula(){
-  // Formula bar luôn chỉ hiện BASE_AD trong lượt — combo AD chạy trong strike animation
-  $('fDmg').textContent=''+BASE_AD;
-  $('fBonus').textContent=''+G.bonusDmg;
+  // Base values: BASE_AD + steak bonus
+  let ad=BASE_AD+(G.steakBonusAD||0)+(G._davyAD||0);
+  let fx=G.flux+(G.stackFlux||0);
+  let bd=G.bonusDmg;
+
+  // Add accumulated push luck group values
+  G.currentGroups.forEach(g=>{
+    const s=scoreGroup(g.dice);
+    ad+=s.ad;fx+=s.fluxG;bd+=s.bdmgG;
+  });
+
+  // Add currently selected dice values (live preview)
+  const{vi,hasInvalid}=analyze();
+  let selAD=0,selFx=0,selBD=0;
+  if(vi.length>0&&!hasInvalid){
+    const selDice=vi.map(i=>G.dice[i]);
+    const s=scoreGroup(selDice);
+    selAD=s.ad;selFx=s.fluxG;selBD=s.bdmgG;
+  }
+
+  const totalAD=ad+selAD;
+  const totalFx=fx+selFx;
+  const totalBD=bd+selBD;
+
+  $('fDmg').textContent=''+totalAD;
+  $('fBonus').textContent=''+totalBD;
   $('fBonusLbl').textContent='BD';
-  const fx=G.flux;
-  $('fFlux').textContent='×'+fmtFlux(fx);
+  $('fFlux').textContent='×'+fmtFlux(totalFx);
   $('fFluxLbl').textContent='Flux';
   const si=$('steakIndicator');
   if(si) si.textContent=G.steakCount>0?'🔥'.repeat(Math.min(G.steakCount,8))+(G.steakCount>8?'…':''):'';
@@ -1532,97 +1593,106 @@ function _tryJolly(){
   updateUI();renderBtns();
 }
 window._jolly=_tryJolly;
+function _canMagnus(){
+  if(!hasSigil('magnus')||G.mana<3||G.phase!=='rolled')return false;
+  const sel=[];G.dice.forEach((d,i)=>{if(G.ds[i]===DS.S)sel.push({face:d,idx:i});});
+  if(sel.length!==4)return false;
+  const c={};sel.forEach(s=>c[s.face]=(c[s.face]||0)+1);
+  const entries=Object.entries(c);
+  return entries.length===2&&entries.some(([_,n])=>n===3);
+}
 function _tryMagnus(){
-  if(!hasSigil('magnus')||G.mana<4||G.phase!=='rolled')return;
-  // Find first triple in current groups
-  const board=G.dice.filter((_,i)=>G.ds[i]===1); // selected dice
-  const c={};board.forEach(d=>c[d]=(c[d]||0)+1);
-  const tripleF=Object.entries(c).find(([f,n])=>n===3);
-  if(!tripleF){feedback('⚗️ Magnus: Need a triple to convert!','warn',1500);return;}
-  // Spend 4 mana, convert triple to quad by adding 1 die of same face
-  G.mana-=4;
-  const face=parseInt(tripleF[0]);
-  // Find a free die and change it to match
-  const freeIdx=G.ds.findIndex(s=>s===0); // DS.F=0
-  if(freeIdx>=0){G.dice[freeIdx]=face;G.ds[freeIdx]=1;} // select it
+  if(!_canMagnus())return;
+  const sel=[];G.dice.forEach((d,i)=>{if(G.ds[i]===DS.S)sel.push({face:d,idx:i});});
+  const c={};sel.forEach(s=>c[s.face]=(c[s.face]||0)+1);
+  const tripleFace=parseInt(Object.entries(c).find(([_,n])=>n===3)[0]);
+  const oddDie=sel.find(s=>s.face!==tripleFace);
+  G.mana-=3;
+  G.dice[oddDie.idx]=tripleFace;
+  // Deselect all dice immediately after conversion
+  G.ds=G.ds.map(s=>s===DS.S?DS.F:s);
   flashSigil('magnus');
-  feedback('⚗️ Magnus: Triple→Quad! (-4 mana)','info',2000);
+  feedback('⚗️ Magnus: →Quad! (-3💧)','info',2000);
   updateUI();renderDice();renderBtns();
 }
 window._magnus=_tryMagnus;
 function renderBtns(){
-  const ph=G.phase,anim=G.busy,combo=calcCombo(),_can=!anim&&ph==='rolled'&&canPush(),mp=G.mana>=2;
+  const ph=G.phase,anim=G.busy,combo=calcCombo(),mp=G.mana>=2;
   const{hasInvalid,hasCombo:hc}=analyze(),hasSel=G.ds.some(s=>s===DS.S);
   const bl=$('btnLeft'),bll=$('bll'),bls=$('bls');
-  if(anim){bl.className='mb b-roll';bl.disabled=true;bll.textContent='Roll';bls.textContent='rolling...';}
-  else if(ph==='idle'){bl.className='mb b-roll';bl.disabled=false;bll.textContent='Roll';bls.textContent='start turn';}
-  else{bl.className='mb b-push';bl.disabled=!_can;bll.textContent='Push Luck';bls.textContent=hasInvalid?'remove invalid':!hc?'select combo':'lock & roll rest';}
-  // With BASE_AD=10, any valid combo can Strike — no attack die required
-  const canStrike=!!combo&&!anim&&ph==='rolled';
-  // Magnus button
+  const sb=$('btnStrike'),sts2=$('sts'),lbl3=$('btnStrikeLbl');
+
+  // Phase: idle → Roll only
+  if(ph==='idle'){
+    bl.style.display='';bl.className='mb b-roll';bl.disabled=false;
+    bll.textContent='Roll';bls.textContent='start turn';
+    sb.style.display='none';
+  }
+  // Phase: rolling/pushing (busy) → Roll disabled, Strike hidden
+  else if(anim){
+    bl.style.display='';bl.className='mb b-roll';bl.disabled=true;
+    bll.textContent='Roll';bls.textContent='rolling...';
+    sb.style.display='none';
+  }
+  // Phase: rolled → Strike only (enabled/disabled based on combo)
+  else{
+    bl.style.display='none';
+    const canStrike=!!combo&&!anim;
+    sb.style.display='';sb.className='mb b-strike';
+    sb.disabled=!canStrike;
+    if(lbl3)lbl3.textContent='Strike';
+    sts2.textContent=canStrike?'→ deal damage':'drag dice to push luck';
+  }
+
+  // Rum/Jolly buttons
   const rumBtn=$('btnRum');
-  if(rumBtn){rumBtn.style.display='none';} // Rum Barrel is passive now
+  if(rumBtn)rumBtn.style.display='none';
   const jollyBtn=$('btnJolly');
-  if(jollyBtn){jollyBtn.style.display=hasSigil('jolly-roger')&&G.mana>=3?'block':'none';}
-  const magnusBtn=$('btnMagnus');
-  if(magnusBtn){magnusBtn.style.display=hasSigil('magnus')&&G.mana>=4&&ph==='rolled'?'block':'none';}
-  
-  const sb=$('btnStrike'),sts2=$('sts');
-  sb.disabled=!canStrike||anim||ph!=='rolled';sb.className='mb b-strike';
-  const lbl3=$('btnStrikeLbl');if(lbl3)lbl3.textContent='Strike';
-  sts2.textContent=canStrike?'→ '+(combo?combo.totalDmg+BASE_AD+G.steakBonusAD:'')+' Damage':'select a combo';
-  // Super Strike: show ONLY when:
-  //   1. steak = maxSteak-1 (đang ở ngưỡng, 1 steak nữa là max)
-  //   2. phase rolled, không busy
-  //   3. selection valid (không có invalid dice)
-  //   4. NO free dice (tất cả non-locked dice đều được select → push sẽ cho k=0 = Steak)
+  if(jollyBtn)jollyBtn.style.display=hasSigil('jolly-roger')&&G.mana>=3?'block':'none';
+
+  // Super Strike / Trident Strike
   const freeDice=G.ds.filter(s=>s===DS.F).length;
   const tridentEquipped=hasSigil('trident-of-poseidon');
-
-  // TRIDENT STRIKE: Trident equipped → trigger at steak=2, ALL free dice selected
-  const atTridentLimit=
-    tridentEquipped&&
-    G.steakCount===2&&
-    ph==='rolled'&&!anim&&hasSel&&!hasInvalid&&freeDice===0;
-
-  // SUPER STRIKE: normal cap (steak=maxSteak-1), ALL free dice selected
-  const atSteakLimit=
-    !tridentEquipped&&
-    G.steakCount===(getMaxSteak()-1)&&
-    ph==='rolled'&&!anim&&hasSel&&!hasInvalid&&freeDice===0;
-
+  const atTridentLimit=tridentEquipped&&G.steakCount===2&&ph==='rolled'&&!anim&&hasSel&&!hasInvalid&&freeDice===0;
+  const atSteakLimit=!tridentEquipped&&G.steakCount===(getMaxSteak()-1)&&ph==='rolled'&&!anim&&hasSel&&!hasInvalid&&freeDice===0;
   const showSpecial=atSteakLimit||atTridentLimit;
   const mainRow=$('mainBtnRow');
   const superRow=$('superStrikeRow');
   if(mainRow&&superRow){
     if(showSpecial&&!anim){
       mainRow.style.display='none';
-      superRow.style.display='grid';
-      superRow.style.gridTemplateColumns='1fr';
-      // Update button style + label
+      superRow.style.display='grid';superRow.style.gridTemplateColumns='1fr';
       const btn=$('btnSuperStrike');
       if(btn){
-        if(atTridentLimit){
-          btn.className='mb b-trident-strike';
-          btn.textContent='🔱 TRIDENT STRIKE';
-        } else {
-          btn.className='mb b-super-strike';
-          btn.textContent='⚡ SUPER STRIKE';
-        }
+        if(atTridentLimit){btn.className='mb b-trident-strike';btn.textContent='🔱 TRIDENT STRIKE';}
+        else{btn.className='mb b-super-strike';btn.textContent='⚡ SUPER STRIKE';}
       }
     } else {
       mainRow.style.display='grid';
       superRow.style.display='none';
     }
   }
-  const shBtn=$('btnShield');
-  if(G.shield>0){shBtn.classList.add('has-shield');}
-  else{shBtn.classList.remove('has-shield');}
-  shBtn.disabled=!mp||anim;$('btnReroll').disabled=!mp||anim||ph!=='rolled'||!hasSel;
+
+  // Magnus skill slot
+  const magnusBtn=$('btnMagnus');
+  if(magnusBtn){
+    const hasMag=hasSigil('magnus');
+    magnusBtn.style.display=hasMag?'flex':'none';
+    magnusBtn.disabled=!_canMagnus()||anim;
+    if(hasMag&&_canMagnus())magnusBtn.classList.add('magnus-active');
+    else magnusBtn.classList.remove('magnus-active');
+    const s2=$('skillSlot2'),s3=$('skillSlot3');
+    if(s2)s2.style.display=hasMag?'none':'flex';
+    if(s3)s3.style.display='flex';
+  }
+
+  // Reroll skill slot
+  $('btnReroll').disabled=!mp||anim||ph!=='rolled'||!hasSel;
   const rrBtn=document.getElementById('btnReroll');
-  const rrMcost=rrBtn?rrBtn.querySelector('.mcost'):null;
-  $('rrSub').textContent=mp?(hasSel?'sel':'select'):'no';
-  if(rrMcost)rrMcost.style.display=mp?'':'none';
+  const rrCost=rrBtn?rrBtn.querySelector('.sl-cost'):null;
+  if($('rrSub'))$('rrSub').textContent=mp?(hasSel?'sel':'select'):'no';
+  if(rrCost)rrCost.style.display=mp?'':'none';
+  _renderPushLuckGrid();
 }
 
 function updateUI(){
@@ -1938,7 +2008,7 @@ window._shopDone=function(){
   else{_go();}
 };
 
-function tapDie(i){if(G.busy||G.phase!=='rolled')return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
+function tapDie(i){if(G.busy||G.phase!=='rolled')return;if(window._dragPreventTap&&window._dragPreventTap())return;hideBanners();G.ds[i]=G.ds[i]===DS.S?DS.F:DS.S;renderDice();}
 
 function doBreak(){
   G.busy=true;G.phase='break';
@@ -2021,17 +2091,14 @@ function doPushLuck(){
   if(hasSigil('shaun-the-lucky')){
     G.mana=Math.min(G.maxMana,G.mana+1);
   }
-  // ── SIGIL: Marksman — +BD per Push based on locked count ──
+  // ── SIGIL: Marksman — +BD based on dice count when pushing ──
   if(hasSigil('zoppshu-the-marksman')){
     const{vi}=analyze();
-    if(vi.length>=3){
-      const bonus=Math.random()<0.67?5:21;
-      G.bonusDmg+=bonus;
-      flashSigil('zoppshu-the-marksman');
-    }
+    if(vi.length>=4){G.bonusDmg+=15;flashSigil('zoppshu-the-marksman');feedback('🎯 Marksman: +15 BD ('+vi.length+' dice)','info',1500);}
+    else if(vi.length===3){G.bonusDmg+=5;flashSigil('zoppshu-the-marksman');feedback('🎯 Marksman: +5 BD (3 dice)','info',1500);}
   }
   // ─────────────────────────────────────────────────────────────
-  const{vi}=analyze();G.currentGroups.push({dice:vi.map(i=>G.dice[i])});
+  const{vi}=analyze();G.currentGroups.push({dice:vi.map(i=>G.dice[i]).sort((a,b)=>a-b)});
   // Flash P&A sigil if this push contains a PA-convertible group
   if(hasSigil('powder-and-alcohol')){
     const lastGroup=G.currentGroups[G.currentGroups.length-1];
@@ -2115,9 +2182,14 @@ function doPushLuck(){
     const first0=fi.find(i=>G.dice[i]===0);
     if(first0!==undefined) keepSet.add(first0);
   }
-  if(hasSigil('lila-the-waitress'))  fi.forEach(i=>{if(G.dice[i]===2)keepSet.add(i);});
+  if(hasSigil('lila-the-waitress')){let lilaKept=0;fi.forEach(i=>{if(G.dice[i]===2&&lilaKept<2){keepSet.add(i);lilaKept++;}});}
+  if(hasSigil('pair-anchor')){
+    const freeC={};fi.forEach(i=>{const d=G.dice[i];freeC[d]=(freeC[d]||0)+1;});
+    fi.forEach(i=>{if((freeC[G.dice[i]]||0)>=2) keepSet.add(i);});
+  }
 
-  // ── Flash Lila IMMEDIATELY if any 💧 in free pool ──
+  // ── Flash kept-die sigils ──
+  if(hasSigil('pair-anchor')){const fc={};fi.forEach(i=>{const d=G.dice[i];fc[d]=(fc[d]||0)+1;});if(Object.values(fc).some(n=>n>=2))flashSigil('pair-anchor');}
   if(hasSigil('lila-the-waitress')&&fi.some(i=>G.dice[i]===2)) flashSigil('lila-the-waitress');
   // ── Flash Flint IMMEDIATELY if any 🗡️ in free pool ──
   if(hasSigil('flint-the-loader')&&fi.some(i=>G.dice[i]===0)) flashSigil('flint-the-loader');
@@ -2141,13 +2213,14 @@ function doPushLuck(){
     rerollFi.forEach(i=>{G.dice[i]=rnd();});
     // Marked Card: push with only a pair → 1 reroll matches the pair's face
     if(hasSigil('marked-card')&&rerollFi.length>0){
-      const lockedFaces=[];G.ds.forEach((s,i)=>{if(s===2)lockedFaces.push(G.dice[i]);});// DS.ST=2
-      // Only fire when locked = exactly 2 dice of same face (a pair)
-      if(lockedFaces.length===2&&lockedFaces[0]===lockedFaces[1]){
-        const targetFace=lockedFaces[0];
+      // Check CURRENT push's selected dice (last group added)
+      const lastGroup=G.currentGroups.length>0?G.currentGroups[G.currentGroups.length-1]:null;
+      if(lastGroup&&lastGroup.dice.length===2&&lastGroup.dice[0]===lastGroup.dice[1]){
+        const targetFace=lastGroup.dice[0];
         const targetIdx=rerollFi[Math.floor(Math.random()*rerollFi.length)];
         G.dice[targetIdx]=targetFace;
         flashSigil('marked-card');
+        feedback('🃏 Marked Card: 1 die → '+['🗡️','⚔️','💧','🛡️','⭐','💥'][targetFace],'info',1500);
       }
     }
     applySpecialDice(G.dice,rerollFi);
@@ -2446,13 +2519,28 @@ function doStrike(){
     // ALL strike dice: steak boxes + current groups + current selection
     const allSD=[...G.steakBoxes.flatMap(sb=>sb.groups).flatMap(g=>g.dice),...G.currentGroups.flatMap(g=>g.dice),...(combo.board||[])];
     const cfA=cf(allSD);
+    // All individual groups (for per-group quad/quint detection)
+    const allGroups=[
+      ...G.steakBoxes.flatMap(sb=>sb.groups),
+      ...G.currentGroups,
+      ...(combo.board&&combo.board.length>0?[{dice:combo.board}]:[])
+    ];
+    // Count quads/quints PER GROUP (not accumulated across pushes)
+    let totalQuads=0, totalQuints=0;
+    allGroups.forEach(g=>{
+      const gc=cf(g.dice);
+      for(let f=0;f<6;f++){
+        if(gc[f]>=5) totalQuints++;
+        if(gc[f]>=4) totalQuads++;
+      }
+    });
     // NEW CREW EFFECTS (v5)
     // Roy: +3 AD per 🗡️
     if(hasSigil('roy-the-gunner')){const swC=cfA[0]||0;crewAD+=swC*3;if(swC>0){flashSigil('roy-the-gunner');feedback('🔧 Roy: +'+swC*3+' AD ('+swC+'×🗡️)','info',1500);}}
     // Long Nine: +2 AD per ⚔️⚔️
     if(hasSigil('the-long-nine')){const bgC=cfA[1]||0;crewAD+=bgC*3;if(bgC>0){flashSigil('the-long-nine');feedback('⚙️ Long Nine: +'+bgC*3+' AD ('+bgC+'×⚔️)','info',1500);}}
     // Meg: +1 AD per 💧
-    if(hasSigil('meg-the-barmaid')){const rmC=cfA[2]||0;crewAD+=rmC*1;}
+    if(hasSigil('meg-the-barmaid')){const rmC=cfA[2]||0;crewAD+=rmC*3;}
     // Quadrant: +0.25 flux per ⭐
     if(hasSigil('quadrant')){const stC=cfA[4]||0;crewFlux+=stC*0.25;}
     // Burning Glass: +0.25 flux if ≤2 locked types
@@ -2464,23 +2552,44 @@ function doStrike(){
     // Ghost Ship: +1 flux per empty deck slot
     if(hasSigil('ghost-ship')){const usedSlots=placedSigils.reduce((s,ps)=>{const d=SIGIL_DEFS[ps.id];return s+(d?d.w*d.h:0);},0);const empty=_deckSlots()-usedSlots;if(empty>0){const gsFlux=empty*0.5;crewFlux+=gsFlux;flashSigil('ghost-ship');feedback('👻 Ghost Ship: +'+gsFlux+' flux ('+empty+' empty slots)','info',1500);}}
     // Cartographer: +1 flux if 4+ unique faces or quad, +2 flux if all 6 unique faces (sextep)
-    if(hasSigil('the-cartographer')){const uf=new Set(allSD).size;const hasQ=[0,1,2,3,4,5].some(f=>(cfA[f]||0)>=4);if(uf===6){crewFlux+=2;flashSigil('the-cartographer');feedback('🧭 Cartographer: +2 Flux (all 6 faces!)','info',1800);}else if(uf>=4||hasQ){crewFlux+=1;flashSigil('the-cartographer');feedback('🧭 Cartographer: +1 Flux','info',1500);}}
+    if(hasSigil('the-cartographer')){const uf=new Set(allSD).size;if(uf===6){crewFlux+=2;flashSigil('the-cartographer');feedback('🧭 Cartographer: +2 Flux (all 6 faces!)','info',1800);}else if(uf>=4||totalQuads>0){crewFlux+=1;flashSigil('the-cartographer');feedback('🧭 Cartographer: +1 Flux','info',1500);}}
     // Powder Keg: +30 BD on quint
-    if(hasSigil('powder-keg')){const hasQ=[0,1,2,3,4,5].some(f=>(cfA[f]||0)>=5);if(hasQ){G.bonusDmg+=30;flashSigil('powder-keg');feedback('🧨 Powder Keg: +30 BD (quint!)','info',1800);}}
+    if(hasSigil('powder-keg')){if(totalQuints>0){G.bonusDmg+=30*totalQuints;flashSigil('powder-keg');feedback('🧨 Powder Keg: +'+30*totalQuints+' BD (quint!)','info',1800);}}
     // Spyglass: quint counts as sextep (+20 BD extra)
-    if(hasSigil('spyglass')){const hasQ=[0,1,2,3,4,5].some(f=>(cfA[f]||0)>=5);if(hasQ){G.bonusDmg+=20;flashSigil('spyglass');feedback('🔭 Spyglass: +20 BD (quint=sextep)','info',1800);}}
+    if(hasSigil('spyglass')){if(totalQuints>0){G.bonusDmg+=20*totalQuints;flashSigil('spyglass');feedback('🔭 Spyglass: +'+20*totalQuints+' BD (quint=sextep)','info',1800);}}
     // Carronade: +5 AD on quad
-    if(hasSigil('carronade')){const hasQ4=[0,1,2,3,4,5].some(f=>(cfA[f]||0)>=4);if(hasQ4){crewAD+=25;flashSigil('carronade');feedback('🔫 Carronade: +25 AD (quad!)','info',1500);}}
+    if(hasSigil('carronade')){if(totalQuads>0){crewAD+=25*totalQuads;flashSigil('carronade');feedback('🔫 Carronade: +'+25*totalQuads+' AD ('+totalQuads+' quad'+(totalQuads>1?'s':'')+'!)','info',1500);}}
     // Big Tricorn: +2 BD per 💥
     if(hasSigil('the-big-tricorn')){const cbC=cfA[5]||0;G.bonusDmg+=cbC*2;}
     // Sanguaro: +0.5 BD permanent per 💥 strike
     if(hasSigil('sanguaro')){const cbC=cfA[5]||0;if(cbC>0){G._sanguaroBD=(G._sanguaroBD||0)+cbC*0.5;G.bonusDmg+=G._sanguaroBD;flashSigil('sanguaro');if(G._sanguaroBD>=20)feedback('🌵 Sanguaro: SHRINK! +30BD/steak now','info',2500);else feedback('🌵 Sanguaro: +'+G._sanguaroBD.toFixed(1)+' BD perm','info',1500);}}
     // Even Eve: steak chẵn (2,4,6) → 50% +10AD / 50% +20AD
     if(hasSigil('even-eve')&&G.steakCount>0&&G.steakCount%2===0){crewAD+=Math.random()<0.5?10:20;}
-    // Organ Gun: quad in combo → auto-steak (advance steak without push)
-    if(hasSigil('organ-gun')){const hasQuad=[0,1,2,3,4,5].some(f=>(cfA[f]||0)>=4);if(hasQuad){G.steakCount++;const nf=getFlux(G.steakCount);G.flux=nf;flashSigil('organ-gun');feedback('🎵 Organ Gun: Quad→Steak! Flux ×'+nf,'info',2000);}}
+    // Organ Gun: +1 flux per quad on strike (quad = 4-of-a-kind within a single push, summed across all pushes)
+    if(hasSigil('organ-gun')){
+      if(totalQuads>0){
+        crewFlux+=totalQuads;
+        flashSigil('organ-gun');
+        feedback('🎵 Organ Gun: +'+totalQuads+' flux ('+totalQuads+' quad'+(totalQuads>1?'s':'')+'!)','info',2000);
+      }
+    }
     // Anchor: strike with ONLY 💧 dice → +2/+3 mana
-    if(hasSigil('the-anchor')){const onlyMana=allSD.length>0&&allSD.every(d=>d===2);if(onlyMana){const am=Math.random()<0.5?2:3;G.mana=Math.min(G.maxMana,G.mana+am);flashSigil('the-anchor');feedback('⚓ Anchor: +'+am+' 💧 (only 💧 strike)','info',1500);}}
+    // When P&A equipped: converted attack+attack+rum = triple rum → counts as all 💧
+    if(hasSigil('the-anchor')){
+      let effDice=[...allSD];
+      if(hasSigil('powder-and-alcohol')){
+        // Simulate P&A conversion: each [atk,atk,rum] → [rum,rum,rum]
+        const ec={};effDice.forEach(d=>ec[d]=(ec[d]||0)+1);
+        for(const atk of [1,0]){
+          while((ec[atk]||0)>=2&&(ec[2]||0)>=1){
+            ec[atk]-=2;ec[2]+=2; // consume 2 atk + 1 rum → net +2 rum
+          }
+        }
+        effDice=[];for(const[k,n]of Object.entries(ec))for(let i=0;i<n;i++)effDice.push(+k);
+      }
+      const onlyMana=effDice.length>0&&effDice.every(d=>d===2);
+      if(onlyMana){const am=Math.random()<0.5?2:3;G.mana=Math.min(G.maxMana,G.mana+am);flashSigil('the-anchor');feedback('⚓ Anchor: +'+am+' 💧 (only 💧 strike)','info',1500);}
+    }
     // Hal: +1 shield +1 mana per 🛡️ locked
     if(hasSigil('hal')){const shC=cfA[3]||0;if(shC>0){G.shield+=shC;G.mana=Math.min(G.maxMana,G.mana+shC);flashSigil('hal');feedback('🪖 Hal: +'+shC+' shield +'+shC+' mana','info',1500);}}
     // Tortoise Shell: 🛡️ triple → +6 shield
@@ -2555,7 +2664,7 @@ function doStrike(){
     $('valMana').textContent=G.mana+'/'+G.maxMana;
 
     // Sigil anims → THEN fire attack
-    runSigilStrikeAnims(corsairBonus, chainBonus, tridentFlux, tridentAD, combo.effectiveFlux, combo.ad, td, paTriggered, tideFlux, vossFlux, ()=>{
+    runSigilStrikeAnims(corsairBonus, chainBonus, tridentFlux, tridentAD, combo.effectiveFlux, combo.ad, td, paTriggered, tideFlux, vossFlux, {crewAD, crewFlux, finalAD, cfA}, ()=>{
       // ── TREASURE HUNT MODE ──
       if(G.treasureMode&&G.chestReq){
         const allStrikeDice=[...G.steakBoxes.flatMap(sb=>sb.groups).flatMap(g=>g.dice),...G.currentGroups.flatMap(g=>g.dice),...(combo.board||[])];
@@ -2604,7 +2713,7 @@ function doStrike(){
   });
 }
 
-$('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();else if(G.phase==='rolled')doPushLuck();};
+$('btnLeft').onclick=()=>{if(G.phase==='idle')doRoll();};
 $('btnStrike').onclick=()=>{if(G.phase!=='rolled'||G.busy)return;doStrike();};
 $('btnSuperStrike').onclick=()=>{
   if(G.phase!=='rolled'||G.busy)return;
@@ -2619,11 +2728,7 @@ $('btnSuperStrike').onclick=()=>{
 
 // Cannonade removed
 
-$('btnShield').onclick=()=>{
-  if(G.mana<2)return;G.mana-=2;G.shield+=13;
-  feedback('🛡️ Shield +13  Total: '+G.shield,'info',1600);
-  updateUI();renderBtns();
-};
+// Shield button removed — Magnus replaces it
 
 $('btnReroll').onclick=()=>{
   if(G.mana<2||G.phase!=='rolled'||G.busy)return;
@@ -2633,7 +2738,7 @@ $('btnReroll').onclick=()=>{
   setTimeout(()=>{sel.forEach(i=>{G.dice[i]=rnd();G.ds[i]=DS.F;});applySpecialDice(G.dice,sel);G.busy=false;G.phase='rolled';hideBanners();renderDice();updateUI();feedback('🎲 Rerolled '+sel.length+' dice!','info',1400);},ANIM);
 };
 
-$('btnHelp').onclick=()=>$('tutOv').classList.add('on');
+if($('btnHelp'))$('btnHelp').onclick=()=>$('tutOv').classList.add('on');
 $('btnRestart').onclick=doRestart;
 
 // ── BRANCH: steak-ceiling ─────────────────────────────────────
@@ -2704,7 +2809,7 @@ function _buildRunEnemies(){
   });
   return run;
 }
-const ENEMIES=_buildRunEnemies();
+const ENEMIES=[{name:'Progression Test',icon:'💀',hp:3500,dmg:40}];
 
 function setEnemy(idx){
   const e=ENEMIES[Math.min(idx,ENEMIES.length-1)];
@@ -2721,14 +2826,14 @@ function setEnemy(idx){
 
 function doRestart(){
   window.hideOverlay();
-  Object.assign(G,{pHp:100,mana:0,flux:1,bonusDmg:0,shield:0,steakBonusAD:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0,goldenDieSlot:-1,silverDieSlot:-1,cutlassDieSlot:-1,gold:5,fightsSinceTavern:0,fightsSinceTreasure:0,treasureCountThisAct:0,treasureMode:false,chestReq:null,chestProgress:null,chestTurnsLeft:0,eliteSpawnedThisAct:false,_lastStrikeDmg:0});
+  Object.assign(G,{pHp:250,mana:4,flux:1,bonusDmg:0,shield:0,steakBonusAD:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0,goldenDieSlot:-1,silverDieSlot:-1,cutlassDieSlot:-1,gold:5,fightsSinceTavern:0,fightsSinceTreasure:0,treasureCountThisAct:0,treasureMode:false,chestReq:null,chestProgress:null,chestTurnsLeft:0,eliteSpawnedThisAct:false,_lastStrikeDmg:0});
   $('chestReqPanel').classList.remove('on');$('ehpbar').style.background='';$('tchoiceOv').classList.remove('on');_updateGold();
   setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 }
 window.restart=doRestart;
 // SHOP
 const SHP={fss:0,cnt:0,sel:null,opts:[],skipped:[],skipCooldown:{},removeMode:false};
-function _deckCols(){const a=_act();return a===1?3:a===2?4:a===3?5:6;}
+function _deckCols(){return 6;}
 function _deckSlots(){return _deckCols()*2;}
 function _act(){const n=$('ename')?.textContent||'';return n.includes('Act 4')?4:n.includes('Act 3')?3:n.includes('Act 2')?2:1;}
 function _wt(){const a=_act(),f=SHP.cnt===0;if(a===1)return f?{c:70,u:30,r:0}:{c:70,u:25,r:5};if(a===2)return{c:60,u:35,r:5};if(a===3)return{c:45,u:30,r:25};return{c:35,u:35,r:30};}
@@ -3021,18 +3126,7 @@ window._ss=function(){G.fightsSinceTavern=0;
 
 window.nextEnemy=function(){
   hideOverlay();
-  G.fightsSinceTavern++;G.fightsSinceTreasure++;
-  // Check for tavern
-  const doTavern=_chk();
-  const doTreasure=_shouldTreasure();
-  if(doTavern){
-    // Tavern first, then treasure check happens in _shopDone
-    _show();
-  } else if(doTreasure){
-    _showTreasureChoice();
-  } else {
-    _go();
-  }
+  _go(); // Skip shop/tavern for publish version
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -3049,61 +3143,61 @@ const GRID_ROWS = 2;
 // Only sigils in backpack (placedSigils) affect combat.
 const SIGIL_DEFS = {
   // ── Test Sigils (active effects implemented) ──
-  'shaun-the-lucky':      { id:'shaun-the-lucky',      name:'Shaun the Lucky',       icon:'🎲', effect:'+1 💧 per Push Luck. Steak resets 💧 to 0',     cls:'sigil-shaun-the-lucky',      w:2,h:1, group:'all' },
-  'bar-on-the-sea':  { id:'bar-on-the-sea',  name:'Bar on the Sea',   icon:'💧', effect:'+5 Max 💧 capacity',                       cls:'sigil-bar-on-the-sea',  w:2,h:1, group:'all' },
-  'bart-the-hoarder':{ id:'bart-the-hoarder',name:"Bart the Hoarder",icon:'🗄️',effect:'+10 Bonus Damage per Steak. Break: +15 Bonus Damage',cls:'sigil-bart-the-hoarder',w:2,h:1,group:'all' },
-  'drake-the-chain':      { id:'drake-the-chain',      name:'Drake the Chain',       icon:'⛓️', effect:'+10 AD with exactly pair of attack dice (not triple)',  cls:'sigil-drake-the-chain',      w:1,h:1, group:'all' },
-  'the-anchor':{ id:'the-anchor',name:'The Anchor',icon:'⚓',effect:'Strike with only 💧 dice: +2 or +3 💧. Break: +1 💧',cls:'sigil-the-anchor',w:4,h:1,group:'all' },
-  'trident-of-poseidon':{ id:'trident-of-poseidon', name:'Trident of Poseidon', icon:'🔱', effect:'+33 AD per triple. Steak 3: ×3 total Flux. Trident Strike at S3', cls:'sigil-trident-of-poseidon', w:3,h:1, group:'all' },
-  'powder-and-alcohol': { id:'powder-and-alcohol',  name:'Powder & Alcohol',    icon:'🍾', effect:'Pair attack + 💧 scores as triple 💧 +20 AD. Conflicts with Vance', cls:'sigil-powder-and-alcohol', w:2,h:2, group:'all' },
-  'the-grapeshot': { id:'the-grapeshot', name:'The Grapeshot',  icon:'🥈', effect:'Die #2: custom faces 🗡️🗡️🗡️💧⭐💥',      cls:'sigil-the-grapeshot', w:1,h:1, group:'all' },
-  'vance-the-versatile':{ id:'vance-the-versatile',name:'Vance the Versatile',icon:'🎯',effect:'5 different faces: +4AD +2BD +1💧 +0.25Fx +2Sh. 6 different: +10AD +5BD +2💧 +1Fx +5Sh',cls:'sigil-vance-the-versatile',w:2,h:2,group:'all' },
-  'zoppshu-the-marksman':       { id:'zoppshu-the-marksman',       name:'Zoppshu The Marksman',      icon:'🎯', effect:'Push with 3+ dice locked: 67% +5 BD or 33% +21 BD',               cls:'sigil-zoppshu-the-marksman',        w:2,h:1, group:'all' },
-  'zim-the-odd-one':{ id:'zim-the-odd-one',name:'Zim The Odd One',icon:'♟️',effect:'Odd Steak (1,3,5): 50% chance +7 AD or +17 AD',cls:'sigil-zim-the-odd-one',w:1,h:1,group:'all' },
-  'flint-the-loader':   { id:'flint-the-loader',   name:"Flint The Loader",          icon:'🔫', effect:'Push Luck: keep 1 normal attack in free pool',                  cls:'sigil-flint-the-loader',    w:2,h:1, group:'all' },
-  'pair-anchor':    { id:'pair-anchor',    name:'Pair Anchor',               icon:'🔒', effect:'Free pool has pair: keep pair, reroll singles only',  cls:'sigil-pair-anchor',     w:1,h:1, group:'all' },
-  'the-culverin':  { id:'the-culverin',  name:'The Culverin',        icon:'🔫', effect:'Extends Steak cap to S5. +2 AD per Steak level',              cls:'sigil-the-culverin', w:1,h:2, group:'all' },
+  'shaun-the-lucky':      { id:'shaun-the-lucky',      name:'Shaun the Lucky',       icon:'🎲', effect:'+1 Rum each Push Luck. Resets to 0 on Steak.',     cls:'sigil-shaun-the-lucky',      w:2,h:1, group:'all' },
+  'bar-on-the-sea':  { id:'bar-on-the-sea',  name:'Bar on the Sea',   icon:'💧', effect:'+5 max Rum capacity.',                       cls:'sigil-bar-on-the-sea',  w:2,h:1, group:'all' },
+  'bart-the-hoarder':{ id:'bart-the-hoarder',name:"Bart the Hoarder",icon:'🗄️',effect:'+10 BD per steak level. On Break:+15 BD.',cls:'sigil-bart-the-hoarder',w:2,h:1,group:'all' },
+  'drake-the-chain':      { id:'drake-the-chain',      name:'Drake the Chain',       icon:'⛓️', effect:'+10 AD per attack pair (🗡️🗡️ or ⚔️⚔️) locked on strike',  cls:'sigil-drake-the-chain',      w:1,h:1, group:'all' },
+  'the-anchor':{ id:'the-anchor',name:'The Anchor',icon:'⚓',effect:'Strike with only 💧 dice locked: gain 50% +2 / 50% +3 mana. On Break: +1 mana.',cls:'sigil-the-anchor',w:3,h:1,group:'all' },
+  'trident-of-poseidon':{ id:'trident-of-poseidon', name:'Trident of Poseidon', icon:'🔱', effect:'+33 AD per triple in combo. At Steak 3: ×3 total Flux.', cls:'sigil-trident-of-poseidon', w:3,h:1, group:'all' },
+  'powder-and-alcohol': { id:'powder-and-alcohol',  name:'Powder & Alcohol',    icon:'🍾', effect:'🗡️🗡️💧 or ⚔️⚔️💧 converts to triple 💧 combo while +20 AD, +3 rum). Can\'t equip with Vance the Versatile.', cls:'sigil-powder-and-alcohol', w:2,h:2, group:'all' },
+  'the-grapeshot': { id:'the-grapeshot', name:'The Grapeshot',  icon:'🥈', effect:'Replace 1 normal die with a die that has 🗡️🗡️🗡️💧⭐💥.',      cls:'sigil-the-grapeshot', w:1,h:1, group:'all' },
+  'vance-the-versatile':{ id:'vance-the-versatile',name:'Vance the Versatile',icon:'🎯',effect:'Unlock new combo: 5 or 6 different faces.',cls:'sigil-vance-the-versatile',w:2,h:2,group:'all' },
+  'zoppshu-the-marksman':       { id:'zoppshu-the-marksman',       name:'Zoppshu The Marksman',      icon:'🎯', effect:'+5 BD if push luck with 3 dice. +15 BD if with 4+ dice',               cls:'sigil-zoppshu-the-marksman',        w:2,h:1, group:'all' },
+  'zim-the-odd-one':{ id:'zim-the-odd-one',name:'Zim The Odd One',icon:'♟️',effect:'Odd steak (1,3,5): 50% chance +7 AD / 50% chance +17 AD.',cls:'sigil-zim-the-odd-one',w:1,h:1,group:'all' },
+  'flint-the-loader':   { id:'flint-the-loader',   name:"Flint The Loader",          icon:'🔫', effect:'Hold 1 🗡️ in free pool on Push Luck, it will not be rerolled.',                  cls:'sigil-flint-the-loader',    w:1,h:2, group:'all' },
+  'pair-anchor':    { id:'pair-anchor',    name:'Pair Anchor',               icon:'🔒', effect:'Free pool has pair: keep pair, reroll singles only.',  cls:'sigil-pair-anchor',     w:1,h:2, group:'all' },
+  'the-culverin':  { id:'the-culverin',  name:'The Culverin',        icon:'🔫', effect:'Maximum Steak = 5. +2 AD per Steak level.',              cls:'sigil-the-culverin', w:1,h:2, group:'all' },
   'the-basilisk':   { id:'the-basilisk',   name:'The Basilisk',        icon:'💣', effect:'Requires Culverin. Extends Steak cap to S7',   cls:'sigil-the-basilisk',  w:1,h:2, group:'all' },
-  'the-parrot':     { id:'the-parrot',     name:'The Parrot',                icon:'🦜', effect:'Retrigger the crew directly below in Deck. Required each side next to it (left & right) has 1 empty slot',         cls:'sigil-parrot',          w:1,h:1, group:'all' },
-  'lila-the-waitress':    { id:'lila-the-waitress',    name:'Lila The Waitress',         icon:'💧', effect:'Push Luck: 💧 dice in free pool are not rerolled',              cls:'sigil-lila-the-waitress',   w:1,h:1, group:'all' },
-  'admiral-voss':   { id:'admiral-voss',   name:'Admiral Voss',      icon:'⚓', effect:'+0.25 Flux per exactly pair of attack dice',  cls:'sigil-admiral-voss',    w:1,h:1, group:'all' },
-  'the-booze':      { id:'the-booze',      name:'The Booze',          icon:'🍾', effect:'+0.5 Flux if any 💧 combo in strike',   cls:'sigil-the-booze',       w:1,h:1, group:'all' },
+  'the-parrot':     { id:'the-parrot',     name:'The Parrot',                icon:'🦜', effect:'Both adjacent slots (left & right) must be empty. Retriggers the crew directly below in the Deck.',         cls:'sigil-parrot',          w:1,h:1, group:'all' },
+  'lila-the-waitress':    { id:'lila-the-waitress',    name:'Lila The Waitress',         icon:'💧', effect:'Hold up to 2 💧 in free pool on Push Luck. They won\u2019t be rerolled.',              cls:'sigil-lila-the-waitress',   w:1,h:1, group:'all' },
+  'admiral-voss':   { id:'admiral-voss',   name:'Admiral Voss',      icon:'⚓', effect:'+0.25 Flux per cannon pair or bombard pair (🗡️🗡️ or ⚔️⚔️) locked in turn.',  cls:'sigil-admiral-voss',    w:1,h:1, group:'all' },
+  'the-booze':      { id:'the-booze',      name:'The Booze',          icon:'🍾', effect:'+0.5 Flux for each pair of 💧 on Strike',   cls:'sigil-the-booze',       w:1,h:1, group:'all' },
   // ── DEBUG ONLY — not in GDD ──────────────────────────────────
   'steak-test':     { id:'steak-test',     name:'STEAK TEST',                icon:'🔧', effect:'[DEBUG] Always rolls 🗡️🗡️🗡️💧💧💧',   cls:'sigil-steak-test',      w:2,h:1, group:'all' },
-'jack':{id:'jack',name:'Jack',icon:'⭐',effect:'Die: ⭐⭐⭐ 🗡️ ⚔️ 🛡️',cls:'sigil-dieslot',w:1,h:1,group:'all'},
-'wade':{id:'wade',name:'Wade',icon:'💧',effect:'Die: 💧💧💧 🗡️ ⚔️ 🛡️',cls:'sigil-dieslot',w:1,h:1,group:'all'},
-'percy':{id:'percy',name:'Percy',icon:'💥',effect:'Die: 💥💥💥 🗡️ ⚔️ 🛡️',cls:'sigil-dieslot',w:1,h:1,group:'all'},
-'frankie':{id:'frankie',name:'Frankie',icon:'🛡️',effect:'Die: 🛡️🛡️🛡️🛡️ 🗡️ ⚔️',cls:'sigil-dieslot',w:1,h:1,group:'all'},
-'roy-the-gunner':{id:'roy-the-gunner',name:'Roy the Gunner',icon:'🔧',effect:'+3 AD per 🗡️ locked in combo',cls:'sigil-ad',w:1,h:1,group:'all'},
-'the-long-nine':{id:'the-long-nine',name:'The Long Nine',icon:'⚙️',effect:'+3 AD per ⚔️ locked in combo',cls:'sigil-ad',w:1,h:1,group:'all'},
-'meg-the-barmaid':{id:'meg-the-barmaid',name:'Meg the Barmaid',icon:'🫙',effect:'+1 AD per 💧 in strike',cls:'sigil-ad',w:2,h:1,group:'all'},
-'even-eve':{id:'even-eve',name:'Even Eve',icon:'🎲',effect:'Even Steak (2,4,6): 50% chance +10 AD or +20 AD',cls:'sigil-ad',w:1,h:1,group:'all'},
-'quadrant':{id:'quadrant',name:'Quadrant',icon:'📐',effect:'+0.25 Flux per ⭐ in strike',cls:'sigil-flux',w:1,h:2,group:'all'},
-'dead-light':{id:'dead-light',name:'Dead Light',icon:'🕯️',effect:'+2 Flux if no attack dice in strike',cls:'sigil-flux',w:1,h:1,group:'all'},
-'the-cartographer':{id:'the-cartographer',name:'The Cartographer',icon:'🧭',effect:'+1 Flux if 4+ unique faces or quad. +2 Flux if all 6 unique faces',cls:'sigil-flux',w:1,h:1,group:'all'},
-'the-big-tricorn':{id:'the-big-tricorn',name:'The Big Tricorn',icon:'🎩',effect:'+2 Bonus Damage per 💥 in strike',cls:'sigil-bd2',w:1,h:1,group:'all'},
-'carronade':{id:'carronade',name:'Carronade',icon:'🔫',effect:'+25 AD when combo contains a quad (4 of a kind)',cls:'sigil-bd2',w:1,h:1,group:'all'},
-'rampart':{id:'rampart',name:'Rampart',icon:'🧱',effect:'Steak 0-1: +15 Bonus Damage. Break: +25 Bonus Damage',cls:'sigil-bd2',w:2,h:1,group:'all'},
-'powder-keg':{id:'powder-keg',name:'Powder Keg',icon:'🧨',effect:'+30 Bonus Damage on quint (5 of a kind)',cls:'sigil-bd2',w:2,h:1,group:'all'},
-'spyglass':{id:'spyglass',name:'Spyglass',icon:'🔭',effect:'Quint counts as sextep. +20 Bonus Damage',cls:'sigil-bd2',w:1,h:1,group:'all'},
-'davy-lens':{id:'davy-lens',name:"Davy Lens",icon:'🔍',effect:'+1 AD permanent per ⭐ in strike',cls:'sigil-hybrid',w:3,h:1,group:'all'},
+'jack':{id:'jack',name:'Jack',icon:'⭐',effect:'Replace 1 normal die with a die that has ⭐⭐⭐🗡️⚔️🛡️',cls:'sigil-dieslot',w:1,h:1,group:'all'},
+'wade':{id:'wade',name:'Wade',icon:'💧',effect:'Replace 1 normal die faces to 💧💧💧 🗡️⚔️🛡️.',cls:'sigil-dieslot',w:1,h:1,group:'all'},
+'percy':{id:'percy',name:'Percy',icon:'💥',effect:'Replace 1 normal die faces to 💥💥💥🗡️⚔️🛡️.',cls:'sigil-dieslot',w:1,h:1,group:'all'},
+'frankie':{id:'frankie',name:'Frankie',icon:'🛡️',effect:'Replace 1 normal die faces to 🛡️🛡️🛡️🛡️ 🗡️⚔️.',cls:'sigil-dieslot',w:1,h:1,group:'all'},
+'roy-the-gunner':{id:'roy-the-gunner',name:'Roy the Gunner',icon:'🔧',effect:'+3 AD per 🗡️ locked on strike',cls:'sigil-ad',w:1,h:1,group:'all'},
+'the-long-nine':{id:'the-long-nine',name:'The Long Nine',icon:'⚙️',effect:'+3 AD per ⚔️ locked on strike',cls:'sigil-ad',w:1,h:1,group:'all'},
+'meg-the-barmaid':{id:'meg-the-barmaid',name:'Meg the Barmaid',icon:'🫙',effect:'+3 AD per 💧 locked on strike',cls:'sigil-ad',w:2,h:1,group:'all'},
+'even-eve':{id:'even-eve',name:'Even Eve',icon:'🎲',effect:'Even steak (2,4,6): 50% chance +10 AD / 50% chance +20 AD.',cls:'sigil-ad',w:1,h:1,group:'all'},
+'quadrant':{id:'quadrant',name:'Hawke - The Scorched Hat',icon:'📐',effect:'+0.25 Flux per ⭐ locked in combo.',cls:'sigil-flux',w:1,h:2,group:'all'},
+'dead-light':{id:'dead-light',name:'Dead Light',icon:'🕯️',effect:'+2 Flux when strike with no attack dice (🗡️/⚔️) across all steaks.',cls:'sigil-flux',w:1,h:1,group:'all'},
+'the-cartographer':{id:'the-cartographer',name:'The Cartographer',icon:'🧭',effect:'+1 Flux when strike with at least 4 different unique die types, or a quad combo.',cls:'sigil-flux',w:1,h:1,group:'all'},
+'the-big-tricorn':{id:'the-big-tricorn',name:'Tamp - Shot Packer',icon:'🎩',effect:'+2 BD per 💥 locked on strike',cls:'sigil-bd2',w:1,h:1,group:'all'},
+'carronade':{id:'carronade',name:'Carronade',icon:'🔫',effect:'+25 AD when combo contains a quad (4 of a kind).',cls:'sigil-bd2',w:1,h:1,group:'all'},
+'rampart':{id:'rampart',name:'Rampart',icon:'🧱',effect:'Strike with Steak 1 or lower: +15 BD. On Break: +25 BD in next turn.',cls:'sigil-bd2',w:2,h:1,group:'all'},
+'powder-keg':{id:'powder-keg',name:'Powder Keg',icon:'🧨',effect:'+30 BD when combo contains a quint (5 of a kind).',cls:'sigil-bd2',w:2,h:1,group:'all'},
+'spyglass':{id:'spyglass',name:'Spyglass',icon:'🔭',effect:'Quint (5 of a kind) scores as Sextep. +20 BD bonus.',cls:'sigil-bd2',w:1,h:1,group:'all'},
+'davy-lens':{id:'davy-lens',name:"Davy Jones' Lens",icon:'🔍',effect:'+1 base AD permanent per ⭐ in combo. Stacks across turns.',cls:'sigil-hybrid',w:3,h:1,group:'all'},
 'marked-card':{id:'marked-card',name:'Marked Card',icon:'🃏',effect:'Push with only a pair: 1 reroll matches the pair\u2019s face',cls:'sigil-hybrid',w:2,h:1,group:'all'},
-'ghost-ship':{id:'ghost-ship',name:'Ghost Ship',icon:'👻',effect:'+0.5 Flux per empty Deck slot',cls:'sigil-flux',w:1,h:1,group:'all'},
-'burning-glass':{id:'burning-glass',name:'Burning Glass',icon:'🔆',effect:'+0.25 Flux if 2 or fewer dice types in strike',cls:'sigil-flux',w:2,h:1,group:'all'},
-'war-chest':{id:'war-chest',name:'War Chest',icon:'💰',effect:'End of turn: +5 Bonus Damage per 💧 currently held',cls:'sigil-bd2',w:3,h:1,group:'all'},
-'sanguaro':{id:'sanguaro',name:'Sanguaro',icon:'🌵',effect:'+0.5 Bonus Damage permanent per 💥 in strike',cls:'sigil-bd2',w:1,h:2,group:'all'},
-'blood-tide':{id:'blood-tide',name:'Blood Tide',icon:'🌊',effect:'+1 Flux permanent each time you take damage',cls:'sigil-shield',w:2,h:1,group:'all'},
-'iron-reef':{id:'iron-reef',name:'Iron Reef',icon:'🪨',effect:'When Shield drops to 0, skip enemy attack',cls:'sigil-shield',w:2,h:1,group:'all'},
-'ironclad':{id:'ironclad',name:'Ironclad',icon:'🚢',effect:'When Shield is broken, next strike deals ×1.5 damage',cls:'sigil-shield',w:2,h:1,group:'all'},
-'tortoise-shell':{id:'tortoise-shell',name:'Tortoise Shell',icon:'🐚',effect:'+1 Shield per 🛡️ in strike. +3 bonus on triple 🛡️',cls:'sigil-shield',w:2,h:1,group:'all'},
-'hal':{id:'hal',name:'Hal',icon:'🪖',effect:'+1 Shield and +1 💧 per 🛡️ in strike',cls:'sigil-shield',w:1,h:1,group:'all'},
-'magnus':{id:'magnus',name:'Magnus',icon:'⚗️',effect:'Active skill: spend 4 💧 to upgrade triple to quad',cls:'sigil-hybrid',w:3,h:1,group:'all'},
-'organ-gun':{id:'organ-gun',name:'Organ Gun',icon:'🎵',effect:'Quad in strike auto-advances Steak',cls:'sigil-hybrid',w:1,h:2,group:'all'},
-'rum-barrel':{id:'rum-barrel',name:'Rum Barrel',icon:'🛢️',effect:'+1 💧 per turn (passive)',cls:'sigil-hybrid',w:2,h:1,group:'all'},
-'jolly-roger':{id:'jolly-roger',name:'Jolly Roger',icon:'🏴',effect:'Active skill: spend 3 💧 to skip enemy next attack',cls:'sigil-hybrid',w:1,h:1,group:'all'},
-'kraken':{id:'kraken',name:"Kraken",icon:'🐙',effect:'On Push Luck: lock 1 additional die',cls:'sigil-hybrid',w:3,h:1,group:'all'},
-'vad-the-diver':{id:'vad-the-diver',name:'Vad The Diver',icon:'🤿',effect:'Match all 5 random target faces this combat: +1 Gold',cls:'sigil-hybrid',w:1,h:2,group:'all'},
-'penny-pincher':{id:'penny-pincher',name:'Penny Pincher',icon:'🪙',effect:'+1 Sell value per 3 💥 locked in combo',cls:'sigil-hybrid',w:1,h:1,group:'all'},
+'ghost-ship':{id:'ghost-ship',name:'Ghost Ship',icon:'👻',effect:'+0.5 Flux per empty deck slot.',cls:'sigil-flux',w:1,h:1,group:'all'},
+'burning-glass':{id:'burning-glass',name:'Burning Glass',icon:'🔆',effect:'+0.25 Flux when 2 or fewer dice types are locked.',cls:'sigil-flux',w:2,h:1,group:'all'},
+'war-chest':{id:'war-chest',name:'War Chest',icon:'💰',effect:'End of turn: +5 BD per Rum currently stored (max 50)',cls:'sigil-bd2',w:3,h:1,group:'all'},
+'sanguaro':{id:'sanguaro',name:'Sanguaro',icon:'🌵',effect:'+0.5 BD permanent per 💥 on Strike. At +20 BD total: shrink to Cactus Spike.',cls:'sigil-bd2',w:1,h:2,group:'all'},
+'blood-tide':{id:'blood-tide',name:'Blood Tide',icon:'🌊',effect:'+0.1 Flux permanent each time you take damage. Stacks through the whole run.',cls:'sigil-shield',w:2,h:1,group:'all'},
+'iron-reef':{id:'iron-reef',name:'Iron Reef',icon:'🪨',effect:'When shield drops to 0 from enemy hit, enemy skips next attack.',cls:'sigil-shield',w:2,h:1,group:'all'},
+'ironclad':{id:'ironclad',name:'Ironclad',icon:'🚢',effect:'When shield absorbs damage: your next Strike deals ×1.5 total damage.',cls:'sigil-shield',w:2,h:1,group:'all'},
+'tortoise-shell':{id:'tortoise-shell',name:'Tortoise Shell',icon:'🐚',effect:'+1 shield per 🛡️ locked in combo. +3 additional for each triple 🛡️.',cls:'sigil-shield',w:2,h:1,group:'all'},
+'hal':{id:'hal',name:'Hal the Armourer',icon:'🪖',effect:'+1 Shield and +1 Rum per 🛡️ locked on strike',cls:'sigil-shield',w:1,h:1,group:'all'},
+'magnus':{id:'magnus',name:'Magnus',icon:'⚗️',effect:'Active: spend 3 Rum to push luck a triple into a quad.',cls:'sigil-hybrid',w:1,h:1,group:'all'},
+'organ-gun':{id:'organ-gun',name:'Organ Gun',icon:'🎵',effect:'+1 flux per quad on strike',cls:'sigil-hybrid',w:1,h:2,group:'all'},
+'rum-barrel':{id:'rum-barrel',name:'Rum Barrel',icon:'🛢️',effect:'Passive: gain +1 mana at the start of each turn.',cls:'sigil-hybrid',w:2,h:1,group:'all'},
+'jolly-roger':{id:'jolly-roger',name:'Jolly Roger',icon:'🏴',effect:'Active skill: spend 3 Rum to make the enemy skip its next attack.',cls:'sigil-hybrid',w:1,h:1,group:'all'},
+'kraken':{id:'kraken',name:"The Kraken's Grip",icon:'🐙',effect:'When push luck, 1 remained pair will be kept and not rerolled.',cls:'sigil-hybrid',w:3,h:1,group:'all'},
+'vad-the-diver':{id:'vad-the-diver',name:'Vad The Diver',icon:'🤿',effect:'Match all 5 random target faces required by this crew: +1 Gold. When earned, refresh with new faces.',cls:'sigil-hybrid',w:1,h:2,group:'all'},
+'penny-pincher':{id:'penny-pincher',name:'Penny Pincher',icon:'🪙',effect:'+1 Sell value per 3 💥 on Strike',cls:'sigil-hybrid',w:1,h:1,group:'all'},
 'salvager':{id:'salvager',name:'The Salvager',icon:'♻️',effect:'On Break: +1/+3/+5/+8 Gold based on consecutive break streak',cls:'sigil-hybrid',w:2,h:1,group:'all'},
 };
 
@@ -3131,7 +3225,7 @@ const SIGIL_RARITY={
   // Common
   'drake-the-chain':'common','bart-the-hoarder':'common','the-grapeshot':'common',
   'vance-the-versatile':'common','the-booze':'common','zoppshu-the-marksman':'common',
-  'zim-the-odd-one':'common','pair-anchor':'common','lila-the-waitress':'common',
+  'zim-the-odd-one':'common','pair-anchor':'rare','lila-the-waitress':'common',
   // Uncommon
   'shaun-the-lucky':'uncommon','bar-on-the-sea':'uncommon','the-anchor':'uncommon',
   'powder-and-alcohol':'uncommon','the-culverin':'uncommon','admiral-voss':'uncommon',
@@ -3190,6 +3284,211 @@ let inventorySigils = layoutInventory();
 let placedSigils = [];
 
 // ── doRestart() called HERE — after placedSigils declared, no TDZ ──
+// ── DRAG-TO-PUSH LUCK ──
+(function(){
+  const DRAG_THRESHOLD=12;
+  let dragState=null;
+  let preventNextClick=false; // prevent tapDie after drag
+
+  // Intercept tapDie to check drag flag
+  const origTapDie=window.tapDie||tapDie;
+  window._dragPreventTap=()=>{if(preventNextClick){preventNextClick=false;return true;}return false;};
+
+  function getPos(e){
+    return{x:e.clientX,y:e.clientY};
+  }
+  function getDieIdx(el){
+    const dw=el.closest('.dw');
+    if(!dw||dw.dataset.idx===undefined)return -1;
+    return parseInt(dw.dataset.idx);
+  }
+  function isOverPushZone(x,y){
+    const zone=document.querySelector('.push-luck-zone');
+    if(!zone)return false;
+    const r=zone.getBoundingClientRect();
+    return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;
+  }
+  function createGhost(){
+    const ghost=document.createElement('div');
+    ghost.className='drag-ghost';
+    G.ds.forEach((s,i)=>{
+      if(s!==DS.S)return;
+      const d=document.createElement('div');
+      d.className='die sel';
+      d.appendChild(mkIconImg(G.dice[i],'72%'));
+      ghost.appendChild(d);
+    });
+    document.body.appendChild(ghost);
+    return ghost;
+  }
+  function snapInvalid(){
+    const plGrid=$('pushLuckGrid');
+    if(!plGrid)return;
+    const selDice=[];G.ds.forEach((s,i)=>{if(s===DS.S)selDice.push(G.dice[i]);});
+    // Remove empties, add separator + snap dice
+    plGrid.querySelectorAll('.pl-slot:not(.filled)').forEach(s=>s.remove());
+    if(G.currentGroups.length>0){
+      const sep=document.createElement('div');sep.className='pl-sep';sep.textContent='|';plGrid.appendChild(sep);
+    }
+    const invalidSlots=[];
+    selDice.forEach(face=>{
+      const slot=document.createElement('div');
+      slot.className='pl-slot filled snap-in';
+      slot.appendChild(mkIconImg(face,'70%'));
+      plGrid.appendChild(slot);
+      invalidSlots.push(slot);
+    });
+    // After snap lands, flash red + shake
+    setTimeout(()=>{
+      invalidSlots.forEach(slot=>{
+        slot.classList.remove('snap-in');
+        slot.classList.add('invalid-flash');
+      });
+    },250);
+    // After flash, restore clean
+    setTimeout(()=>{
+      _renderPushLuckGrid();
+    },800);
+  }
+
+  function onStart(e){
+    if(G.busy||G.phase!=='rolled')return;
+    const die=e.target.closest('.die');
+    if(!die||die.classList.contains('slot'))return;
+    const idx=getDieIdx(die);
+    if(idx<0)return;
+    const wasFree=G.ds[idx]===DS.F;
+    if(wasFree){
+      G.ds[idx]=DS.S;
+      renderDice();
+    }
+    if(G.ds[idx]!==DS.S)return;
+    preventNextClick=true; // always block tapDie while drag is possible
+    const pos=getPos(e);
+    dragState={startX:pos.x,startY:pos.y,dragging:false,ghost:null,idx,wasFree,previewing:false};
+  }
+  function onMove(e){
+    if(!dragState)return;
+    const pos=getPos(e);
+    const dx=pos.x-dragState.startX,dy=pos.y-dragState.startY;
+    if(!dragState.dragging&&Math.sqrt(dx*dx+dy*dy)>DRAG_THRESHOLD){
+      dragState.dragging=true;
+      preventNextClick=true;
+      dragState.ghost=createGhost();
+      document.querySelector('.dice-box')?.classList.add('dragging');
+      document.querySelector('.push-luck-zone')?.classList.add('drop-active');
+    }
+    if(dragState.dragging){
+      e.preventDefault();
+      const g=dragState.ghost;
+      g.style.left=(pos.x-g.offsetWidth/2)+'px';
+      g.style.top=(pos.y-20)+'px';
+      const zone=document.querySelector('.push-luck-zone');
+      if(zone){
+        const over=isOverPushZone(pos.x,pos.y);
+        if(over&&!dragState.previewing){
+          zone.classList.add('drop-hover');
+          zone.classList.remove('drop-active');
+          g.style.opacity='0.3';
+          // Show preview snap in slots
+          const selDice=[];G.ds.forEach((s,i)=>{if(s===DS.S)selDice.push(G.dice[i]);});
+          const plGrid=$('pushLuckGrid');
+          // Add separator if there are existing groups
+          if(G.currentGroups.length>0){
+            const sep=document.createElement('div');
+            sep.className='pl-sep preview-sep';
+            sep.textContent='|';
+            plGrid.appendChild(sep);
+          }
+          // Remove empty placeholder slots, add preview dice
+          plGrid.querySelectorAll('.pl-slot:not(.filled)').forEach(s=>s.remove());
+          selDice.forEach(face=>{
+            const slot=document.createElement('div');
+            slot.className='pl-slot filled snap-preview';
+            slot.appendChild(mkIconImg(face,'70%'));
+            plGrid.appendChild(slot);
+          });
+          // Re-add remaining empty slots
+          const usedSlots=G.currentGroups.flatMap(gr=>gr.dice).length+selDice.length;
+          for(let i=usedSlots;i<6;i++){
+            const slot=document.createElement('div');
+            slot.className='pl-slot';
+            plGrid.appendChild(slot);
+          }
+          dragState.previewing=true;
+        } else if(!over&&dragState.previewing){
+          zone.classList.remove('drop-hover');
+          zone.classList.add('drop-active');
+          g.style.opacity='0.85';
+          // Remove preview
+          _renderPushLuckGrid();
+          dragState.previewing=false;
+        }
+      }
+    }
+  }
+  function onEnd(e){
+    if(!dragState)return;
+    const wasDragging=dragState.dragging;
+    if(dragState.ghost)dragState.ghost.remove();
+    document.querySelector('.dice-box')?.classList.remove('dragging');
+    document.querySelector('.push-luck-zone')?.classList.remove('drop-active','drop-hover');
+
+    if(wasDragging){
+      // Clear preview first
+      if(dragState.previewing){
+        _renderPushLuckGrid();
+      }
+      const pos=getPos(e);
+      if(isOverPushZone(pos.x,pos.y)){
+        if(canPush()&&G.mana>=2){
+          // Snap animation: show dice landing in slots
+          const selDice=[];G.ds.forEach((s,i)=>{if(s===DS.S)selDice.push(G.dice[i]);});
+          const plGrid=$('pushLuckGrid');
+          // Remove empties, add separator + snap dice
+          plGrid.querySelectorAll('.pl-slot:not(.filled)').forEach(s=>s.remove());
+          if(G.currentGroups.length>0){
+            const sep=document.createElement('div');sep.className='pl-sep';sep.textContent='|';plGrid.appendChild(sep);
+          }
+          selDice.forEach(face=>{
+            const slot=document.createElement('div');
+            slot.className='pl-slot filled snap-in';
+            slot.appendChild(mkIconImg(face,'70%'));
+            plGrid.appendChild(slot);
+          });
+          // Short delay for snap visual, then execute push
+          const plz=document.querySelector('.push-luck-zone');
+          if(plz){plz.classList.remove('snap-flash');void plz.offsetWidth;plz.classList.add('snap-flash');}
+          setTimeout(()=>doPushLuck(),250);
+        } else {
+          snapInvalid();
+          feedback('❌ Invalid combo','warn',1200);
+        }
+      }
+    } else {
+      // No drag happened — was just a tap
+      if(!dragState.wasFree){
+        // Tapped an already-selected die → deselect it
+        G.ds[dragState.idx]=DS.F;
+        renderDice();
+      }
+      // If wasFree, die was just auto-selected — keep it selected
+    }
+    dragState=null;
+  }
+
+  const grid=$('diceGrid');
+  grid.addEventListener('pointerdown',e=>{
+    onStart(e);
+    if(dragState)grid.setPointerCapture(e.pointerId);
+  });
+  grid.addEventListener('pointermove',onMove);
+  grid.addEventListener('pointerup',onEnd);
+  grid.addEventListener('pointercancel',onEnd);
+  // Prevent default touch behavior on grid to avoid scroll conflicts during drag
+  grid.style.touchAction='none';
+})();
+
 doRestart();
 
 // ── HELPERS ───────────────────────────────────────────────────
@@ -3197,7 +3496,7 @@ function hasSigil(id){ return placedSigils.some(s=>s.id===id); }
 function countSigil(id){ return placedSigils.filter(s=>s.id===id).length; }
 function getSigilMaxManaBonus(){ return countSigil('bar-on-the-sea')*5; }
 function applyMaxManaFromSigils(){
-  G.maxMana=10+getSigilMaxManaBonus();
+  G.maxMana=20+getSigilMaxManaBonus();
   G.mana=Math.min(G.mana,G.maxMana);
   updateUI();
 }
@@ -3337,11 +3636,15 @@ function flashSigil(id){
   el.classList.add('flashing');setTimeout(()=>el.classList.remove('flashing'),500);
 }
 
-function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effectiveFlux,tAD,td,paTriggered,tideFlux,vossFlux,onDone){
+function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effectiveFlux,tAD,td,paTriggered,tideFlux,vossFlux,crewInfo,onDone){
   let delay=0;
   const FLASH_DUR=300;
   const BAR_DUR=600;
   const BETWEEN=300;
+  const {crewAD,crewFlux,finalAD:fAD,cfA:cfa}=crewInfo||{};
+
+  // Track running AD for sequential flash
+  let runAD=BASE_AD+tAD+(G.steakBonusAD||0)+(G._davyAD||0);
 
   if(paTriggered){
     setTimeout(()=>{ flashSigil('powder-and-alcohol'); },delay);
@@ -3362,10 +3665,36 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
   if(chainBonus>0){
     setTimeout(()=>{ flashSigil('drake-the-chain'); },delay);
     delay+=FLASH_DUR;
+    runAD+=chainBonus;
     setTimeout(()=>{
-      const finalAD=BASE_AD+tAD+chainBonus+(tridentAD||0);
-      $('fDmg').textContent=''+finalAD;
-      flashPop('fDmg',''+finalAD);flashFormulaBar();
+      $('fDmg').textContent=''+runAD;
+      flashPop('fDmg',''+runAD);flashFormulaBar();
+    },delay);
+    delay+=BAR_DUR+BETWEEN;
+  }
+
+  // Roy: +3 AD per 🗡️
+  if(hasSigil('roy-the-gunner')&&cfa&&(cfa[0]||0)>0){
+    const royAD=(cfa[0]||0)*3;
+    setTimeout(()=>{ flashSigil('roy-the-gunner'); },delay);
+    delay+=FLASH_DUR;
+    runAD+=royAD;
+    setTimeout(()=>{
+      $('fDmg').textContent=''+runAD;
+      flashPop('fDmg',''+runAD);flashFormulaBar();
+    },delay);
+    delay+=BAR_DUR+BETWEEN;
+  }
+
+  // Long Nine: +3 AD per ⚔️
+  if(hasSigil('the-long-nine')&&cfa&&(cfa[1]||0)>0){
+    const lnAD=(cfa[1]||0)*3;
+    setTimeout(()=>{ flashSigil('the-long-nine'); },delay);
+    delay+=FLASH_DUR;
+    runAD+=lnAD;
+    setTimeout(()=>{
+      $('fDmg').textContent=''+runAD;
+      flashPop('fDmg',''+runAD);flashFormulaBar();
     },delay);
     delay+=BAR_DUR+BETWEEN;
   }
@@ -3373,10 +3702,10 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
   if(tridentFlux>0||tridentAD>0){
     setTimeout(()=>{ flashSigil('trident-of-poseidon'); },delay);
     delay+=FLASH_DUR;
+    runAD+=tridentAD;
     setTimeout(()=>{
-      const finalAD=BASE_AD+tAD+(chainBonus||0)+tridentAD;
-      $('fDmg').textContent=''+finalAD;
-      flashPop('fDmg',''+finalAD);
+      $('fDmg').textContent=''+runAD;
+      flashPop('fDmg',''+runAD);
       if(tridentFlux>0){
         const finalFlux=effectiveFlux+tridentFlux;
         $('fFlux').textContent='×'+fmtFlux(finalFlux);
@@ -3386,6 +3715,41 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
       flashFormulaBar();
     },delay);
     delay+=BAR_DUR+BETWEEN;
+  }
+
+  // Carronade: +25 AD per quad
+  if(hasSigil('carronade')&&crewInfo){
+    const allGroups2=[...G.steakBoxes.flatMap(sb=>sb.groups),...G.currentGroups];
+    let tq=0;allGroups2.forEach(g=>{const gc={};g.dice.forEach(d=>gc[d]=(gc[d]||0)+1);for(let f=0;f<6;f++)if((gc[f]||0)>=4)tq++;});
+    if(tq>0){
+      const carrAD=25*tq;
+      setTimeout(()=>{ flashSigil('carronade'); },delay);
+      delay+=FLASH_DUR;
+      runAD+=carrAD;
+      setTimeout(()=>{
+        $('fDmg').textContent=''+runAD;
+        flashPop('fDmg',''+runAD);flashFormulaBar();
+      },delay);
+      delay+=BAR_DUR+BETWEEN;
+    }
+  }
+
+  // Organ Gun: +1 flux per quad
+  if(hasSigil('organ-gun')&&crewInfo&&crewFlux>0){
+    // Check if organ gun contributed (quads exist)
+    const allGroups3=[...G.steakBoxes.flatMap(sb=>sb.groups),...G.currentGroups];
+    let ogq=0;allGroups3.forEach(g=>{const gc={};g.dice.forEach(d=>gc[d]=(gc[d]||0)+1);for(let f=0;f<6;f++)if((gc[f]||0)>=4)ogq++;});
+    if(ogq>0){
+      setTimeout(()=>{ flashSigil('organ-gun'); },delay);
+      delay+=FLASH_DUR;
+      setTimeout(()=>{
+        const newFlux=effectiveFlux+(tridentFlux||0)+ogq;
+        $('fFlux').textContent='×'+fmtFlux(newFlux);
+        flashPop('fFlux','×'+fmtFlux(newFlux));
+        flashFormulaBar();
+      },delay);
+      delay+=BAR_DUR+BETWEEN;
+    }
   }
 
   if(tideFlux>0){
@@ -3433,7 +3797,7 @@ function runSigilStrikeAnims(corsairBonus,chainBonus,tridentFlux,tridentAD,effec
 // ── MAKE SIGIL ELEMENT ────────────────────────────────────────
 function makeSigilEl(def,slotPx){
   const el=document.createElement('div');
-  el.className='bp-sigil '+def.cls;
+  el.className='bp-sigil '+def.cls+' rarity-'+(SIGIL_RARITY[def.id]||'common');
   el.dataset.sigilId=def.id;
   el.style.width=(def.w*slotPx-3)+'px';
   el.style.height=(def.h*slotPx-3)+'px';
