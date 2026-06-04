@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1100, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Pirate Dice</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%;overflow:hidden}
-body{height:100%;overflow:hidden;display:flex;justify-content:center;align-items:stretch;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.app-wrap{display:flex;flex-direction:row;height:100dvh;align-items:stretch;}
-.phone{background:#f8f8f8;width:430px;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+html{height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
+body{height:100%;overflow:hidden;display:flex;justify-content:center;align-items:stretch;background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+.app-wrap{display:flex;flex-direction:column;height:100dvh;width:100%;align-items:stretch;}
+.phone{background:#f8f8f8;width:100%;max-width:430px;margin:0 auto;flex-shrink:0;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
 button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 /* ── SHIP SCENE ── */
 .ship-scene{
   position:relative;width:100%;flex-shrink:0;
-  height:20vh;min-height:100px;max-height:160px;
+  height:18vh;min-height:80px;max-height:140px;
   background:linear-gradient(180deg,#a8d8e0 0%,#b8e0e8 30%,#c0e0e4 50%,#9ed0d8 70%,#8ec8d0 85%,#7abec8 100%);
   overflow:hidden;
+  padding-top:env(safe-area-inset-top);
 }
 /* Sky rays */
 .scene-rays{position:absolute;inset:0;pointer-events:none}
@@ -104,7 +105,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.15);
   border-radius:4px;padding:2px 5px;
   font-size:8px;font-weight:600;color:#fff;
-  white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;max-width:45%;overflow:hidden;text-overflow:ellipsis;
   text-shadow:none;
 }
 
@@ -282,29 +283,29 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   margin:0 auto;
   display:flex;gap:8px;align-items:stretch;
 }
-.fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:6px 12px;display:flex;align-items:center;justify-content:space-around}
+.fbox-db{flex:2;background:#fff;border:1.5px solid #2980b9;border-radius:9px;padding:4px 8px;display:flex;align-items:center;justify-content:space-around}
 .fdc{display:flex;flex-direction:column;align-items:center;gap:1px}
-.fdc-val{font-size:20px;font-weight:700;line-height:1}
+.fdc-val{font-size:18px;font-weight:700;line-height:1}
 .fdc-lbl{font-size:9px;color:#888}
 .fdc-dmg .fdc-val{color:#e8a020}.fdc-dmg .fdc-lbl{color:#e8a020;opacity:.7}.fdc-bonus .fdc-val{color:#e05530}.fdc-bonus .fdc-lbl{color:#e05530;opacity:.7}
 .fdiv{width:1px;height:20px;background:#aed6f1}
 .fop-mid{display:flex;align-items:center;font-size:14px;color:#bbb;flex-shrink:0}
-.fbox-flux{flex:1;background:#fff;border:1.5px solid #c71585;border-radius:9px;padding:4px 3px;text-align:center}
-.fval-flux{font-size:18px;font-weight:700;color:#9b59b6;line-height:1}
+.fbox-flux{flex:1;background:#fff;border:1.5px solid #c71585;border-radius:9px;padding:3px 3px;text-align:center}
+.fval-flux{font-size:16px;font-weight:700;color:#9b59b6;line-height:1}
 .fl{font-size:8px;color:#9b59b6;opacity:.7;margin-top:2px}
 
 /* ── ARENA ── */
 /* ── NEW LAYOUT: game-mid (skills left + dice right) ── */
 .game-mid{
-  display:flex;gap:6px;width:100%;
-  padding:4px 12px 4px;align-items:stretch;flex-shrink:0;
+  display:flex;gap:4px;width:100%;
+  padding:3px 8px 3px;align-items:stretch;flex-shrink:0;
   box-sizing:border-box;
 }
 .skill-panel{
-  display:flex;flex-direction:column;gap:4px;width:44px;flex-shrink:0;
+  display:flex;flex-direction:column;gap:3px;width:40px;flex-shrink:0;
 }
 .skill-slot{
-  width:44px;height:44px;border-radius:8px;border:1.5px solid #ddd;
+  width:40px;height:40px;border-radius:8px;border:1.5px solid #ddd;
   background:#f9f9f9;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:1px;
   font-size:7px;font-weight:600;color:#555;cursor:pointer;
@@ -323,11 +324,11 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   flex:1;border:2px solid #d0d0d0;border-radius:10px;
   background:#fafafa;padding:6px;
   display:flex;align-items:center;justify-content:center;
-  position:relative;min-height:100px;
+  position:relative;min-height:80px;
   min-width:0; /* allow flex shrink calculation */
 }
 .dice-box .dg{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
   width:100%;
 }
 /* ── DRAG-TO-PUSH ── */
@@ -351,8 +352,8 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 
 /* ── PUSH LUCK ZONE ── */
 .push-luck-zone{
-  width:100%;padding:4px 12px 2px;flex-shrink:0;
-  min-height:62px;box-sizing:border-box;
+  width:100%;padding:2px 10px 2px;flex-shrink:0;
+  min-height:50px;box-sizing:border-box;
 }
 .push-luck-header{
   display:flex;align-items:center;gap:6px;margin-bottom:3px;
@@ -365,7 +366,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   display:flex;align-items:center;gap:8px;
 }
 .btn-push-luck{
-  flex-shrink:0;width:44px;height:44px;border-radius:10px;
+  flex-shrink:0;width:40px;height:40px;border-radius:10px;
   border:2px solid #e67e22;background:linear-gradient(135deg,#fff8ee,#ffecd2);
   color:#e67e22;font-size:18px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
@@ -379,7 +380,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
   display:flex;flex-wrap:wrap;gap:3px;align-items:center;
 }
 .pl-slot{
-  width:38px;height:38px;border:1.5px dashed #ccc;border-radius:4px;
+  width:min(34px,9vw);height:min(34px,9vw);border:1.5px dashed #ccc;border-radius:4px;
   background:#f8f8f8;display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
 }
@@ -396,17 +397,17 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 .push-luck-stats span{color:#555}
 
-.arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:0;width:100%}
+.arena{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;overflow-y:auto;overflow-x:hidden;padding:0;width:100%;-webkit-overflow-scrolling:touch}
 /* Dice zone — formula bar, fixed height */
 .dice-zone{
-  width:100%;display:flex;flex-direction:column;align-items:center;gap:5px;
-  padding:6px 16px 0;
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:4px 10px 0;
   flex-shrink:0;
 }
 /* Groups zone — steak rows, scrollable remainder */
 .groups-zone{
   width:100%;display:flex;flex-direction:column;align-items:center;gap:0;
-  padding:4px 16px 4px;
+  padding:2px 10px 2px;
   border-top:1.5px solid #e8e8e8;
   background:#f4f4f4;
   flex:1;min-height:0;overflow-y:auto;
@@ -490,7 +491,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .gbox.selbox .gbox-score{color:#888}
 
 /* ── BOTTOM — action area only ── */
-.bottom{background:#fff;padding:5px 12px 12px;border-top:1px solid #eee;flex-shrink:0}
+.bottom{background:#fff;padding:4px 10px max(8px,env(safe-area-inset-bottom));border-top:1px solid #eee;flex-shrink:0}
 .bb{display:flex;flex-direction:column;gap:0}
 .hbtn{width:20px;height:20px;border-radius:50%;background:#f0f0f0;border:1px solid #ddd;color:#999;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 /* ── PLAYER STAT ROW — bottom, HP left / MP right ── */
@@ -571,7 +572,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .sk.sh.has-shield{opacity:1!important;border-color:#27ae60!important;background:#f0fff4!important}
 .sk.sh.has-shield:disabled{cursor:not-allowed}
 .mr{display:grid;grid-template-columns:1fr;gap:5px}
-.mb{border:none;border-radius:10px;padding:8px 6px;font-size:13px;font-weight:700;line-height:1.2}
+.mb{border:none;border-radius:10px;padding:7px 6px;font-size:12px;font-weight:700;line-height:1.2}
 .mb:active:not(:disabled){transform:scale(.94)}
 .mb:disabled{opacity:.25;cursor:not-allowed}
 .mb .ms{font-size:7px;display:block;margin-top:1px;opacity:.7;font-weight:400}
@@ -602,7 +603,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 }
 
 /* ── OVERLAYS ── */
-.ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:50}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:50}
 .ov.on{display:flex}
 .oc{background:#fff;border-radius:14px;padding:18px;text-align:center;width:230px;border:1px solid #ddd}
 .ot{font-size:15px;font-weight:600;color:#111;margin-bottom:4px}
@@ -2337,7 +2338,7 @@ function doPushLuck(){
   }
   vi.forEach(i=>G.ds[i]=DS.ST);G.ds.forEach((s,i)=>{if(s===DS.S)G.ds[i]=DS.F;});
   const pushed=G.ds.filter(s=>s===DS.ST).length;
-  if(pushed===6){
+  if(pushed===_numDice()){
     // STEAK — increment steakCount, apply flux
     // +2 AD base · +3 AD with Culverin · +4 AD with Culverin+Basilisk
     G.steakCount++;
