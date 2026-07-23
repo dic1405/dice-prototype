@@ -71,7 +71,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .cannonball.fly-player{display:block;animation:cannon-fly 0.45s ease forwards}
 .cannonball.fly-enemy{display:block;animation:cannon-fly-r 0.45s ease forwards}
 /* ── VALUE CHIPS — Balatro-style floating score (AD=blue ◆, Flux=yellow ◆, BD=red ◆) ── */
-.val-chip{position:fixed;z-index:220;pointer-events:none;display:flex;align-items:center;justify-content:center;
+.val-chip{position:absolute;z-index:220;pointer-events:none;display:flex;align-items:center;justify-content:center;
   min-width:30px;height:26px;transform:translate(-50%,-50%);
   animation:chip-float 4s cubic-bezier(.2,.8,.3,1) forwards}
 .val-chip span{position:relative;z-index:1;font-weight:900;font-size:13px;color:#fff;
@@ -102,7 +102,7 @@ button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
 .strike-trail{position:fixed;width:11px;height:11px;border-radius:50%;z-index:199;pointer-events:none;
   background:rgba(255,200,70,.8);transform:translate(-50%,-50%);animation:trail-fade .42s ease forwards}
 @keyframes trail-fade{to{opacity:0;transform:translate(-50%,-50%) scale(.15)}}
-.strike-impact{position:fixed;width:60px;height:60px;border-radius:50%;z-index:201;pointer-events:none;
+.strike-impact{position:absolute;width:60px;height:60px;border-radius:50%;z-index:201;pointer-events:none;
   transform:translate(-50%,-50%);
   background:radial-gradient(circle,rgba(255,235,160,.95),rgba(255,120,30,.65) 45%,transparent 70%);
   animation:impact-burst .45s ease-out forwards}
@@ -645,7 +645,7 @@ body.strike-dim .game-mid,body.strike-dim .push-luck-zone,body.strike-dim .group
 .b-reroll:disabled{background:#d5dbe0;color:#98a2ab;box-shadow:none}
 .b-push:not(:disabled){background:linear-gradient(135deg,#21618c,#2980b9);color:#fff;box-shadow:0 2px 8px rgba(41,128,185,.4)}
 /* ── FTUE ── */
-.ftue-msg{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);z-index:225;
+.ftue-msg{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:225;
   width:max-content;max-width:min(320px,82vw);
   background:rgba(20,26,40,.93);color:#fff;border-radius:14px;
   padding:16px 22px;font-size:15px;font-weight:700;line-height:1.55;text-align:center;
@@ -658,7 +658,7 @@ body.strike-dim .game-mid,body.strike-dim .push-luck-zone,body.strike-dim .group
   animation:ftue-banner-in .4s ease}
 .ftue-banner img{width:16px;height:16px;vertical-align:-3px}
 @keyframes ftue-banner-in{0%{opacity:0;transform:translateY(-4px)}100%{opacity:1;transform:translateY(0)}}
-.ftue-pointer{position:fixed;z-index:230;font-size:30px;pointer-events:none;transform:translate(-50%,0);
+.ftue-pointer{position:absolute;z-index:230;font-size:30px;pointer-events:none;transform:translate(-50%,0);
   animation:ftue-point 0.9s ease infinite;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
 @keyframes ftue-point{0%,100%{margin-top:0}50%{margin-top:-10px}}
 .dw.ftue-dim .die{opacity:.25;filter:grayscale(1)}
@@ -1129,8 +1129,9 @@ const FTUE={active:true,stage:1,step:-1,nextRoll:null,nextPushRoll:null,scriptDo
   rollQueue:[[5,5,2,3],[1,1,1,4]]};
 function iconImgHTML(idx){return '<img src="'+ICON_URLS[idx]+'" alt="">';}
 function ftueMsg(html){
+  const ph=$('phone')||document.body;
   let m=$('ftueMsg');
-  if(!m){m=document.createElement('div');m.id='ftueMsg';m.className='ftue-msg';document.body.appendChild(m);}
+  if(!m){m=document.createElement('div');m.id='ftueMsg';m.className='ftue-msg';ph.appendChild(m);}
   m.innerHTML=html;m.style.display='block';
   const gm=document.querySelector('.game-mid');
   if(gm)gm.classList.add('ftue-hide-dice');
@@ -1148,16 +1149,20 @@ function ftueBanner(html){
 function ftueBannerOff(){const b=$('ftueBanner');if(b)b.style.display='none';}
 let _ftuePtrTimer=null;
 function ftuePoint(btnId){
+  const ph=$('phone')||document.body;
   let p=$('ftuePointer');
-  if(!p){p=document.createElement('div');p.id='ftuePointer';p.className='ftue-pointer';p.textContent='\uD83D\uDC46';document.body.appendChild(p);}
+  if(!p){p=document.createElement('div');p.id='ftuePointer';p.className='ftue-pointer';p.textContent='\uD83D\uDC46';ph.appendChild(p);}
   const place=()=>{
     const sb=$(btnId);if(!sb)return;
+    // Coordinates RELATIVE to the phone frame — immune to Safari's layout/visual viewport offset
+    const pr=ph.getBoundingClientRect();
     const r=sb.getBoundingClientRect();
-    p.style.left=(r.left+r.width/2)+'px';p.style.top=(r.top-34)+'px';
+    p.style.left=(r.left-pr.left+r.width/2)+'px';
+    p.style.top=(r.top-pr.top-34)+'px';
   };
   place();p.style.display='block';
   if(_ftuePtrTimer)clearInterval(_ftuePtrTimer);
-  _ftuePtrTimer=setInterval(place,300); // Safari URL bar collapse shifts viewport — keep re-anchoring
+  _ftuePtrTimer=setInterval(place,300);
 }
 function ftuePointStrike(){ftuePoint('btnStrike');}
 // ── Tap-anywhere chains ──
@@ -2888,9 +2893,10 @@ function launchStrikeProjectile(dmg){
     // IMPACT at enemy: burst, hit-shake, scene micro-shake, damage float
     setTimeout(()=>{
       const re=eShip.getBoundingClientRect();
+      const _ph=$('phone')||document.body,_pr=_ph.getBoundingClientRect();
       const burst=document.createElement('div');burst.className='strike-impact';
-      burst.style.left=(re.left+re.width/2)+'px';burst.style.top=(re.top+re.height*0.55)+'px';
-      document.body.appendChild(burst);setTimeout(()=>burst.remove(),480);
+      burst.style.left=(re.left-_pr.left+re.width/2)+'px';burst.style.top=(re.top-_pr.top+re.height*0.55)+'px';
+      _ph.appendChild(burst);setTimeout(()=>burst.remove(),480);
       eShip.classList.remove('hit');void eShip.offsetWidth;eShip.classList.add('hit');
       setTimeout(()=>eShip.classList.remove('hit'),500);
       const scene=document.querySelector('.ship-scene');
@@ -3100,8 +3106,10 @@ function runStrikeAnimation(combo, events, onDone){
 function spawnValChip(x,y,kind,text){
   const c=document.createElement('div');c.className='val-chip '+kind;
   const sp=document.createElement('span');sp.textContent=text;c.appendChild(sp);
-  c.style.left=x+'px';c.style.top=y+'px';
-  document.body.appendChild(c);
+  // viewport coords → phone-frame coords (same reason as the FTUE pointer)
+  const ph=$('phone')||document.body,pr=ph.getBoundingClientRect();
+  c.style.left=(x-pr.left)+'px';c.style.top=(y-pr.top)+'px';
+  ph.appendChild(c);
   setTimeout(()=>c.remove(),4200);
 }
 
