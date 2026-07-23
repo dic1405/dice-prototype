@@ -658,7 +658,7 @@ body.strike-dim .game-mid,body.strike-dim .push-luck-zone,body.strike-dim .group
   animation:ftue-banner-in .4s ease}
 .ftue-banner img{width:16px;height:16px;vertical-align:-3px}
 @keyframes ftue-banner-in{0%{opacity:0;transform:translateY(-4px)}100%{opacity:1;transform:translateY(0)}}
-.ftue-pointer{position:absolute;z-index:230;font-size:30px;pointer-events:none;transform:translate(-50%,0);
+.ftue-pointer{position:absolute;z-index:230;font-size:30px;pointer-events:none;transform:translate(-50%,0) rotate(180deg);
   animation:ftue-point 0.9s ease infinite;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
 @keyframes ftue-point{0%,100%{margin-top:0}50%{margin-top:-10px}}
 .dw.ftue-dim .die{opacity:.25;filter:grayscale(1)}
@@ -1190,7 +1190,7 @@ function ftuePointerOff(){const p=$('ftuePointer');if(p)p.style.display='none';i
 
 function ftueStart(){
   BASE_AD=5;
-  G.eHp=60;G.eMaxHp=60;G.eDmg=5; // 48 would die exactly on turn 3 (19+14+15) — 60 guarantees death on turn 4
+  G.eHp=48;G.eMaxHp=48;G.eDmg=5; // FTUE enemy 1 — dies during the forced roll queue
   const bp=$('backpackArea');if(bp)bp.style.display='none';
   const pz=document.querySelector('.push-luck-zone');if(pz)pz.style.display='none';
   const sp=document.querySelector('.skill-panel');if(sp)sp.style.display='none'; // skills hidden during FTUE
@@ -1315,7 +1315,7 @@ const fl=v=>Math.floor(v+1e-9); // epsilon guards float errors (6.2+1.8=7.999…
 const r2=v=>Math.round((v+1e-9)*100)/100; // flux rule: round to 2 decimals
 const ANIM=1000; // roll animation duration
 const G={
-  pHp:200,pMaxHp:200,mana:4,maxMana:26,maxShield:100,
+  pHp:55,pMaxHp:55,mana:0,maxMana:11,maxShield:100, // start state: Act-1 tier (Notion: Archetype Sim Env / Progression)
   eHp:5000,eMaxHp:5000,eDmg:22,enemyIdx:0,
   flux:1,bonusDmg:0,shield:0,steakBonusAD:0,
   busy:false,phase:'idle',
@@ -1866,7 +1866,7 @@ function renderGroups(newSteakIdx=-1){
   }
 }
 
-let BASE_AD=30; // Act 4 Expected Power (FTUE overrides to 5)
+let BASE_AD=5; // Ship upgrade node 0 = starting Base AD (Notion: Ship (upgrade) config)
 
 function updateFormula(){
   // STATIC formula bar: shows only banked/persistent values (base AD, steak flux, banked BD).
@@ -2379,6 +2379,7 @@ window._endTreasure=function(){
 };
 
 function _shouldTreasure(){
+  if(FTUE.active)return false; // playtest build: treasure hunt not taught yet
   const act=_act();
   const threshold=act<=2?2:1;
   const maxPerAct=act===1?1:2;
@@ -3366,6 +3367,10 @@ function doStrike(){
     const eHpBefore=G.eHp;
     G._preStrikeEHP=eHpBefore; // Save HP BEFORE damage for overstrike calc
     G.eHp=Math.max(0,G.eHp-td);
+    if(FTUE.active&&!FTUE.scriptDone){
+      const floorHp=Math.ceil(G.eMaxHp*0.25);
+      if(G.eHp<floorHp)G.eHp=floorHp; // tutorial guard: enemy survives scripted lessons
+    }
 
     // Update mana immediately
     // Rum already applied incrementally at chip time — just ensure display is in sync
@@ -3557,7 +3562,7 @@ function setEnemy(idx){
 
 function doRestart(){
   window.hideOverlay();
-  Object.assign(G,{pHp:200,mana:4,flux:1,bonusDmg:0,shield:0,steakBonusAD:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0,goldenDieSlot:-1,silverDieSlot:-1,cutlassDieSlot:-1,gold:5,fightsSinceTavern:0,fightsSinceTreasure:0,treasureCountThisAct:0,treasureMode:false,chestReq:null,chestProgress:null,chestTurnsLeft:0,eliteSpawnedThisAct:false,_lastStrikeDmg:0});
+  Object.assign(G,{pHp:55,mana:0,flux:1,bonusDmg:0,shield:0,steakBonusAD:0,busy:false,phase:'idle',steakCount:0,breakStreak:0,stackFlux:0,stackBoxes:[],dice:[],ds:[],steakBoxes:[],currentGroups:[],enemyIdx:0,cannonadeDice:0,goldenDieSlot:-1,silverDieSlot:-1,cutlassDieSlot:-1,gold:5,fightsSinceTavern:0,fightsSinceTreasure:0,treasureCountThisAct:0,treasureMode:false,chestReq:null,chestProgress:null,chestTurnsLeft:0,eliteSpawnedThisAct:false,_lastStrikeDmg:0});
   $('chestReqPanel').classList.remove('on');$('ehpbar').style.background='';$('tchoiceOv').classList.remove('on');_updateGold();
   setEnemy(0);hideBanners();renderGroups();renderDice();updateFormula();updateUI();
 }
@@ -3811,6 +3816,19 @@ function _show(){G.fightsSinceTavern=0;$('shopGold').textContent='🪙 '+G.gold;
 function _sa(opt){$('arrNc').innerHTML='<div class="ni">'+opt.def.icon+'</div><div class="nn">'+opt.def.name+' (NEW)</div><div class="ne">'+opt.def.w+'×'+opt.def.h+' · '+opt.rar+' · '+opt.def.effect+'</div>';const da=$('arrDa');da.innerHTML='';placedSigils.forEach(ps=>{const d=SIGIL_DEFS[ps.id];if(!d)return;const c=document.createElement('div');c.className='arr-ch';c.style.cssText='background:#2a2a4a;border:1px solid #555';c.textContent=d.icon+' '+d.name;da.appendChild(c);});if(!placedSigils.length)da.innerHTML='<span style="color:#555;font-size:10px">Empty</span>';const ia=$('arrIa');ia.innerHTML='';inventorySigils.forEach(is=>{const d=SIGIL_DEFS[is.id];if(!d)return;const c=document.createElement('div');c.className='arr-ch';const nw=is.id===opt.id;c.style.cssText='background:'+(nw?'#1a3a1a':'#1e1e3a')+';border:1px solid '+(nw?'#27ae60':'#444');c.textContent=d.icon+' '+d.name;ia.appendChild(c);});$('arrOv').classList.add('on');}
 function _go(){hideOverlay();Object.assign(G,{bonusDmg:0,shield:0,flux:1,steakBonusAD:0,stackFlux:0,stackBoxes:[],busy:false,phase:'idle',steakCount:0,dice:[],ds:[],steakBoxes:[],currentGroups:[],cannonadeDice:0,treasureMode:false,chestReq:null,chestProgress:null,chestTurnsLeft:0});$('chestReqPanel').classList.remove('on');$('ehpbar').style.background='';setEnemy(G.enemyIdx+1);hideBanners();renderGroups();renderDice();updateFormula();updateUI();}
 function _chk(){return G.fightsSinceTavern>=2||(G.fightsSinceTavern>=1&&Math.random()<0.5);}
+
+// FTUE free-play ladder: stamp enemy stats after _go() whichever path loaded the fight
+// (victory → Next, or shop → Done) so the tavern sitting in between can't break the ramp.
+const _goBase=_go;
+_go=function(){
+  _goBase();
+  if(FTUE.active&&FTUE.stage>=3){
+    const hp=Math.round(60*Math.pow(1.1,FTUE.stage-3)); // 60 · 66 · 73 · 80 · 88 · …
+    G.eHp=hp;G.eMaxHp=hp;G.eDmg=5;
+    const en=$('ename');if(en)en.textContent='Enemy '+(FTUE.stage-1);
+    updateUI();renderBtns();
+  }
+};
 window._so=function(){window._shopDone();return;/*old:
   if(SHP.sel===null||!SHP.canFit)return;
   const o=SHP.opts[SHP.sel];
@@ -3856,11 +3874,29 @@ window._ss=function(){G.fightsSinceTavern=0;
 
 window.nextEnemy=function(){
   hideOverlay();
+  if(FTUE.active&&FTUE.stage>=2){
+    // ── FREE PLAY after the tutorial ── endless ladder (HP 60, +10%/encounter)
+    // with the Tavern/Shop flow re-enabled between fights.
+    FTUE.stage++;
+    FTUE.step=13;FTUE.scriptDone=true;FTUE.rollQueue=[];FTUE.nextRoll=null;FTUE.nextPushRoll=null;
+    FTUE.strikeOff=false;FTUE.tapChain=null;
+    ftueMsgOff();ftueBannerOff();ftuePointerOff();
+    G.fightsSinceTavern=(G.fightsSinceTavern||0)+1;
+    if(_chk()){
+      // Deck frame stays hidden until the first tavern — it only becomes meaningful
+      // once the player has somewhere to recruit crew from.
+      FTUE.tavernSeen=true;
+      const bp=$('backpackArea');if(bp)bp.style.display='';
+      _show();return;
+    }
+    _go();
+    return;
+  }
   _go();
   if(FTUE.active&&FTUE.stage===1){
     // ── FTUE STAGE 2: Push Luck tutorial ──
     FTUE.stage=2;FTUE.step=6;FTUE.scriptDone=false;
-    G.eHp=150;G.eMaxHp=150;G.eDmg=5; // tutorial steak strike deals 89 — 60 would die instantly; 150 survives it and always falls within the 5 forced turns
+    G.eHp=60;G.eMaxHp=60;G.eDmg=5; // FTUE enemy 2 (push-luck tutorial)
     FTUE.nextRoll=[0,2,5,4]; // 1🗡 cannon · 1💧 rum · 1💥 cannonball · 1⭐ tricorn
     ftueMsg('Another enemy ship!');
     updateUI();renderBtns();
@@ -4238,7 +4274,7 @@ function hasSigil(id){ return placedSigils.some(s=>s.id===id); }
 function countSigil(id){ return placedSigils.filter(s=>s.id===id).length; }
 function getSigilMaxManaBonus(){ return countSigil('bar-on-the-sea')*5; }
 function applyMaxManaFromSigils(){
-  G.maxMana=26+getSigilMaxManaBonus(); // Act 4 max rum
+  G.maxMana=11+getSigilMaxManaBonus(); // start-state max rum (Act-1 tier)
   G.mana=Math.min(G.mana,G.maxMana);
   updateUI();
 }
